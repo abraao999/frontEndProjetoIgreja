@@ -33,7 +33,7 @@ export default function Header() {
   ];
   const configuracoes = [
     { desc: 'FUNÇÕES', path: '/funcao' },
-    { desc: 'JOVENS', path: '/jovens' },
+    { desc: 'CARGOS', path: '/cargo' },
   ];
   return (
     <Nav>

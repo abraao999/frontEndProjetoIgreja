@@ -2,12 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
-import {
-  FaUserCircle,
-  FaEdit,
-  FaWindowClose,
-  FaExclamation,
-} from 'react-icons/fa';
+import { FaEdit, FaWindowClose, FaExclamation } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
@@ -19,7 +14,7 @@ import Loading from '../../components/Loading';
 import history from '../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
-export default function Funcao({ match }) {
+export default function Cargo({ match }) {
   const dispath = useDispatch();
   const id = get(match, 'params.id', '');
 
@@ -30,10 +25,10 @@ export default function Funcao({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get('/funcao');
+      const response = await axios.get('/cargo');
       console.log(response.data);
-      console.log('idfuncao', id);
       setDescricaoList(response.data);
+      toast.success('nada');
       // if(idFuncao){
 
       // }
@@ -53,20 +48,21 @@ export default function Funcao({ match }) {
     if (formErrors) return;
     try {
       if (!id) {
-        const response = await axios.post('/funcao', { descricao });
+        const response = await axios.post('/cargo', { descricao });
         console.log(response);
-        const novaLista = await axios.get('/funcao');
+        const novaLista = await axios.get('/cargo');
         setDescricaoList(novaLista.data);
         setDescricao('');
-        toast.success('Função criada com sucesso');
+        toast.success('Cargo criada com sucesso');
+
         setIsLoading(false);
       } else {
-        const response = await axios.put(`/funcao/${id}`, { descricao });
+        const response = await axios.put(`/cargo/${id}`, { descricao });
         console.log(response);
-        const novaLista = await axios.get('/funcao');
+        const novaLista = await axios.get('/cargo');
         setDescricaoList(novaLista.data);
         setDescricao('');
-        toast.success('Função editada com sucesso');
+        toast.success('Cargo editado com sucesso');
 
         history.push('/funcao');
         setIsLoading(false);
@@ -87,15 +83,15 @@ export default function Funcao({ match }) {
     exclamation.setAttribute('display', 'block');
     e.currentTarget.remove();
   };
-  const handleDelete = async (e, idFuncao, index) => {
+  const handleDelete = async (e, idDado, index) => {
     e.persist();
     try {
       setIsLoading(true);
-      await axios.delete(`/funcao/${idFuncao}`);
+      await axios.delete(`/cargo/${idDado}`);
       const novosFuncoes = [...descricaoList];
       novosFuncoes.splice(index, 1);
       setDescricaoList(novosFuncoes);
-      toast.success('Função excluida com sucesso');
+      toast.success('Cargo excluido com sucesso');
 
       setIsLoading(false);
     } catch (error) {
@@ -110,46 +106,44 @@ export default function Funcao({ match }) {
   };
   return (
     <Container>
-      <h1>{id ? 'Editar Aluno' : 'Novo Aluno'}</h1>
+      <h1>{id ? 'Editar Cargo' : 'Novo Cargo'}</h1>
       <Loading isLoading={isLoading} />
 
       <Form onSubmit={handleSubmit}>
         <label htmlFor="descricao">
-          Nome da função:
+          Nome da cargo:
           <input
             type="text"
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
-            placeholder="Função"
+            placeholder="Cargo"
           />
         </label>
         <button type="submit">Salvar</button>
       </Form>
       <Listagem>
-        <h3>Lista de Funções</h3>
+        <h3>Lista de Cargos</h3>
         <center>
           <ListFuncoesConteiner>
-            {descricaoList.map((funcao, index) => (
-              <div key={String(funcao.id)}>
-                <span>{funcao.descricao}</span>
+            {descricaoList.map((dado, index) => (
+              <div key={String(dado.id)}>
+                <span>{dado.descricao}</span>
                 <Link
                   onClick={(e) => {
-                    setDescricao(funcao.descricao);
-                    history.push(`/funcao/${funcao.id}/edit`);
+                    e.preventDefault();
+                    setDescricao(dado.descricao);
+                    history.push(`/funcao/${dado.id}/edit`);
                   }}
-                  to={`/funcao/${funcao.id}/edit`}
+                  to={`/funcao/${dado.id}/edit`}
                 >
                   <FaEdit size={16} />
                 </Link>
-                <Link
-                  onClick={handleDeleteAsk}
-                  to={`/aluno/${funcao.id}/delete`}
-                >
+                <Link onClick={handleDeleteAsk} to={`/aluno/${dado.id}/delete`}>
                   <FaWindowClose size={16} />
                 </Link>
 
                 <FaExclamation
-                  onClick={(e) => handleDelete(e, funcao.id, index)}
+                  onClick={(e) => handleDelete(e, dado.id, index)}
                   size={16}
                   display="none"
                   cursor="pointer"
@@ -162,6 +156,6 @@ export default function Funcao({ match }) {
     </Container>
   );
 }
-Funcao.protoTypes = {
+Cargo.protoTypes = {
   match: PropTypes.shape({}).isRequired,
 };

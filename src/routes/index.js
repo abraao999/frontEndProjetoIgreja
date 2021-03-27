@@ -11,6 +11,7 @@ import Home from '../pages/Home';
 import Funcao from '../pages/Funcao';
 import Cargo from '../pages/Cargo';
 import Congregacao from '../pages/Congregacao';
+import Classe from '../pages/Classe';
 
 export default function Routes() {
   return (
@@ -25,6 +26,8 @@ export default function Routes() {
       <MyRoute path="/funcao/" component={Funcao} isClosed={false} />
       <MyRoute path="/cargo/:id/edit" component={Cargo} isClosed={false} />
       <MyRoute path="/cargo/" component={Cargo} isClosed={false} />
+      <MyRoute path="/classe/:id/edit" component={Classe} isClosed={false} />
+      <MyRoute path="/classe/" component={Classe} isClosed={false} />
       <MyRoute
         path="/congregacao/:id/edit"
         component={Congregacao}

@@ -32,9 +32,10 @@ export default function Header() {
     { desc: 'JOVENS', path: '/jovens' },
   ];
   const configuracoes = [
-    { desc: 'FUNÇÕES', path: '/funcao' },
     { desc: 'CARGOS', path: '/cargo' },
+    { desc: 'CLASSES', path: '/classe' },
     { desc: 'CONGREGAÇÃO', path: '/congregacao' },
+    { desc: 'FUNÇÕES', path: '/funcao' },
   ];
   return (
     <Nav>

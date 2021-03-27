@@ -20,7 +20,6 @@ export default function Classe({ match }) {
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
-  const [event, setEvent] = useState('');
 
   const [descricao, setDescricao] = useState('');
   const [descricaoList, setDescricaoList] = useState([]);
@@ -30,7 +29,6 @@ export default function Classe({ match }) {
     async function getData() {
       setIsLoading(true);
       const response = await axios.get('/classe');
-      console.log(response.data);
       setDescricaoList(response.data);
       setIsLoading(false);
     }
@@ -80,10 +78,9 @@ export default function Classe({ match }) {
   const handleClose = () => {
     setShow(false);
   };
-  const handleShow = (e, idFuncao, index) => {
+  const handleShow = (idFuncao, index) => {
     setIdParaDelecao(idFuncao);
     setIndiceDelecao(index);
-    setEvent(e);
     setShow(true);
   };
   const handleFunctionConfirm = async () => {
@@ -162,7 +159,7 @@ export default function Classe({ match }) {
                   </td>
                   <td>
                     <Link
-                      onClick={(e) => handleShow(e, dado.id, index)}
+                      onClick={() => handleShow(dado.id, index)}
                       to={`/classe/${dado.id}/delete`}
                     >
                       <FaWindowClose size={16} />

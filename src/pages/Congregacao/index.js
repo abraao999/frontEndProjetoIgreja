@@ -2,12 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
-import {
-  FaUserCircle,
-  FaEdit,
-  FaWindowClose,
-  FaExclamation,
-} from 'react-icons/fa';
+import { FaEdit, FaWindowClose, FaExclamation } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
@@ -19,7 +14,7 @@ import Loading from '../../components/Loading';
 import history from '../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
-export default function Funcao({ match }) {
+export default function Congregacao({ match }) {
   const dispath = useDispatch();
   const id = get(match, 'params.id', '');
 
@@ -30,13 +25,9 @@ export default function Funcao({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get('/funcao');
+      const response = await axios.get('/setor');
       console.log(response.data);
-      console.log('idfuncao', id);
       setDescricaoList(response.data);
-      // if(idFuncao){
-
-      // }
       setIsLoading(false);
     }
     getData();
@@ -53,22 +44,23 @@ export default function Funcao({ match }) {
     if (formErrors) return;
     try {
       if (!id) {
-        const response = await axios.post('/funcao', { descricao });
+        const response = await axios.post('/setor', { descricao });
         console.log(response);
-        const novaLista = await axios.get('/funcao');
+        const novaLista = await axios.get('/setor');
         setDescricaoList(novaLista.data);
         setDescricao('');
-        toast.success('Função criada com sucesso');
+        toast.success('Congregação criada com sucesso');
+
         setIsLoading(false);
       } else {
-        const response = await axios.put(`/funcao/${id}`, { descricao });
+        const response = await axios.put(`/setor/${id}`, { descricao });
         console.log(response);
-        const novaLista = await axios.get('/funcao');
+        const novaLista = await axios.get('/setor');
         setDescricaoList(novaLista.data);
         setDescricao('');
-        toast.success('Função editada com sucesso');
+        toast.success('Congregação editado com sucesso');
 
-        history.push('/funcao');
+        history.push('/congregacao');
         setIsLoading(false);
       }
     } catch (error) {
@@ -76,7 +68,7 @@ export default function Funcao({ match }) {
       if (status === 401) {
         toast.error('Voce precisa fazer loggin');
       } else {
-        toast.error('Erro ao excluir um aluno');
+        toast.error('Erro ao excluir a Congregação');
       }
       setIsLoading(false);
     }
@@ -87,15 +79,15 @@ export default function Funcao({ match }) {
     exclamation.setAttribute('display', 'block');
     e.currentTarget.remove();
   };
-  const handleDelete = async (e, idFuncao, index) => {
+  const handleDelete = async (e, idDado, index) => {
     e.persist();
     try {
       setIsLoading(true);
-      await axios.delete(`/funcao/${idFuncao}`);
+      await axios.delete(`/setor/${idDado}`);
       const novosFuncoes = [...descricaoList];
       novosFuncoes.splice(index, 1);
       setDescricaoList(novosFuncoes);
-      toast.success('Função excluida com sucesso');
+      toast.success('Congregação excluida com sucesso');
 
       setIsLoading(false);
     } catch (error) {
@@ -110,23 +102,23 @@ export default function Funcao({ match }) {
   };
   return (
     <Container>
-      <h1>{id ? 'Editar Aluno' : 'Novo Aluno'}</h1>
+      <h1>{id ? 'Editar Congregação' : 'Nova Congregação'}</h1>
       <Loading isLoading={isLoading} />
 
       <Form onSubmit={handleSubmit}>
         <label htmlFor="descricao">
-          Nome da função:
+          Nome da setor:
           <input
             type="text"
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
-            placeholder="Função"
+            placeholder="Congregação"
           />
         </label>
         <button type="submit">Salvar</button>
       </Form>
       <Listagem>
-        <h3>Lista de Funções</h3>
+        <h3>Lista de congregação</h3>
         <center>
           <Table className="table table-striped">
             <thead>
@@ -145,9 +137,9 @@ export default function Funcao({ match }) {
                       onClick={(e) => {
                         e.preventDefault();
                         setDescricao(dado.descricao);
-                        history.push(`/funcao/${dado.id}/edit`);
+                        history.push(`/congregacao/${dado.id}/edit`);
                       }}
-                      to={`/funcao/${dado.id}/edit`}
+                      to={`/congregacao/${dado.id}/edit`}
                     >
                       <FaEdit size={16} />
                     </Link>
@@ -155,7 +147,7 @@ export default function Funcao({ match }) {
                   <td>
                     <Link
                       onClick={handleDeleteAsk}
-                      to={`/funcao/${dado.id}/delete`}
+                      to={`/congregacao/${dado.id}/delete`}
                     >
                       <FaWindowClose size={16} />
                     </Link>
@@ -175,6 +167,6 @@ export default function Funcao({ match }) {
     </Container>
   );
 }
-Funcao.protoTypes = {
+Congregacao.protoTypes = {
   match: PropTypes.shape({}).isRequired,
 };

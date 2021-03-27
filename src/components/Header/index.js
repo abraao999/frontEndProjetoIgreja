@@ -34,6 +34,7 @@ export default function Header() {
   const configuracoes = [
     { desc: 'FUNÇÕES', path: '/funcao' },
     { desc: 'CARGOS', path: '/cargo' },
+    { desc: 'CONGREGAÇÃO', path: '/congregacao' },
   ];
   return (
     <Nav>

@@ -10,6 +10,7 @@ import Page404 from '../pages/Page404';
 import Home from '../pages/Home';
 import Funcao from '../pages/Funcao';
 import Cargo from '../pages/Cargo';
+import Congregacao from '../pages/Congregacao';
 
 export default function Routes() {
   return (
@@ -24,6 +25,12 @@ export default function Routes() {
       <MyRoute path="/funcao/" component={Funcao} isClosed={false} />
       <MyRoute path="/cargo/:id/edit" component={Cargo} isClosed={false} />
       <MyRoute path="/cargo/" component={Cargo} isClosed={false} />
+      <MyRoute
+        path="/congregacao/:id/edit"
+        component={Congregacao}
+        isClosed={false}
+      />
+      <MyRoute path="/congregacao/" component={Congregacao} isClosed={false} />
       <MyRoute path="*" component={Page404} />
     </Switch>
   );

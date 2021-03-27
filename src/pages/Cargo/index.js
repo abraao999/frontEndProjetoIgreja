@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
-import { Form, ListFuncoesConteiner, Listagem } from './styled';
+import { Form, Table, Listagem } from './styled';
 import axios from '../../services/axios';
 
 import Loading from '../../components/Loading';
@@ -28,7 +28,6 @@ export default function Cargo({ match }) {
       const response = await axios.get('/cargo');
       console.log(response.data);
       setDescricaoList(response.data);
-      toast.success('nada');
       // if(idFuncao){
 
       // }
@@ -64,7 +63,7 @@ export default function Cargo({ match }) {
         setDescricao('');
         toast.success('Cargo editado com sucesso');
 
-        history.push('/funcao');
+        history.push('/cargo');
         setIsLoading(false);
       }
     } catch (error) {
@@ -124,33 +123,48 @@ export default function Cargo({ match }) {
       <Listagem>
         <h3>Lista de Cargos</h3>
         <center>
-          <ListFuncoesConteiner>
-            {descricaoList.map((dado, index) => (
-              <div key={String(dado.id)}>
-                <span>{dado.descricao}</span>
-                <Link
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setDescricao(dado.descricao);
-                    history.push(`/funcao/${dado.id}/edit`);
-                  }}
-                  to={`/funcao/${dado.id}/edit`}
-                >
-                  <FaEdit size={16} />
-                </Link>
-                <Link onClick={handleDeleteAsk} to={`/aluno/${dado.id}/delete`}>
-                  <FaWindowClose size={16} />
-                </Link>
-
-                <FaExclamation
-                  onClick={(e) => handleDelete(e, dado.id, index)}
-                  size={16}
-                  display="none"
-                  cursor="pointer"
-                />
-              </div>
-            ))}
-          </ListFuncoesConteiner>
+          <Table className="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Descição</th>
+                <th scope="col">Alterar</th>
+                <th scope="col">Excluir</th>
+              </tr>
+            </thead>
+            <tbody>
+              {descricaoList.map((dado, index) => (
+                <tr key={String(dado.id)}>
+                  <td>{dado.descricao}</td>
+                  <td>
+                    <Link
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setDescricao(dado.descricao);
+                        history.push(`/cargo/${dado.id}/edit`);
+                      }}
+                      to={`/cargo/${dado.id}/edit`}
+                    >
+                      <FaEdit size={16} />
+                    </Link>
+                  </td>
+                  <td>
+                    <Link
+                      onClick={handleDeleteAsk}
+                      to={`/cargo/${dado.id}/delete`}
+                    >
+                      <FaWindowClose size={16} />
+                    </Link>
+                    <FaExclamation
+                      onClick={(e) => handleDelete(e, dado.id, index)}
+                      size={16}
+                      display="none"
+                      cursor="pointer"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
         </center>
       </Listagem>
     </Container>

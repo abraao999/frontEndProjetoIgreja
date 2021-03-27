@@ -23,3 +23,24 @@ export const Form = styled.form`
     }
   }
 `;
+export const ListFuncoesConteiner = styled.div`
+  margin-top: 20px;
+  max-width: 300px;
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    padding: 5px 0;
+  }
+  div + div {
+    border-top: 1px solid #eee;
+  }
+`;
+export const Listagem = styled.div`
+  h3 {
+    margin: 30px;
+    display: flex;
+    justify-content: center;
+  }
+`;

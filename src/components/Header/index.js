@@ -18,7 +18,6 @@ import Dropdown from '../Dropdowm';
 export default function Header() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const dispath = useDispatch();
-  const options = ['one', 'two', 'three'];
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -28,8 +27,12 @@ export default function Header() {
   const handleRedirect = () => {
     history.push('/login');
   };
-  const opcoes = [
+  const departamentos = [
     { desc: 'EBD', path: '/ebd' },
+    { desc: 'JOVENS', path: '/jovens' },
+  ];
+  const configuracoes = [
+    { desc: 'FUNÇÕES', path: '/funcao' },
     { desc: 'JOVENS', path: '/jovens' },
   ];
   return (
@@ -40,10 +43,8 @@ export default function Header() {
         <Link to="/">
           <span>HOME</span>
         </Link>
-        <Link to="/funcao">
-          <span>Funcao</span>
-        </Link>
-        <Dropdown nome="DEPARTAMENTO" opcoes={opcoes} />
+        <Dropdown nome="DEPARTAMENTOS" opcoes={departamentos} />
+        <Dropdown nome="CONFIGURAÇÕES" opcoes={configuracoes} />
         <Link to="/contato">
           <span>FALE CONOSCO</span>
         </Link>

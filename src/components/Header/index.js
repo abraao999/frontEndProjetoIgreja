@@ -40,6 +40,9 @@ export default function Header() {
         <Link to="/">
           <span>HOME</span>
         </Link>
+        <Link to="/funcao">
+          <span>Funcao</span>
+        </Link>
         <Dropdown nome="DEPARTAMENTO" opcoes={opcoes} />
         <Link to="/contato">
           <span>FALE CONOSCO</span>

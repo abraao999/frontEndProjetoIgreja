@@ -9,6 +9,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Page404 from '../pages/Page404';
 import Home from '../pages/Home';
+import Funcao from '../pages/Funcao';
 
 export default function Routes() {
   return (
@@ -19,6 +20,7 @@ export default function Routes() {
       <MyRoute path="/fotos/:id" component={Fotos} isClosed />
       <MyRoute path="/login/" component={Login} isClosed={false} />
       <MyRoute path="/register/" component={Register} isClosed={false} />
+      <MyRoute path="/funcao/" component={Funcao} isClosed={false} />
       <MyRoute path="*" component={Page404} />
     </Switch>
   );

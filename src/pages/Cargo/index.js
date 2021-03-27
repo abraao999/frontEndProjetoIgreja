@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
+import Modal from '../../components/Modal';
+
 import { Form, Table, Listagem } from './styled';
 import axios from '../../services/axios';
 
@@ -17,6 +19,9 @@ import history from '../../services/history';
 export default function Cargo({ match }) {
   const dispath = useDispatch();
   const id = get(match, 'params.id', '');
+  const [show, setShow] = useState(false);
+  const [idParaDelecao, setIdParaDelecao] = useState('');
+  const [indiceDelecao, setIndiceDelecao] = useState('');
 
   const [descricao, setDescricao] = useState('');
   const [descricaoList, setDescricaoList] = useState([]);
@@ -76,21 +81,23 @@ export default function Cargo({ match }) {
       setIsLoading(false);
     }
   }
-  const handleDeleteAsk = (e) => {
-    e.preventDefault();
-    const exclamation = e.currentTarget.nextSibling;
-    exclamation.setAttribute('display', 'block');
-    e.currentTarget.remove();
+  const handleClose = () => {
+    setShow(false);
   };
-  const handleDelete = async (e, idDado, index) => {
-    e.persist();
+  const handleShow = (idFuncao, index) => {
+    setIdParaDelecao(idFuncao);
+    setIndiceDelecao(index);
+    setShow(true);
+  };
+  const handleFunctionConfirm = async () => {
     try {
       setIsLoading(true);
-      await axios.delete(`/cargo/${idDado}`);
+      await axios.delete(`/cargo/${idParaDelecao}`);
       const novosFuncoes = [...descricaoList];
-      novosFuncoes.splice(index, 1);
+      novosFuncoes.splice(indiceDelecao, 1);
       setDescricaoList(novosFuncoes);
-      toast.success('Cargo excluido com sucesso');
+      toast.success('Cargo excluida com sucesso');
+      setShow(false);
 
       setIsLoading(false);
     } catch (error) {
@@ -98,16 +105,25 @@ export default function Cargo({ match }) {
       if (status === 401) {
         toast.error('Voce precisa fazer loggin');
       } else {
-        toast.error('Erro ao excluir um função');
+        toast.error('Erro ao excluir a classe');
       }
       setIsLoading(false);
     }
   };
+
   return (
     <Container>
       <h1>{id ? 'Editar Cargo' : 'Novo Cargo'}</h1>
       <Loading isLoading={isLoading} />
-
+      <Modal
+        title="Atenção!!!"
+        handleClose={handleClose}
+        show={show}
+        text="Deseja exluir esse registro"
+        buttonCancel="Não"
+        buttonConfirm="Sim"
+        handleFunctionConfirm={handleFunctionConfirm}
+      />
       <Form onSubmit={handleSubmit}>
         <label htmlFor="descricao">
           Nome da cargo:
@@ -149,17 +165,11 @@ export default function Cargo({ match }) {
                   </td>
                   <td>
                     <Link
-                      onClick={handleDeleteAsk}
-                      to={`/cargo/${dado.id}/delete`}
+                      onClick={() => handleShow(dado.id, index)}
+                      to={`/classe/${dado.id}/delete`}
                     >
                       <FaWindowClose size={16} />
                     </Link>
-                    <FaExclamation
-                      onClick={(e) => handleDelete(e, dado.id, index)}
-                      size={16}
-                      display="none"
-                      cursor="pointer"
-                    />
                   </td>
                 </tr>
               ))}

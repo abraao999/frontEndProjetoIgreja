@@ -2,12 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
-import {
-  FaUserCircle,
-  FaEdit,
-  FaWindowClose,
-  FaExclamation,
-} from 'react-icons/fa';
+import { FaEdit, FaWindowClose } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';

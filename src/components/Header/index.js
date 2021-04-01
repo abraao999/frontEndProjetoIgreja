@@ -35,6 +35,7 @@ export default function Header() {
     { desc: 'CARGOS', path: '/cargo' },
     { desc: 'CLASSES', path: '/classe' },
     { desc: 'CONGREGAÇÃO', path: '/congregacao' },
+    { desc: 'DEPARTAMENTOS', path: '/departamento' },
     { desc: 'FUNÇÕES', path: '/funcao' },
   ];
   return (

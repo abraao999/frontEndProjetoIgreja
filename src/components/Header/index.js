@@ -31,6 +31,10 @@ export default function Header() {
     { desc: 'EBD', path: '/ebd' },
     { desc: 'JOVENS', path: '/jovens' },
   ];
+  const secretaria = [
+    { desc: 'CADASTRO DE MEMBROS', path: '/cadMembro' },
+    { desc: 'JOVENS', path: '/jovens' },
+  ];
   const configuracoes = [
     { desc: 'CARGOS', path: '/cargo' },
     { desc: 'CLASSES', path: '/classe' },
@@ -48,6 +52,7 @@ export default function Header() {
         </Link>
         <Dropdown nome="DEPARTAMENTOS" opcoes={departamentos} />
         <Dropdown nome="CONFIGURAÇÕES" opcoes={configuracoes} />
+        <Dropdown nome="SECRETARIA" opcoes={secretaria} />
         <Link to="/contato">
           <span>FALE CONOSCO</span>
         </Link>

@@ -13,6 +13,7 @@ import Cargo from '../pages/Cargo';
 import Congregacao from '../pages/Congregacao';
 import Classe from '../pages/Classe';
 import Departamento from '../pages/Departamento';
+import CadMembro from '../pages/CadMembro';
 
 export default function Routes() {
   return (
@@ -29,6 +30,12 @@ export default function Routes() {
       <MyRoute path="/cargo/" component={Cargo} isClosed={false} />
       <MyRoute path="/classe/:id/edit" component={Classe} isClosed={false} />
       <MyRoute path="/classe/" component={Classe} isClosed={false} />
+      <MyRoute
+        path="/cadMembro/:id/edit"
+        component={CadMembro}
+        isClosed={false}
+      />
+      <MyRoute path="/cadMembro/" component={CadMembro} isClosed={false} />
       <MyRoute
         path="/departamento/:id/edit"
         component={Departamento}

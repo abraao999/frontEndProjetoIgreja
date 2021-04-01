@@ -8,6 +8,7 @@ export const Form = styled.form`
 
   small {
     color: red;
+    display: none;
   }
   label {
     flex: 1;

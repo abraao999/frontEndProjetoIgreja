@@ -1,47 +1,72 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
-import { FaEdit, FaWindowClose } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { get, isEqual } from 'lodash';
+import InputMask from 'react-input-mask';
+import { isEmail, isDate } from 'validator';
+import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
-import { Form, Table, Listagem } from './styled';
+import { Form } from './styled';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
 import history from '../../services/history';
+import ComboBox from '../../components/ComboBox';
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function CadMembro({ match }) {
   const dispath = useDispatch();
   const id = get(match, 'params.id', '');
   const [show, setShow] = useState(false);
-  const [idParaDelecao, setIdParaDelecao] = useState('');
-  const [indiceDelecao, setIndiceDelecao] = useState('');
   const [msg, setMsg] = useState(true);
 
   const [setores, setSetores] = useState([]);
+  const [funcoes, setFuncoes] = useState([]);
+  const [cargos, setCargos] = useState([]);
   const [setorSeletected, setSetorSeletected] = useState(0);
   const [comboBoxCongregacao, setComboBoxCongregacao] = useState(
     'Selecione uma congregação'
   );
+  const [nomeMembro, setNomeMembro] = useState('');
+  const [rg, setRg] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [dataBatismo, setDataBatismo] = useState('');
+  const [estacoCivil, setEstacoCivil] = useState('');
+  const [profissao, setProfissao] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [cargo, setCargo] = useState('');
+  const [cargoId, setCargoId] = useState(0);
+  const [functionNome, setFunctionNome] = useState('');
+  const [functionId, setFunctionId] = useState(0);
+  const [setor, setSetor] = useState('');
+  const [setorId, setSetorId] = useState(0);
 
   const [departamento, setDepartamento] = useState([]);
   const [descricao, setDescricao] = useState('');
   const [descricaoList, setDescricaoList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const listEstadoCivil = [
+    { id: 1, descricao: 'Solteiro(a)' },
+    { id: 2, descricao: 'Casado(a)' },
+    { id: 3, descricao: 'Viúvo(a)' },
+    { id: 4, descricao: 'Divorciado(a)' },
+  ];
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get('/departamento');
-      setDepartamento(response.data);
+      const response = await axios.get('/funcao');
+      setFuncoes(response.data);
       const response2 = await axios.get('/setor');
       setSetores(response2.data);
-      console.log(setorSeletected);
+      const response3 = await axios.get('/cargo');
+      setCargos(response3.data);
       setIsLoading(false);
     }
     getData();
@@ -52,9 +77,15 @@ export default function CadMembro({ match }) {
     let formErrors = false;
 
     if (
-      descricao.length < 3 ||
-      descricao.length > 255 ||
-      setorSeletected === 0
+      nomeMembro.length < 3 ||
+      rg.length < 3 ||
+      cpf.length < 11 ||
+      telefone.length < 11 ||
+      estacoCivil.length < 3 ||
+      profissao.length < 3 ||
+      setorId === 0 ||
+      functionId === 0 ||
+      cargoId === 0
     ) {
       formErrors = true;
       setIsLoading(false);
@@ -63,16 +94,21 @@ export default function CadMembro({ match }) {
     if (formErrors) return;
     try {
       if (!id) {
-        const response = await axios.post('/departamento', {
-          descricao,
-          setor_id: setorSeletected,
+        const response = await axios.post(`membro`, {
+          nome: nomeMembro,
+          rg,
+          cpf,
+          data_batismo: dataBatismo,
+          profissao,
+          estado_civil: estacoCivil,
+          telefone,
+          email,
+          password,
+          cargo_id: cargoId,
+          function_id: functionId,
+          setor_id: setorId,
         });
         console.log(response);
-        const novaLista = await axios.get('/departamento');
-        setDepartamento(novaLista.data);
-        setDescricao('');
-        setSetorSeletected(0);
-        setComboBoxCongregacao('Selecione uma congregação');
         toast.success('Departamento criada com sucesso');
         setIsLoading(false);
       } else {
@@ -105,42 +141,50 @@ export default function CadMembro({ match }) {
   const handleClose = () => {
     setShow(false);
   };
-  const handleShow = (idFuncao, index) => {
-    setIdParaDelecao(idFuncao);
-    setIndiceDelecao(index);
-    setShow(true);
-  };
-  const handleFunctionConfirm = async () => {
-    try {
-      setIsLoading(true);
-      await axios.delete(`/departamento/${idParaDelecao}`);
-      const novosFuncoes = [...departamento];
-      novosFuncoes.splice(indiceDelecao, 1);
-      setDepartamento(novosFuncoes);
-      toast.success('Departamento excluida com sucesso');
-      setShow(false);
 
-      setIsLoading(false);
-    } catch (error) {
-      const status = get(error, 'response.data.status', 0);
-      if (status === 401) {
-        toast.error('Voce precisa fazer loggin');
-      } else {
-        toast.error('Erro ao excluir a departamento');
-      }
-      setIsLoading(false);
-    }
-  };
-  const handleGetIdClasse = (e) => {
+  const handleFunctionConfirm = async () => {};
+  const handleGetIdCongregacao = (e) => {
     const nome = e.target.value;
-    setComboBoxCongregacao(e.target.value);
+    setSetor(e.target.value);
     setores.map((dado) => {
-      if (nome === dado.descricao) setSetorSeletected(dado.id);
+      if (nome === dado.descricao) setSetorId(dado.id);
     });
+  };
+  const handleGetIdFuncao = (e) => {
+    const nome = e.target.value;
+    setFunctionNome(e.target.value);
+    funcoes.map((dado) => {
+      if (nome === dado.descricao) setFunctionId(dado.id);
+    });
+  };
+  const handleGetIdCargo = (e) => {
+    const nome = e.target.value;
+    setCargo(e.target.value);
+    cargos.map((dado) => {
+      if (nome === dado.descricao) setCargoId(dado.id);
+    });
+  };
+  const handleInput = (e, idTag) => {
+    const element = document.getElementById(idTag);
+    const next = e.currentTarget.nextElementSibling;
+    if (idTag === 'dataBatismo')
+      if (!isDate(e.target.value)) {
+        next.setAttribute('style', 'display:block');
+        return;
+      }
+
+    if (e.target.value.length < 3) {
+      element.setAttribute('style', 'border-color:red');
+      next.setAttribute('style', 'display:block');
+      element.style.borderWidth = '2px';
+    } else {
+      element.removeAttribute('style');
+      next.removeAttribute('style');
+    }
   };
   return (
     <Container>
-      <h1>{id ? 'Editar Departamento' : 'Novo Departamento'}</h1>
+      <h1> Novo Membro</h1>
       <Loading isLoading={isLoading} />
       <Modal
         title="Atenção!!!"
@@ -154,86 +198,158 @@ export default function CadMembro({ match }) {
 
       <Form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="descricao">
-            Nome do departamento:
+          <label htmlFor="nome">
+            Nome completo:
             <input
-              id="input"
+              id="nome"
               type="text"
-              value={descricao}
+              value={nomeMembro}
               onChange={(e) => {
-                const banana = document.getElementById('input');
-                if (e.target.value.length < 3) {
-                  setMsg(false);
-                  banana.setAttribute('style', 'border-color:red');
-                  banana.style.borderWidth = '2px';
-                } else {
-                  banana.removeAttribute('style');
-                  setMsg(true);
-                }
-                setDescricao(e.target.value);
+                setNomeMembro(e.target.value);
+                handleInput(e, 'nome');
               }}
-              placeholder="Departamento"
+              placeholder="Nome"
             />
-            <small hidden={msg}>Minimo de 3 caracteres</small>
+            <small>Minimo de 3 caracteres</small>
           </label>
-          <label htmlFor="congregacao">
-            Nome da congregação
-            <select onChange={handleGetIdClasse} value={comboBoxCongregacao}>
-              <option value="nada">Selecione a congregação</option>
-              {setores.map((dado) => (
-                <option key={dado.id} value={dado.descricao}>
-                  {dado.descricao}
-                </option>
-              ))}
-            </select>
+        </div>
+        <div>
+          <label htmlFor="rg">
+            RG:
+            <input
+              id="rg"
+              type="text"
+              value={rg}
+              onChange={(e) => {
+                setRg(e.target.value);
+                handleInput(e, 'rg');
+              }}
+              placeholder="RG"
+            />
+            <small>Minimo de 3 caracteres</small>
+          </label>
+          <label htmlFor="cpf">
+            CPF:
+            <InputMask
+              mask="999.999.999-99"
+              id="cpf"
+              type="text"
+              value={cpf}
+              onChange={(e) => {
+                setCpf(e.target.value);
+                handleInput(e, 'cpf');
+              }}
+              placeholder="000.000.000-00"
+            />
+            <small>Minimo de 3 caracteres</small>
+          </label>
+        </div>
+        <div>
+          <label htmlFor="dataBatismo">
+            Data de Batismo:
+            <input
+              id="dataBatismo"
+              type="date"
+              value={dataBatismo}
+              onChange={(e) => {
+                setDataBatismo(e.target.value);
+                handleInput(e, 'dataBatismo');
+              }}
+            />
+            <small>Insira uma data valida</small>
+          </label>
+          <label htmlFor="telefone">
+            Celular:
+            <InputMask
+              mask="(99) 99999-9999"
+              id="telefone"
+              type="text"
+              value={telefone}
+              onChange={(e) => {
+                setTelefone(e.target.value);
+                handleInput(e, 'telefone');
+              }}
+              placeholder="(00) 00000-0000"
+            />
+            <small>Insira um número válido</small>
+          </label>
+        </div>
+        <div>
+          <ComboBox
+            title="Estado Civil"
+            list={listEstadoCivil}
+            text="Selecione o estado civil"
+            value={estacoCivil}
+            onChange={(e) => setEstacoCivil(e.target.value)}
+          />
+          <label htmlFor="profissao">
+            Profissão:
+            <input
+              id="profissao"
+              type="text"
+              value={profissao}
+              onChange={(e) => {
+                setProfissao(e.target.value);
+                handleInput(e, 'profissao');
+              }}
+              placeholder="Insira a profissão"
+            />
+            <small>Insira uma data valida</small>
+          </label>
+        </div>
+        <div>
+          <ComboBox
+            title="Selecione a Congregação"
+            list={setores}
+            value={setor}
+            onChange={handleGetIdCongregacao}
+          />
+          <ComboBox
+            title="Selecione a função"
+            list={funcoes}
+            value={functionNome}
+            onChange={handleGetIdFuncao}
+          />
+          <ComboBox
+            title="Selecione a cargo"
+            list={cargos}
+            value={cargo}
+            onChange={handleGetIdCargo}
+          />
+        </div>
+        <div>
+          <label htmlFor="email">
+            E-mail:
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                handleInput(e, 'email');
+              }}
+              placeholder="exemplo@email.com"
+            />
+            <small>Insira um e-mail válido</small>
+          </label>
+          <label htmlFor="password">
+            Senha:
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                handleInput(e, 'password');
+              }}
+              placeholder="Senha"
+            />
+            <small>Minimo de 3 caracteres</small>
           </label>
         </div>
 
         <button type="submit">Salvar</button>
       </Form>
-      <Listagem>
-        <h3>Lista de Funções</h3>
-        <center>
-          <Table className="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">Departamento</th>
-                <th scope="col">Congregação</th>
-                <th scope="col">Alterar</th>
-                <th scope="col">Excluir</th>
-              </tr>
-            </thead>
-            <tbody>
-              {departamento.map((dado, index) => (
-                <tr key={String(dado.dep_id)}>
-                  <td>{dado.dep_descricao}</td>
-                  <td>{dado.setor_descricao}</td>
-                  <td>
-                    <Link
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setDescricao(dado.dep_descricao);
-                        history.push(`/departamento/${dado.dep_id}/edit`);
-                      }}
-                      to={`/departamento/${dado.dep_id}/edit`}
-                    >
-                      <FaEdit size={16} />
-                    </Link>
-                  </td>
-                  <td>
-                    <Link
-                      onClick={() => handleShow(dado.dep_id, index)}
-                      to={`/departamento/${dado.dep_id}/delete`}
-                    >
-                      <FaWindowClose size={16} />
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </center>
-      </Listagem>
     </Container>
   );
 }

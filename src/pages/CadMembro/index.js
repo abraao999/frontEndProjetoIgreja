@@ -61,8 +61,18 @@ export default function CadMembro({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get('/funcao');
-      setFuncoes(response.data);
+      const response = await axios.get(`/membro/${id}`);
+      setNomeMembro(response.data.nome);
+      setRg(response.data.rg);
+      setCpf(response.data.cpf);
+      setTelefone(response.data.telefone);
+      setEstacoCivil(response.data.estado_civil);
+      setProfissao(response.data.profissao);
+      setCargoId(response.data.cargo_id);
+      setFunctionId(response.data.function_id);
+      setSetorId(response.data.setor_id);
+      const response4 = await axios.get('/funcao');
+      setFuncoes(response4.data);
       const response2 = await axios.get('/setor');
       setSetores(response2.data);
       const response3 = await axios.get('/cargo');
@@ -125,22 +135,27 @@ export default function CadMembro({ match }) {
         });
         console.log(response);
         limpaCampos();
-        toast.success('Departamento criada com sucesso');
+        toast.success('Membro criado com sucesso');
+        history.push('/listMembros');
         setIsLoading(false);
       } else {
-        const response = await axios.put(`/departamento/${id}`, {
-          descricao,
-          setor_id: setorSeletected,
+        const response = await axios.put(`/membro/${id}`, {
+          nome: nomeMembro,
+          rg,
+          cpf,
+          data_batismo: dataBatismo || null,
+          profissao,
+          estado_civil: estacoCivil,
+          telefone,
+          cargo_id: cargoId,
+          function_id: functionId,
+          setor_id: setorId,
         });
         console.log(response);
-        const novaLista = await axios.get('/departamento');
-        setDepartamento(novaLista.data);
-        setDescricao('');
-        setSetorSeletected(0);
-        setComboBoxCongregacao('Selecione uma congregação');
-        toast.success('Departamento editada com sucesso');
+        limpaCampos();
+        toast.success('Membro editado com sucesso');
 
-        history.push('/departamento');
+        history.push(`/cadMembro/${id}/edit`);
         setIsLoading(false);
       }
     } catch (error) {

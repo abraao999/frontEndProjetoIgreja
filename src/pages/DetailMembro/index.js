@@ -3,34 +3,17 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
 import InputMask from 'react-input-mask';
-import { isEmail, isDate } from 'validator';
 import { get } from 'lodash';
-import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
 import { Form } from './styled';
 import axios from '../../services/axios';
-import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
 import history from '../../services/history';
-import ComboBox from '../../components/ComboBox';
-// import * as actions from '../../store/modules/auth/actions';
 
 export default function DetailMembro({ match }) {
-  const dispath = useDispatch();
   const id = get(match, 'params.id', '');
-  const [show, setShow] = useState(false);
-  const [msg, setMsg] = useState(true);
 
-  const [setores, setSetores] = useState([]);
-  const [membro, setMembros] = useState([]);
-  const [cargos, setCargos] = useState([]);
-  const [setorSeletected, setSetorSeletected] = useState(0);
-  const [comboBoxCongregacao, setComboBoxCongregacao] = useState(
-    'Selecione uma congregação'
-  );
   const [nomeMembro, setNomeMembro] = useState('');
   const [rg, setRg] = useState('');
   const [cpf, setCpf] = useState('');
@@ -38,31 +21,16 @@ export default function DetailMembro({ match }) {
   const [dataBatismo, setDataBatismo] = useState('');
   const [estacoCivil, setEstacoCivil] = useState('');
   const [profissao, setProfissao] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [cargo, setCargo] = useState('');
-  const [cargoId, setCargoId] = useState(0);
   const [functionNome, setFunctionNome] = useState('');
-  const [functionId, setFunctionId] = useState(0);
   const [setor, setSetor] = useState('');
-  const [setorId, setSetorId] = useState(0);
 
-  const [departamento, setDepartamento] = useState([]);
-  const [descricao, setDescricao] = useState('');
-  const [descricaoList, setDescricaoList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const listEstadoCivil = [
-    { id: 1, descricao: 'Solteiro(a)' },
-    { id: 2, descricao: 'Casado(a)' },
-    { id: 3, descricao: 'Viúvo(a)' },
-    { id: 4, descricao: 'Divorciado(a)' },
-  ];
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
       const response = await axios.get(`/membro/${id}`);
-      setMembros(response.data);
       setNomeMembro(response.data.nome);
       setRg(response.data.rg);
       setCpf(response.data.cpf);

@@ -66,8 +66,6 @@ export default function ListMembros({ match }) {
     }
     setIsLoading(false);
     setMembros(novaLista);
-
-    // setCongregacaoId('Selecione uma congregação');
   }
 
   const handleClose = () => {

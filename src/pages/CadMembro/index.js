@@ -71,6 +71,21 @@ export default function CadMembro({ match }) {
     }
     getData();
   }, []);
+  const limpaCampos = () => {
+    setNomeMembro('');
+    setRg('');
+    setCpf('');
+    setDataBatismo('');
+    setTelefone('');
+    setEstacoCivil('');
+    setProfissao('');
+    setSetor('Selecione a Congregação');
+    setFunctionNome('Selecione a função');
+    setCargo('Selecione o cargo');
+    setFunctionId(0);
+    setSetorId(0);
+    setCargoId(0);
+  };
   async function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
@@ -98,7 +113,7 @@ export default function CadMembro({ match }) {
           nome: nomeMembro,
           rg,
           cpf,
-          data_batismo: dataBatismo,
+          data_batismo: dataBatismo || null,
           profissao,
           estado_civil: estacoCivil,
           telefone,
@@ -109,6 +124,7 @@ export default function CadMembro({ match }) {
           setor_id: setorId,
         });
         console.log(response);
+        limpaCampos();
         toast.success('Departamento criada com sucesso');
         setIsLoading(false);
       } else {

@@ -14,6 +14,8 @@ import Congregacao from '../pages/Congregacao';
 import Classe from '../pages/Classe';
 import Departamento from '../pages/Departamento';
 import CadMembro from '../pages/CadMembro';
+import ListMembros from '../pages/ListMembros';
+import DetailMembro from '../pages/DetailMembro';
 
 export default function Routes() {
   return (
@@ -52,6 +54,12 @@ export default function Routes() {
         isClosed={false}
       />
       <MyRoute path="/congregacao/" component={Congregacao} isClosed={false} />
+      <MyRoute path="/listMembros/" component={ListMembros} isClosed={false} />
+      <MyRoute
+        path="/detailtMembro/:id"
+        component={DetailMembro}
+        isClosed={false}
+      />
       <MyRoute path="*" component={Page404} />
     </Switch>
   );

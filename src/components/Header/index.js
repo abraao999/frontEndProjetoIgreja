@@ -33,7 +33,7 @@ export default function Header() {
   ];
   const secretaria = [
     { desc: 'CADASTRO DE MEMBROS', path: '/cadMembro' },
-    { desc: 'JOVENS', path: '/jovens' },
+    { desc: 'LISTA DE MEMBROS', path: '/listMembros' },
   ];
   const configuracoes = [
     { desc: 'CARGOS', path: '/cargo' },

@@ -81,11 +81,11 @@ export default function ListMembros({ match }) {
   const handleFunctionConfirm = async () => {
     try {
       setIsLoading(true);
-      await axios.delete(`/departamento/${idParaDelecao}`);
-      const novosFuncoes = [...departamento];
-      novosFuncoes.splice(indiceDelecao, 1);
-      setDepartamento(novosFuncoes);
-      toast.success('Departamento excluida com sucesso');
+      await axios.delete(`/membro/${idParaDelecao}`);
+      const novaList = [...membros];
+      novaList.splice(indiceDelecao, 1);
+      setMembros(novaList);
+      toast.success('Membro excluido com sucesso');
       setShow(false);
 
       setIsLoading(false);
@@ -94,7 +94,7 @@ export default function ListMembros({ match }) {
       if (status === 401) {
         toast.error('Voce precisa fazer loggin');
       } else {
-        toast.error('Erro ao excluir a departamento');
+        toast.error('Erro ao excluir a membro');
       }
       setIsLoading(false);
     }
@@ -191,17 +191,17 @@ export default function ListMembros({ match }) {
                       onClick={(e) => {
                         e.preventDefault();
                         setDescricao(dado.dep_descricao);
-                        history.push(`/departamento/${dado.dep_id}/edit`);
+                        history.push(`/cadMembro/${dado.id}/edit`);
                       }}
-                      to={`/departamento/${dado.dep_id}/edit`}
+                      to={`/cadMembro/${dado.id}/edit`}
                     >
                       <FaEdit size={16} />
                     </Link>
                   </td>
                   <td>
                     <Link
-                      onClick={() => handleShow(dado.dep_id, index)}
-                      to={`/departamento/${dado.dep_id}/delete`}
+                      onClick={() => handleShow(dado.id, index)}
+                      to="/listMembros"
                     >
                       <FaWindowClose size={16} />
                     </Link>

@@ -162,7 +162,7 @@ export default function DetailMembro({ match }) {
           </label>
         </div>
         <span>
-          <button type="submit">Salvar</button>
+          <button type="submit">Alterar</button>
           <button type="button" onClick={() => history.push('/listMembros')}>
             Voltar
           </button>

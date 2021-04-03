@@ -16,7 +16,6 @@ export default function (state = initialState, action) {
       newState.tokem = action.payload.tokem;
       newState.user = action.payload.user;
       newState.isLoading = false;
-      console.log('reducer', action);
       return newState;
     }
     case types.LOGIN_FAILURE: {

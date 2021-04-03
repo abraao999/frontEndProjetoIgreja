@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 
 import InputMask from 'react-input-mask';
 import { get } from 'lodash';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Container } from '../../styles/GlobalStyles';
 import { Form } from './styled';
 import axios from '../../services/axios';
@@ -14,6 +16,7 @@ import history from '../../services/history';
 export default function DetailMembro({ match }) {
   const id = get(match, 'params.id', '');
 
+  const [membros, setMembros] = useState([]);
   const [nomeMembro, setNomeMembro] = useState('');
   const [rg, setRg] = useState('');
   const [cpf, setCpf] = useState('');
@@ -31,6 +34,7 @@ export default function DetailMembro({ match }) {
     async function getData() {
       setIsLoading(true);
       const response = await axios.get(`/membro/${id}`);
+      setMembros(response.data);
       setNomeMembro(response.data.nome);
       setRg(response.data.rg);
       setCpf(response.data.cpf);
@@ -49,7 +53,7 @@ export default function DetailMembro({ match }) {
       const response4 = await axios.get(`/cargo/${response.data.cargo_id}`);
       setCargo(response4.data.descricao);
 
-      const response3 = await axios.get(`/funcao/${response.data.setor_id}`);
+      const response3 = await axios.get(`/funcao/${response.data.function_id}`);
       console.log(response3.data);
       setFunctionNome(response3.data.descricao);
 
@@ -62,6 +66,7 @@ export default function DetailMembro({ match }) {
     e.preventDefault();
     history.push(`/cadMembro/${id}/edit`);
   }
+
   return (
     <Container>
       <h1> Detalhes do Membro</h1>

@@ -51,11 +51,13 @@ export default function Header() {
           <span>HOME</span>
         </Link>
         <Dropdown nome="DEPARTAMENTOS" opcoes={departamentos} />
-        <Dropdown nome="CONFIGURAÇÕES" opcoes={configuracoes} />
-        <Dropdown nome="SECRETARIA" opcoes={secretaria} />
-        <Link to="/contato">
-          <span>FALE CONOSCO</span>
-        </Link>
+        {isLoggedIn && <Dropdown nome="CONFIGURAÇÕES" opcoes={configuracoes} />}
+        {isLoggedIn && <Dropdown nome="SECRETARIA" opcoes={secretaria} />}
+        {!isLoggedIn && (
+          <Link to="/contato">
+            <span>FALE CONOSCO</span>
+          </Link>
+        )}
         {isLoggedIn ? (
           <Link onClick={handleLogout} to="/login">
             <FaSignOutAlt size={24} />

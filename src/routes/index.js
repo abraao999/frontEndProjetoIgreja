@@ -26,40 +26,24 @@ export default function Routes() {
       <MyRoute path="/fotos/:id" component={Fotos} isClosed />
       <MyRoute path="/login/" component={Login} isClosed={false} />
       <MyRoute path="/register/" component={Register} isClosed={false} />
-      <MyRoute path="/funcao/:id/edit" component={Funcao} isClosed={false} />
-      <MyRoute path="/funcao/" component={Funcao} isClosed={false} />
-      <MyRoute path="/cargo/:id/edit" component={Cargo} isClosed={false} />
-      <MyRoute path="/cargo/" component={Cargo} isClosed={false} />
-      <MyRoute path="/classe/:id/edit" component={Classe} isClosed={false} />
-      <MyRoute path="/classe/" component={Classe} isClosed={false} />
-      <MyRoute
-        path="/cadMembro/:id/edit"
-        component={CadMembro}
-        isClosed={false}
-      />
-      <MyRoute path="/cadMembro/" component={CadMembro} isClosed={false} />
+      <MyRoute path="/funcao/:id/edit" component={Funcao} isClosed />
+      <MyRoute path="/funcao/" component={Funcao} isClosed />
+      <MyRoute path="/cargo/:id/edit" component={Cargo} isClosed />
+      <MyRoute path="/cargo/" component={Cargo} isClosed />
+      <MyRoute path="/classe/:id/edit" component={Classe} isClosed />
+      <MyRoute path="/classe/" component={Classe} isClosed />
+      <MyRoute path="/cadMembro/:id/edit" component={CadMembro} isClosed />
+      <MyRoute path="/cadMembro/" component={CadMembro} isClosed />
       <MyRoute
         path="/departamento/:id/edit"
         component={Departamento}
-        isClosed={false}
+        isClosed
       />
-      <MyRoute
-        path="/departamento/"
-        component={Departamento}
-        isClosed={false}
-      />
-      <MyRoute
-        path="/congregacao/:id/edit"
-        component={Congregacao}
-        isClosed={false}
-      />
-      <MyRoute path="/congregacao/" component={Congregacao} isClosed={false} />
-      <MyRoute path="/listMembros/" component={ListMembros} isClosed={false} />
-      <MyRoute
-        path="/detailtMembro/:id"
-        component={DetailMembro}
-        isClosed={false}
-      />
+      <MyRoute path="/departamento/" component={Departamento} isClosed />
+      <MyRoute path="/congregacao/:id/edit" component={Congregacao} isClosed />
+      <MyRoute path="/congregacao/" component={Congregacao} isClosed />
+      <MyRoute path="/listMembros/" component={ListMembros} isClosed />
+      <MyRoute path="/detailtMembro/:id" component={DetailMembro} isClosed />
       <MyRoute path="*" component={Page404} />
     </Switch>
   );

@@ -205,25 +205,25 @@ export default function Departamento({ match }) {
             </thead>
             <tbody>
               {departamento.map((dado, index) => (
-                <tr key={String(dado.dep_id)}>
-                  <td>{dado.dep_descricao}</td>
+                <tr key={String(dado.id)}>
+                  <td>{dado.descricao}</td>
                   <td>{dado.setor_descricao}</td>
                   <td>
                     <Link
                       onClick={(e) => {
                         e.preventDefault();
-                        setDescricao(dado.dep_descricao);
-                        history.push(`/departamento/${dado.dep_id}/edit`);
+                        setDescricao(dado.descricao);
+                        history.push(`/departamento/${dado.id}/edit`);
                       }}
-                      to={`/departamento/${dado.dep_id}/edit`}
+                      to={`/departamento/${dado.id}/edit`}
                     >
                       <FaEdit size={16} />
                     </Link>
                   </td>
                   <td>
                     <Link
-                      onClick={() => handleShow(dado.dep_id, index)}
-                      to={`/departamento/${dado.dep_id}/delete`}
+                      onClick={() => handleShow(dado.id, index)}
+                      to={`/departamento/${dado.id}/delete`}
                     >
                       <FaWindowClose size={16} />
                     </Link>

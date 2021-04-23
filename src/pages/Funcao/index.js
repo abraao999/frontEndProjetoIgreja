@@ -111,7 +111,7 @@ export default function Funcao({ match }) {
   };
   return (
     <Container>
-      <h1>{id ? 'Editar Aluno' : 'Novo Aluno'}</h1>
+      <h1>{id ? 'Editar função' : 'Novo função'}</h1>
       <Loading isLoading={isLoading} />
       <Modal
         title="Atenção!!!"

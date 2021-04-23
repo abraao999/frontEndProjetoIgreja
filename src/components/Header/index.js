@@ -27,6 +27,10 @@ export default function Header() {
   const handleRedirect = () => {
     history.push('/login');
   };
+  const caixa = [
+    { desc: 'LANÇAMENTO', path: '/caixa' },
+    { desc: 'RELATÓRIO', path: '/relatorioCaixa' },
+  ];
   const departamentos = [
     { desc: 'EBD', path: '/ebd' },
     { desc: 'JOVENS', path: '/jovens' },
@@ -50,9 +54,13 @@ export default function Header() {
         <Link to="/">
           <span>HOME</span>
         </Link>
-        <Dropdown nome="DEPARTAMENTOS" opcoes={departamentos} />
+        {!isLoggedIn && (
+          <Dropdown nome="DEPARTAMENTOS" opcoes={departamentos} />
+        )}
         {isLoggedIn && <Dropdown nome="CONFIGURAÇÕES" opcoes={configuracoes} />}
         {isLoggedIn && <Dropdown nome="SECRETARIA" opcoes={secretaria} />}
+        {isLoggedIn && <Dropdown nome="CAIXA" opcoes={caixa} />}
+
         {!isLoggedIn && (
           <Link to="/contato">
             <span>FALE CONOSCO</span>

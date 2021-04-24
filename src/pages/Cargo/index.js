@@ -166,7 +166,7 @@ export default function Cargo({ match }) {
                   <td>
                     <Link
                       onClick={() => handleShow(dado.id, index)}
-                      to={`/classe/${dado.id}/delete`}
+                      to={`/cargo/${dado.id}/delete`}
                     >
                       <FaWindowClose size={16} />
                     </Link>

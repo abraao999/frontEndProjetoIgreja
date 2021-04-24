@@ -21,7 +21,7 @@ export default function Home() {
     <>
       <Loading isLoading={isLoading} />
       <Container>
-        <h1>Alunos</h1>
+        <h1>HomeScreen</h1>
       </Container>
     </>
   );

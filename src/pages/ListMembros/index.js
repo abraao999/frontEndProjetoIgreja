@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { FaEdit, FaWindowClose, FaRegListAlt, FaSearch } from 'react-icons/fa';
 
 import { useDispatch } from 'react-redux';
-import { get, isEqual } from 'lodash';
+import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
 import { Form, Table, Listagem } from './styled';
@@ -30,10 +30,8 @@ export default function ListMembros({ match }) {
     'Selecione uma congregação'
   );
 
-  const [departamento, setDepartamento] = useState([]);
   const [membros, setMembros] = useState([]);
   const [descricao, setDescricao] = useState('');
-  const [descricaoList, setDescricaoList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -156,6 +154,7 @@ export default function ListMembros({ match }) {
           <Table className="table table-striped">
             <thead>
               <tr>
+                <th scope="col">Nº Ficha</th>
                 <th scope="col">Nome</th>
                 <th scope="col">Telefone</th>
                 <th scope="col">Congregação</th>
@@ -168,6 +167,7 @@ export default function ListMembros({ match }) {
             <tbody>
               {membros.map((dado, index) => (
                 <tr key={String(dado.id)}>
+                  <td>{dado.id}</td>
                   <td>{dado.nome}</td>
                   <td>{dado.telefone}</td>
                   <td>{dado.desc_setor}</td>

@@ -22,20 +22,18 @@ export default function CadMembro({ match }) {
   const dispath = useDispatch();
   const id = get(match, 'params.id', '');
   const [show, setShow] = useState(false);
-  const [msg, setMsg] = useState(true);
 
+  const [maxId, setMaxId] = useState(0);
   const [setores, setSetores] = useState([]);
   const [funcoes, setFuncoes] = useState([]);
   const [cargos, setCargos] = useState([]);
-  const [setorSeletected, setSetorSeletected] = useState(0);
-  const [comboBoxCongregacao, setComboBoxCongregacao] = useState(
-    'Selecione uma congregação'
-  );
-  const [nomeMembro, setNomeMembro] = useState('');
+
+  const [nomeMembro, setNomeMembro] = useState(' ');
   const [rg, setRg] = useState('');
   const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');
   const [dataBatismo, setDataBatismo] = useState('');
+  const [dataNascimento, setDataNascimento] = useState('');
   const [estacoCivil, setEstacoCivil] = useState('');
   const [profissao, setProfissao] = useState('');
   const [email, setEmail] = useState('');
@@ -46,10 +44,6 @@ export default function CadMembro({ match }) {
   const [functionId, setFunctionId] = useState(0);
   const [setor, setSetor] = useState('');
   const [setorId, setSetorId] = useState(0);
-
-  const [departamento, setDepartamento] = useState([]);
-  const [descricao, setDescricao] = useState('');
-  const [descricaoList, setDescricaoList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const listEstadoCivil = [
@@ -61,16 +55,21 @@ export default function CadMembro({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get(`/membro/${id}`);
-      setNomeMembro(response.data.nome);
-      setRg(response.data.rg);
-      setCpf(response.data.cpf);
-      setTelefone(response.data.telefone);
-      setEstacoCivil(response.data.estado_civil);
-      setProfissao(response.data.profissao);
-      setCargoId(response.data.cargo_id);
-      setFunctionId(response.data.function_id);
-      setSetorId(response.data.setor_id);
+      if (!id) {
+        const dado = await axios.get('/membro/maxId');
+        setMaxId(dado.data + 1);
+      } else {
+        const response = await axios.get(`/membro/${id}`);
+        setNomeMembro(response.data.nome);
+        setRg(response.data.rg);
+        setCpf(response.data.cpf);
+        setTelefone(response.data.telefone);
+        setEstacoCivil(response.data.estado_civil);
+        setProfissao(response.data.profissao);
+        setCargoId(response.data.cargo_id);
+        setFunctionId(response.data.function_id);
+        setSetorId(response.data.setor_id);
+      }
       const response4 = await axios.get('/funcao');
       setFuncoes(response4.data);
       const response2 = await axios.get('/setor');
@@ -80,12 +79,13 @@ export default function CadMembro({ match }) {
       setIsLoading(false);
     }
     getData();
-  }, []);
+  }, [id]);
   const limpaCampos = () => {
     setNomeMembro('');
     setRg('');
     setCpf('');
     setDataBatismo('');
+    setDataNascimento('');
     setTelefone('');
     setEstacoCivil('');
     setProfissao('');
@@ -124,6 +124,7 @@ export default function CadMembro({ match }) {
           rg,
           cpf,
           data_batismo: dataBatismo || null,
+          data_nascimento: dataNascimento || null,
           profissao,
           estado_civil: estacoCivil,
           telefone,
@@ -144,6 +145,7 @@ export default function CadMembro({ match }) {
           rg,
           cpf,
           data_batismo: dataBatismo || null,
+          data_nascimento: dataNascimento || null,
           profissao,
           estado_civil: estacoCivil,
           telefone,
@@ -229,6 +231,14 @@ export default function CadMembro({ match }) {
 
       <Form onSubmit={handleSubmit}>
         <div>
+          <label htmlFor="id">
+            Número da ficha:
+            {id ? (
+              <input id="id" type="text" value={id} disabled />
+            ) : (
+              <input id="maxId" type="text" value={maxId} disabled />
+            )}
+          </label>
           <label htmlFor="nome">
             Nome completo:
             <input
@@ -276,6 +286,19 @@ export default function CadMembro({ match }) {
           </label>
         </div>
         <div>
+          <label htmlFor="dataNascimento">
+            Data de Nascimento:
+            <input
+              id="dataNascimento"
+              type="date"
+              value={dataNascimento}
+              onChange={(e) => {
+                setDataNascimento(e.target.value);
+                handleInput(e, 'dataNascimento');
+              }}
+            />
+            <small>Insira uma data valida</small>
+          </label>
           <label htmlFor="dataBatismo">
             Data de Batismo:
             <input
@@ -342,7 +365,7 @@ export default function CadMembro({ match }) {
             onChange={handleGetIdFuncao}
           />
           <ComboBox
-            title="Selecione a cargo"
+            title="Selecione o cargo"
             list={cargos}
             value={cargo}
             onChange={handleGetIdCargo}

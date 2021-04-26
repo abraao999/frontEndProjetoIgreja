@@ -19,6 +19,8 @@ import history from '../../services/history';
 export default function Caixa({ match }) {
   const dispath = useDispatch();
   const id = get(match, 'params.id', '');
+
+  const [maxId, setMaxId] = useState(0);
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
@@ -46,6 +48,10 @@ export default function Caixa({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
+      if (!id) {
+        const dado = await axios.get('/caixa/maxId');
+        setMaxId(dado.data + 1);
+      }
       const response = await axios.get('/setor');
       setSetores(response.data);
       const response2 = await axios.get('/departamento');
@@ -147,6 +153,15 @@ export default function Caixa({ match }) {
 
       <Form onSubmit={handleSubmit}>
         <div>
+          <label htmlFor="id">
+            R.F.:
+            {id ? (
+              <input id="id" type="text" value={id} disabled />
+            ) : (
+              <input id="maxId" type="text" value={maxId} disabled />
+            )}
+          </label>
+
           <label htmlFor="descricao">
             Descrição
             <input

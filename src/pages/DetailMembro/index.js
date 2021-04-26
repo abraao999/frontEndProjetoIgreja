@@ -22,6 +22,7 @@ export default function DetailMembro({ match }) {
   const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');
   const [dataBatismo, setDataBatismo] = useState('');
+  const [dataNascimento, setDataNascimento] = useState('');
   const [estacoCivil, setEstacoCivil] = useState('');
   const [profissao, setProfissao] = useState('');
   const [cargo, setCargo] = useState('');
@@ -44,6 +45,13 @@ export default function DetailMembro({ match }) {
         data.getMonth() + 1
       }/${data.getFullYear()}`;
       setDataBatismo(dataFormatada);
+
+      const data2 = new Date(response.data.data_nascimento);
+      const dataNasicmentoFormatada = `${data2.getDate()}/${
+        data2.getMonth() + 1
+      }/${data2.getFullYear()}`;
+      setDataNascimento(dataNasicmentoFormatada);
+
       setTelefone(response.data.telefone);
       setEstacoCivil(response.data.estado_civil);
       setProfissao(response.data.profissao);
@@ -96,6 +104,10 @@ export default function DetailMembro({ match }) {
           </label>
         </div>
         <div>
+          <label htmlFor="dataNascimento">
+            Data de Nascimento:
+            <input type="text" value={dataNascimento} disabled />
+          </label>
           <label htmlFor="dataBatismo">
             Data de Batismo:
             <input type="text" value={dataBatismo} disabled />

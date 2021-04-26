@@ -17,7 +17,7 @@ import Loading from '../../components/Loading';
 import history from '../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
-export default function ListMembros({ match }) {
+export default function RelatorioCaixa({ match }) {
   const dispath = useDispatch();
   const id = get(match, 'params.id', '');
   const [show, setShow] = useState(false);
@@ -355,6 +355,6 @@ export default function ListMembros({ match }) {
     </Container>
   );
 }
-ListMembros.protoTypes = {
+RelatorioCaixa.protoTypes = {
   match: PropTypes.shape({}).isRequired,
 };

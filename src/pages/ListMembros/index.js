@@ -23,7 +23,7 @@ export default function ListMembros({ match }) {
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
   const [msg, setMsg] = useState(true);
-
+  const [filtro, setFiltro] = useState(false);
   const [setores, setSetores] = useState([]);
   const [setorSeletected, setSetorSeletected] = useState(0);
   const [congregacaoId, setCongregacaoId] = useState(
@@ -56,14 +56,25 @@ export default function ListMembros({ match }) {
         }
       });
     } else {
-      membros.map((dados) => {
-        if (dados.setor_id === setorSeletected) {
-          novaLista.push(dados);
-        }
-      });
+      console.log();
+      if (!filtro) {
+        membros.map((dados) => {
+          if (dados.setor_id === setorSeletected) {
+            novaLista.push(dados);
+          }
+        });
+        setFiltro(true);
+      } else {
+        const response = await axios.get('/membro');
+        response.data.map((dados) => {
+          if (dados.setor_id === setorSeletected) {
+            novaLista.push(dados);
+          }
+        });
+      }
     }
-    setIsLoading(false);
     setMembros(novaLista);
+    setIsLoading(false);
   }
 
   const handleClose = () => {
@@ -98,6 +109,7 @@ export default function ListMembros({ match }) {
   const handleGetIdCongregacao = (e) => {
     const nome = e.target.value;
     setCongregacaoId(e.target.value);
+
     setores.map((dado) => {
       if (nome === dado.descricao) setSetorSeletected(dado.id);
     });

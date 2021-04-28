@@ -359,16 +359,16 @@ export default function CadMembro({ match }) {
             onChange={handleGetIdCongregacao}
           />
           <ComboBox
-            title="Selecione a função"
-            list={funcoes}
-            value={functionNome}
-            onChange={handleGetIdFuncao}
-          />
-          <ComboBox
             title="Selecione o cargo"
             list={cargos}
             value={cargo}
             onChange={handleGetIdCargo}
+          />
+          <ComboBox
+            title="Selecione a função"
+            list={funcoes}
+            value={functionNome}
+            onChange={handleGetIdFuncao}
           />
         </div>
         <div>

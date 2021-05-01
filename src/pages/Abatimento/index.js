@@ -79,7 +79,6 @@ export default function Abatimento({ match }) {
           valor,
           data_operacao: dataMovimentacao,
           setor_id: setorId,
-          departamento_id: departmanetoId,
         });
         console.log(response);
         setDescricao('');
@@ -93,15 +92,13 @@ export default function Abatimento({ match }) {
           valor,
           data_operacao: dataMovimentacao,
           setor_id: setorSeletected,
-          departamento_id: departmanetoId,
         });
         console.log(response);
         setDescricao('');
         setSetorSeletected(0);
         setComboBoxCongregacao('Selecione uma congregação');
-        toast.success('Departamento editada com sucesso');
+        toast.success('Abatimento editada com sucesso');
 
-        history.push('/departamento');
         setIsLoading(false);
       }
     } catch (error) {
@@ -203,12 +200,6 @@ export default function Abatimento({ match }) {
             list={setores}
             value={setor}
             onChange={handleGetIdCongregacao}
-          />
-          <ComboBox
-            title="Selecione o departamento"
-            list={departamentos}
-            value={departamento}
-            onChange={handleGetIdDepartamento}
           />
         </div>
 

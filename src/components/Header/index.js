@@ -31,6 +31,7 @@ export default function Header() {
     { desc: 'ABATIMENTO', path: '/abatimento' },
     { desc: 'LANÇAMENTO', path: '/caixa' },
     { desc: 'RELATÓRIO', path: '/relatorioCaixa' },
+    { desc: 'RELATÓRIO ABATIMENTO', path: '/relatorioAbatimento' },
   ];
   const departamentos = [
     { desc: 'EBD', path: '/ebd' },

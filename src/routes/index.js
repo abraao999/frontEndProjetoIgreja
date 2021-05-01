@@ -18,6 +18,7 @@ import ListMembros from '../pages/ListMembros';
 import DetailMembro from '../pages/DetailMembro';
 import Caixa from '../pages/Caixa';
 import RelatorioCaixa from '../pages/RelatorioCaixa';
+import Abatimento from '../pages/Abatimento';
 
 export default function Routes() {
   return (
@@ -48,6 +49,8 @@ export default function Routes() {
       <MyRoute path="/detailtMembro/:id" component={DetailMembro} isClosed />
       <MyRoute path="/caixa/:id/edit" component={Caixa} isClosed />
       <MyRoute path="/caixa/" component={Caixa} isClosed />
+      <MyRoute path="/abatimento/:id/edit" component={Abatimento} isClosed />
+      <MyRoute path="/abatimento/" component={Abatimento} isClosed />
       <MyRoute path="/relatorioCaixa/" component={RelatorioCaixa} isClosed />
       <MyRoute path="*" component={Page404} />
     </Switch>

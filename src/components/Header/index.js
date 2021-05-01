@@ -28,6 +28,7 @@ export default function Header() {
     history.push('/login');
   };
   const caixa = [
+    { desc: 'ABATIMENTO', path: '/abatimento' },
     { desc: 'LANÇAMENTO', path: '/caixa' },
     { desc: 'RELATÓRIO', path: '/relatorioCaixa' },
   ];

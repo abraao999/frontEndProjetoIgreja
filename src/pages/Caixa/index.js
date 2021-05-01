@@ -14,6 +14,8 @@ import Modal from '../../components/Modal';
 import ComboBox from '../../components/ComboBox';
 import Loading from '../../components/Loading';
 import history from '../../services/history';
+import * as actions from '../../store/modules/auth/actions';
+
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function Caixa({ match }) {
@@ -33,6 +35,7 @@ export default function Caixa({ match }) {
   const [comboBoxCongregacao, setComboBoxCongregacao] = useState(
     'Selecione uma congregação'
   );
+
   const [tipoMovimentacaoBox, setTipoMovimentacaoBox] = useState('');
   const [tipoMovimentacao, setTipoMovimentacao] = useState();
   const [valor, setValor] = useState('');
@@ -42,7 +45,6 @@ export default function Caixa({ match }) {
   const [departamento, setDepartamento] = useState('');
   const [departamentos, setDepartamentos] = useState([]);
   const [descricao, setDescricao] = useState('');
-  const [descricaoList, setDescricaoList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -51,12 +53,19 @@ export default function Caixa({ match }) {
       if (!id) {
         const dado = await axios.get('/caixa/maxId');
         setMaxId(dado.data + 1);
+      } else {
+        const dado = await axios.get(`/caixa/${id}`);
+        setDescricao(dado.data.descricao);
+        setValor(dado.data.valor);
+        setTipoMovimentacao(dado.data.tipo);
+        setDataMovimentacao(dado.data.data_operacao);
+        setSetorId(dado.data.setor_id);
+        setDepartamentoId(dado.data.departamento_id);
       }
       const response = await axios.get('/setor');
       setSetores(response.data);
       const response2 = await axios.get('/departamento');
       setDepartamentos(response2.data);
-      console.log(setorSeletected);
       setIsLoading(false);
     }
     getData();
@@ -89,9 +98,13 @@ export default function Caixa({ match }) {
         toast.success('Departamento criada com sucesso');
         setIsLoading(false);
       } else {
-        const response = await axios.put(`/departamento/${id}`, {
+        const response = await axios.put(`/caixa/${id}`, {
           descricao,
-          setor_id: setorSeletected,
+          valor,
+          tipo: tipoMovimentacao,
+          data_operacao: dataMovimentacao,
+          setor_id: setorId,
+          departamento_id: departmanetoId,
         });
         console.log(response);
         setDescricao('');
@@ -99,13 +112,14 @@ export default function Caixa({ match }) {
         setComboBoxCongregacao('Selecione uma congregação');
         toast.success('Departamento editada com sucesso');
 
-        history.push('/departamento');
+        history.push('/relatorioCaixa');
         setIsLoading(false);
       }
     } catch (error) {
       const status = get(error, 'response.data.status', 0);
       if (status === 401) {
         toast.error('Voce precisa fazer loggin');
+        dispath(actions.loginFailure());
       } else {
         toast.error('Erro ao excluir uma Classe');
       }

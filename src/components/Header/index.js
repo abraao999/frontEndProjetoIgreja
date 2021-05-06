@@ -29,6 +29,7 @@ export default function Header() {
   };
   const caixa = [
     { desc: 'ABATIMENTO', path: '/abatimento' },
+    { desc: 'DIZIMO', path: '/dizimo' },
     { desc: 'LANÇAMENTO', path: '/caixa' },
     { desc: 'RELATÓRIO', path: '/relatorioCaixa' },
     { desc: 'RELATÓRIO ABATIMENTO', path: '/relatorioAbatimento' },

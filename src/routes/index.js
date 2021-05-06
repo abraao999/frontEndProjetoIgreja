@@ -20,6 +20,7 @@ import Caixa from '../pages/Caixa';
 import RelatorioCaixa from '../pages/RelatorioCaixa';
 import Abatimento from '../pages/Abatimento';
 import RelatorioAbatimento from '../pages/RelatorioAbatimento';
+import Dizimo from '../pages/Dizimo';
 
 export default function Routes() {
   return (
@@ -52,6 +53,9 @@ export default function Routes() {
       <MyRoute path="/caixa/" component={Caixa} isClosed />
       <MyRoute path="/abatimento/:id/edit" component={Abatimento} isClosed />
       <MyRoute path="/abatimento/" component={Abatimento} isClosed />
+      <MyRoute path="/dizimo/:id/edit" component={Abatimento} isClosed />
+      <MyRoute path="/dizimo/" component={Dizimo} isClosed />
+      <MyRoute path="/dizimo/" component={Dizimo} isClosed />
       <MyRoute path="/relatorioCaixa/" component={RelatorioCaixa} isClosed />
       <MyRoute
         path="/relatorioAbatimento/"

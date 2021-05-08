@@ -22,6 +22,7 @@ import Abatimento from '../pages/Abatimento';
 import RelatorioAbatimento from '../pages/RelatorioAbatimento';
 import Dizimo from '../pages/Dizimo';
 import RelatorioDizimo from '../pages/RelatorioDizimo';
+import RelatorioDizimoGeral from '../pages/RelatorioDizimoGeral';
 
 export default function Routes() {
   return (
@@ -58,6 +59,11 @@ export default function Routes() {
       <MyRoute path="/dizimo/" component={Dizimo} isClosed />
       <MyRoute path="/relatorioCaixa/" component={RelatorioCaixa} isClosed />
       <MyRoute path="/relatorioDizimo/" component={RelatorioDizimo} isClosed />
+      <MyRoute
+        path="/relatorioDizimoGeral/"
+        component={RelatorioDizimoGeral}
+        isClosed
+      />
       <MyRoute
         path="/relatorioAbatimento/"
         component={RelatorioAbatimento}

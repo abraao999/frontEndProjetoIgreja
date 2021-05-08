@@ -115,7 +115,11 @@ export default function Dizimo({ match }) {
       const novaLista = [];
       const response = await axios.get('/membro');
       response.data.map((dados) => {
-        if (String(dados.nome).toLowerCase().includes(String(nomeMembro))) {
+        if (
+          String(dados.nome)
+            .toLowerCase()
+            .includes(String(nomeMembro.toLowerCase()))
+        ) {
           novaLista.push(dados);
         }
       });

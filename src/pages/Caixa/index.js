@@ -44,8 +44,12 @@ export default function Caixa({ match }) {
     async function getData() {
       setIsLoading(true);
       if (!id) {
-        const dado = await axios.get('/caixa/maxId');
-        setMaxId(dado.data + 1);
+        try {
+          const dado = await axios.get('/caixa/maxId');
+          setMaxId(dado.data + 1);
+        } catch (error) {
+          setMaxId(1);
+        }
       } else {
         const dado = await axios.get(`/caixa/${id}`);
         setDescricao(dado.data.descricao);

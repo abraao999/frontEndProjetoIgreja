@@ -49,8 +49,12 @@ export default function Abatimento({ match }) {
     async function getData() {
       setIsLoading(true);
       if (!id) {
-        const dado = await axios.get('/abatimento/maxId');
-        setMaxId(dado.data + 1);
+        try {
+          const dado = await axios.get('/abatimento/maxId');
+          setMaxId(dado.data + 1);
+        } catch (error) {
+          setMaxId(1);
+        }
       }
       const response = await axios.get('/setor');
       setSetores(response.data);
@@ -147,7 +151,7 @@ export default function Abatimento({ match }) {
       <Form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="id">
-            R.E.:
+            F.E.:
             {id ? (
               <input id="id" type="text" value={id} disabled />
             ) : (

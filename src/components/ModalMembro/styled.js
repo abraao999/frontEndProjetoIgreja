@@ -25,6 +25,10 @@ export const Table = styled.table`
   margin-top: 20px;
   td {
     text-align: center;
+    svg {
+      color: ${colors.primaryColor};
+      cursor: pointer;
+    }
   }
   th {
     text-align: center;

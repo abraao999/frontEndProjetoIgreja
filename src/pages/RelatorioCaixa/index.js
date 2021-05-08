@@ -53,13 +53,10 @@ export default function RelatorioCaixa({ match }) {
       const response2 = await axios.get('/departamento');
       setDepartamentos(response2.data);
 
-      axios
-        .get('/caixa')
-        .then(async (dado) => {
-          setListMovimentacao(dado.data);
-          renderizaLista(dado.data);
-        })
-        .then((dado) => dado);
+      axios.get('/caixa').then(async (dado) => {
+        setListMovimentacao(dado.data);
+        renderizaLista(dado.data);
+      });
       setIsLoading(false);
     }
     getData();

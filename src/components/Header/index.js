@@ -33,6 +33,7 @@ export default function Header() {
     { desc: 'LANÇAMENTO', path: '/caixa' },
     { desc: 'RELATÓRIO', path: '/relatorioCaixa' },
     { desc: 'RELATÓRIO ABATIMENTO', path: '/relatorioAbatimento' },
+    { desc: 'RELATÓRIO DÍZIMO', path: '/relatorioDizimo' },
   ];
   const departamentos = [
     { desc: 'EBD', path: '/ebd' },

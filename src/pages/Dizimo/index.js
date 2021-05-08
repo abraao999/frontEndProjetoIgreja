@@ -22,12 +22,12 @@ export default function Dizimo({ match }) {
   const [show, setShow] = useState(false);
 
   const [idMembro, setIdMembro] = useState('');
+  const [nomeMembro, setNomeMembro] = useState('');
   const [membros, setMembros] = useState([]);
 
   const [valor, setValor] = useState('');
   const [dataMovimentacao, setDataMovimentacao] = useState('');
 
-  const [nomeMembro, setNomeMembro] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -35,7 +35,11 @@ export default function Dizimo({ match }) {
       setIsLoading(true);
       if (id) {
         const dado = await axios.get(`/dizimo/${id}`);
+        console.log(dado.data);
         setValor(dado.data.valor);
+        setDataMovimentacao(dado.data.data_operacao);
+        console.log('babana');
+
         setNomeMembro(dado.data.nome);
         setIdMembro(dado.data.membro_id);
       }
@@ -48,7 +52,7 @@ export default function Dizimo({ match }) {
     setIsLoading(true);
     let formErrors = false;
 
-    if (nomeMembro.length < 3 || nomeMembro.length > 255) {
+    if (nomeMembro.length < 3 || nomeMembro.length > 255 || !dataMovimentacao) {
       formErrors = true;
       setIsLoading(false);
       toast.error('Preencha todos os campos');
@@ -89,7 +93,6 @@ export default function Dizimo({ match }) {
   }
   const handleClose = () => {
     setShow(false);
-    console.log(idMembro);
   };
   const handleShow = (idFuncao, index) => {
     setShow(true);
@@ -158,7 +161,7 @@ export default function Dizimo({ match }) {
           ) : (
             <label htmlFor="id">
               Código Membro:
-              <input disabled type="text" value={id} />
+              <input disabled type="text" value={idMembro} />
             </label>
           )}
           {!id ? (

@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-curly-brace-presence */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/button-has-type */
 /* eslint-disable react/prop-types */
 import React from 'react';
@@ -37,14 +39,12 @@ export default function ModalMembro({
                   <td>{dado.id}</td>
                   <td>{dado.nome}</td>
                   <td>
-                    <Link
+                    <FaCheck
                       onClick={() => {
                         handleIdMembro(dado.id);
                       }}
-                      to
-                    >
-                      <FaCheck size={16} />
-                    </Link>
+                      size={16}
+                    />
                   </td>
                 </tr>
               ))}

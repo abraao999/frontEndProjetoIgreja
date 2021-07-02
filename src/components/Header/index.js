@@ -51,6 +51,13 @@ export default function Header() {
     { desc: 'DEPARTAMENTOS', path: '/departamento' },
     { desc: 'FUNÇÕES', path: '/funcao' },
   ];
+  const ebd = [
+    { desc: 'CADASTRO CLASSE', path: '/classe' },
+    { desc: 'CADASTRO DE ALUNO', path: '/cadAluno' },
+    { desc: 'CHAMADA', path: '/chamada' },
+    { desc: 'LISTA DE ALUNOS', path: '/listAluno' },
+    { desc: 'FUNÇÕES', path: '/funcao' },
+  ];
   return (
     <Nav>
       <Conteiner>
@@ -65,6 +72,7 @@ export default function Header() {
         {isLoggedIn && <Dropdown nome="CONFIGURAÇÕES" opcoes={configuracoes} />}
         {isLoggedIn && <Dropdown nome="SECRETARIA" opcoes={secretaria} />}
         {isLoggedIn && <Dropdown nome="CAIXA" opcoes={caixa} />}
+        {isLoggedIn && <Dropdown nome="EBD" opcoes={ebd} />}
 
         {!isLoggedIn && (
           <Link to="/contato">

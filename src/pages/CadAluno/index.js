@@ -44,14 +44,15 @@ export default function CadAluno({ match }) {
     async function getData() {
       setIsLoading(true);
       if (!id) {
-        const dado = await axios.get('/membro/maxId');
-        setMaxId(dado.data + 1);
+        // const dado = await axios.get('/aluno/maxId');
+        // setMaxId(dado.data + 1);
       } else {
-        const response = await axios.get(`/membro/${id}`);
+        const response = await axios.get(`/aluno/${id}`);
         setNomeMembro(response.data.nome);
         setCpf(response.data.cpf);
         setTelefone(response.data.telefone);
         setSetorId(response.data.setor_id);
+        setClasseId(response.data.classe_id);
       }
       const response2 = await axios.get('/setor');
       setSetores(response2.data);

@@ -53,6 +53,7 @@ export default function CadAluno({ match }) {
         setTelefone(response.data.telefone);
         setSetorId(response.data.setor_id);
         setClasseId(response.data.classe_id);
+        setDataNascimento(response.data.data_aniversario);
       }
       const response2 = await axios.get('/setor');
       setSetores(response2.data);
@@ -102,6 +103,15 @@ export default function CadAluno({ match }) {
         // history.push('/listMembros');
         setIsLoading(false);
       } else {
+        console.log({
+          nome: nomeMembro,
+          cpf,
+          data_aniversario: dataNascimento || null,
+          telefone,
+          setor_id: setorId,
+          classe_id: classeId,
+          id,
+        });
         const response = await axios.put(`/aluno/${id}`, {
           nome: nomeMembro,
           cpf,
@@ -111,10 +121,10 @@ export default function CadAluno({ match }) {
           classe_id: classeId,
         });
         console.log(response);
-        limpaCampos();
+        // limpaCampos();
         toast.success('Membro editado com sucesso');
 
-        history.push(`/cadAluno/${id}/edit`);
+        // history.push(`/cadAluno/${id}/edit`);
         setIsLoading(false);
       }
     } catch (error) {

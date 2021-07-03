@@ -1,12 +1,19 @@
+/* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
 import PropTypes, { string } from 'prop-types';
 
 import { toast } from 'react-toastify';
-import { FaEdit, FaWindowClose, FaRegListAlt, FaSearch } from 'react-icons/fa';
+import {
+  FaEdit,
+  FaWindowClose,
+  FaRegListAlt,
+  FaSearch,
+  FaSave,
+} from 'react-icons/fa';
 
 import { useDispatch } from 'react-redux';
-import { get } from 'lodash';
+import { get, indexOf } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
 import { Form, Table, Listagem } from './styled';
@@ -16,7 +23,7 @@ import Loading from '../../components/Loading';
 import history from '../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
-export default function ListAluno({ match }) {
+export default function Chamada({ match }) {
   const dispath = useDispatch();
   const id = get(match, 'params.id', '');
   const [show, setShow] = useState(false);
@@ -33,6 +40,8 @@ export default function ListAluno({ match }) {
   const [aluno, setAluno] = useState([]);
   const [descricao, setDescricao] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [aparecer, setAparecer] = useState(true);
+  const [check, setCheck] = useState(false);
 
   useEffect(() => {
     async function getData() {
@@ -49,30 +58,24 @@ export default function ListAluno({ match }) {
     e.preventDefault();
     setIsLoading(true);
     const novaLista = [];
-    if (descricao.length > 1) {
+
+    console.log(filtro);
+    if (!filtro) {
       aluno.map((dados) => {
-        if (String(dados.nome).toLowerCase().includes(String(descricao))) {
+        if (dados.classe_id === setorSeletected) {
           novaLista.push(dados);
         }
       });
+      setFiltro(true);
     } else {
-      console.log(filtro);
-      if (!filtro) {
-        aluno.map((dados) => {
-          if (dados.classe_id === setorSeletected) {
-            novaLista.push(dados);
-          }
-        });
-        setFiltro(true);
-      } else {
-        const response = await axios.get('/aluno');
-        response.data.map((dados) => {
-          if (dados.classe_id === setorSeletected) {
-            novaLista.push(dados);
-          }
-        });
-      }
+      const response = await axios.get('/aluno');
+      response.data.map((dados) => {
+        if (dados.classe_id === setorSeletected) {
+          novaLista.push(dados);
+        }
+      });
     }
+    setAparecer(false);
     setAluno(novaLista);
     setIsLoading(false);
   }
@@ -114,9 +117,36 @@ export default function ListAluno({ match }) {
       if (nome === dado.descricao) setSetorSeletected(dado.id);
     });
   };
+  const listaChamada = [];
+  const handleCheck = (dado) => {
+    if (listaChamada.length > 0) {
+      listaChamada.map((item) => {
+        if (item === dado) listaChamada.splice(listaChamada.indexOf(item), 1);
+        else listaChamada.push(dado);
+      });
+    } else {
+      listaChamada.push(dado);
+    }
+    console.log(dado);
+  };
+  const handleSalvar = () => {
+    if (listaChamada.length === 0)
+      return toast.error('A lista de chamada está vazia');
+    try {
+      listaChamada.map(async (item) => {
+        const response = await axios.post('/chamada', {
+          data_aula: new Date(),
+          aluno_id: item,
+        });
+      });
+      toast.success('Chamada feita com sucesso');
+    } catch (error) {
+      toast.error('Erro ao atribuir as presenças');
+    }
+  };
   return (
     <Container>
-      <h1>{id ? 'Editar Aluno' : 'Novo Aluno'}</h1>
+      <h1>Chamada</h1>
       <Loading isLoading={isLoading} />
       <Modal
         title="Atenção!!!"
@@ -130,19 +160,6 @@ export default function ListAluno({ match }) {
 
       <Form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="descricao">
-            Insira um nome para filtrar:
-            <input
-              id="input"
-              type="text"
-              value={descricao}
-              onChange={(e) => {
-                setDescricao(e.target.value);
-              }}
-              placeholder="Nome para filtro"
-            />
-          </label>
-
           <label htmlFor="congregacao">
             Filtrar por congregação
             <select onChange={handleGetIdCongregacao} value={congregacaoId}>
@@ -155,73 +172,46 @@ export default function ListAluno({ match }) {
             </select>
           </label>
         </div>
-
         <button type="submit">
           Filtrar <FaSearch />
         </button>
       </Form>
-      <Listagem>
-        <h3>Lista de Membros</h3>
+      <Listagem hidden={aparecer}>
+        <h3>Lista de Alunos</h3>
         <center>
           <Table className="table table-striped">
             <thead>
               <tr>
-                <th scope="col">Nº Ficha</th>
                 <th scope="col">Nome</th>
-                <th scope="col">Telefone</th>
                 <th scope="col">Classe</th>
-                <th scope="col">Detalhes</th>
-                <th scope="col">Editar</th>
-                <th scope="col">Excluir</th>
+                <th scope="col">Presença</th>
               </tr>
             </thead>
             <tbody>
               {aluno.map((dado, index) => (
                 <tr key={String(dado.id)}>
-                  <td>{dado.id}</td>
                   <td>{dado.nome}</td>
-                  <td>{dado.telefone}</td>
                   <td>{dado.desc_classes}</td>
                   <td>
-                    <Link
-                      onClick={(e) => {
-                        e.preventDefault();
-                        history.push(`/detailAluno/${dado.id}`);
-                      }}
-                      to={`/detailAluno/${dado.id}`}
-                    >
-                      <FaRegListAlt size={16} />
-                    </Link>
-                  </td>
-                  <td>
-                    <Link
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setDescricao(dado.dep_descricao);
-                        history.push(`/cadAluno/${dado.id}/edit`);
-                      }}
-                      to={`/cadAluno/${dado.id}/edit`}
-                    >
-                      <FaEdit size={16} />
-                    </Link>
-                  </td>
-                  <td>
-                    <Link
-                      onClick={() => handleShow(dado.id, index)}
-                      to="/listAluno"
-                    >
-                      <FaWindowClose size={16} />
-                    </Link>
+                    <input
+                      onChange={() => handleCheck(dado.id)}
+                      type="checkbox"
+                      name=""
+                      value={check}
+                    />
                   </td>
                 </tr>
               ))}
             </tbody>
           </Table>
+          <button type="button" onClick={handleSalvar}>
+            Salvar <FaSave />
+          </button>
         </center>
       </Listagem>
     </Container>
   );
 }
-ListAluno.protoTypes = {
+Chamada.protoTypes = {
   match: PropTypes.shape({}).isRequired,
 };

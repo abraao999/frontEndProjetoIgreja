@@ -25,6 +25,8 @@ import RelatorioDizimo from '../pages/RelatorioDizimo';
 import RelatorioDizimoGeral from '../pages/RelatorioDizimoGeral';
 import CadAluno from '../pages/CadAluno';
 import ListAluno from '../pages/ListAluno';
+import DetailAluno from '../pages/DetailAluno';
+import Chamada from '../pages/Chamada';
 
 export default function Routes() {
   return (
@@ -74,6 +76,8 @@ export default function Routes() {
       <MyRoute path="/cadAluno/:id/edit" component={CadAluno} isClosed />
       <MyRoute path="/cadAluno/" component={CadAluno} isClosed />
       <MyRoute path="/listAluno/" component={ListAluno} isClosed />
+      <MyRoute path="/chamada/" component={Chamada} isClosed />
+      <MyRoute path="/detailAluno/:id" component={DetailAluno} isClosed />
       <MyRoute path="*" component={Page404} />
     </Switch>
   );

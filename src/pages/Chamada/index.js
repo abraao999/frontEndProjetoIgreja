@@ -134,6 +134,7 @@ export default function Chamada({ match }) {
     console.log(dado);
   };
   const handleSalvar = () => {
+    setIsLoading(true);
     if (listaChamada.length === 0)
       return toast.error('A lista de chamada está vazia');
     try {
@@ -147,6 +148,7 @@ export default function Chamada({ match }) {
     } catch (error) {
       toast.error('Erro ao atribuir as presenças');
     }
+    setIsLoading(false);
   };
   return (
     <Container>

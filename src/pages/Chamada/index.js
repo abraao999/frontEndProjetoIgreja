@@ -119,11 +119,15 @@ export default function Chamada({ match }) {
   };
   const listaChamada = [];
   const handleCheck = (dado) => {
+    let pula = false;
     if (listaChamada.length > 0) {
       listaChamada.map((item) => {
-        if (item === dado) listaChamada.splice(listaChamada.indexOf(item), 1);
-        else listaChamada.push(dado);
+        if (item === dado) {
+          listaChamada.splice(listaChamada.indexOf(item), 1);
+          pula = true;
+        }
       });
+      if (!pula) listaChamada.push(dado);
     } else {
       listaChamada.push(dado);
     }

@@ -27,6 +27,7 @@ import CadAluno from '../pages/CadAluno';
 import ListAluno from '../pages/ListAluno';
 import DetailAluno from '../pages/DetailAluno';
 import Chamada from '../pages/Chamada';
+import RelatorioPresencaDetalhada from '../pages/RelatorioPresencaEbd';
 
 export default function Routes() {
   return (
@@ -78,6 +79,11 @@ export default function Routes() {
       <MyRoute path="/listAluno/" component={ListAluno} isClosed />
       <MyRoute path="/chamada/" component={Chamada} isClosed />
       <MyRoute path="/detailAluno/:id" component={DetailAluno} isClosed />
+      <MyRoute
+        path="/relatorioPresencaDetalhada/"
+        component={RelatorioPresencaDetalhada}
+        isClosed
+      />
       <MyRoute path="*" component={Page404} />
     </Switch>
   );

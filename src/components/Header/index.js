@@ -56,6 +56,14 @@ export default function Header() {
     { desc: 'CADASTRO DE ALUNO', path: '/cadAluno' },
     { desc: 'CHAMADA', path: '/chamada' },
     { desc: 'LISTA DE ALUNOS', path: '/listAluno' },
+    {
+      desc: 'RELATÓRIO DE PRESENÇA DETALHADA',
+      path: '/relatorioPresencaDetalhada',
+    },
+    {
+      desc: 'RELATÓRIO DE PRESENÇA GERAL',
+      path: '/relatorioPresencaGeral',
+    },
     { desc: 'FUNÇÕES', path: '/funcao' },
   ];
   return (

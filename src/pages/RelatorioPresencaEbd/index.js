@@ -16,32 +16,25 @@ import Loading from '../../components/Loading';
 import history from '../../services/history';
 import ModalMembro from '../../components/ModalMembro';
 
-export default function RelatorioDizimoGeral({ match }) {
+export default function RelatorioPresencaDetalhada({ match }) {
   const [show, setShow] = useState(false);
-  const [showMembro, setShowMembro] = useState(false);
 
-  const [filtroDep, setFiltroDep] = useState(false);
-  const [congregacaoId, setCongregacaoId] = useState(
-    'Selecione uma congregação'
-  );
+  const [congregacaoId, setCongregacaoId] = useState('Selecione uma classe');
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
-
-  const [idMembro, setIdMembro] = useState('');
-  const [nomeMembro, setNomeMembro] = useState('');
 
   const [dataInicial, setDataInicial] = useState('');
   const [dataFinal, setDataFinal] = useState('');
 
   const [setores, setSetores] = useState([]);
-  const [membros, setMembros] = useState([]);
-  const [listMovimentacao, setListMovimentacao] = useState([]);
+  const [listAlunos, setListAlunos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [hidden, setHidden] = useState(true);
   const [setorSeletected, setSetorSeletected] = useState(0);
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get('/setor');
+      const response = await axios.get('/classe');
       setSetores(response.data);
 
       // const mes = new Date().getMonth();
@@ -55,29 +48,20 @@ export default function RelatorioDizimoGeral({ match }) {
   const renderizaLista = (list, mes) => {
     const novaLista = [];
     list.map((dado) => {
-      const data = new Date(dado.data_operacao);
+      const data = new Date(dado.data_aula);
       const dataFormatada = `${data.getDate()}/
       ${data.getMonth() + 1}/${data.getFullYear()}`;
-      if (data.getMonth() === mes) {
-        novaLista.push({
-          id: dado.id,
-          nomeMembro: dado.nome,
-          setorId: dado.setorId,
-          setorDesc: dado.setorDesc,
-          dataOp: dataFormatada,
-        });
-      } else {
-        novaLista.push({
-          id: dado.id,
-          nomeMembro: dado.nome,
-          setorId: dado.setorId,
-          setorDesc: dado.setorDesc,
-          dataOp: dataFormatada,
-        });
-      }
+      novaLista.push({
+        id: dado.id,
+        nomeAluno: dado.desc_aluno,
+        classeId: dado.setorId,
+        classeDesc: dado.desc_classes,
+        dataAula: dataFormatada,
+      });
     });
     setIsLoading(false);
-    setListMovimentacao(novaLista);
+    setHidden(false);
+    setListAlunos(novaLista);
   };
 
   const handleSubmit = async (e) => {
@@ -85,13 +69,14 @@ export default function RelatorioDizimoGeral({ match }) {
     setIsLoading(true);
     const novaList = [];
     if (dataInicial && dataFinal) {
-      axios.get(`/dizimo`).then((dados) => {
+      axios.get(`/chamada`).then((dados) => {
         dados.data.map((dado) => {
-          console.log(setorSeletected);
+          console.log(dado.data_aula);
+          console.log('data', dataInicial);
           if (
-            dado.data_operacao >= dataInicial &&
-            dado.data_operacao <= dataFinal &&
-            dado.setorDesc === congregacaoId
+            dado.data_aula >= dataInicial &&
+            dado.data_aula <= dataFinal &&
+            dado.id_classe === setorSeletected
           ) {
             novaList.push(dado);
           }
@@ -117,11 +102,11 @@ export default function RelatorioDizimoGeral({ match }) {
   const handleFunctionConfirm = async () => {
     try {
       setIsLoading(true);
-      await axios.delete(`/dizimo/${idParaDelecao}`);
-      const novaList = [...listMovimentacao];
+      await axios.delete(`/chamada/${idParaDelecao}`);
+      const novaList = [...listAlunos];
       novaList.splice(indiceDelecao, 1);
-      setListMovimentacao(novaList);
-      toast.success('Movimentação excluido com sucesso');
+      setListAlunos(novaList);
+      toast.success('Presença excluida com sucesso');
       setShow(false);
 
       setIsLoading(false);
@@ -145,7 +130,7 @@ export default function RelatorioDizimoGeral({ match }) {
 
   return (
     <Container>
-      <h1>Relatório de dízimo geral</h1>
+      <h1>Relatório de presença detalhada</h1>
       <Loading isLoading={isLoading} />
 
       <Modal
@@ -161,9 +146,9 @@ export default function RelatorioDizimoGeral({ match }) {
       <Form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="congregacao">
-            Filtrar por congregação
+            Filtrar por classe
             <select onChange={handleGetIdCongregacao} value={congregacaoId}>
-              <option value="nada">Selecione a congregação</option>
+              <option value="nada">Selecione a classe</option>
               {setores.map((dado) => (
                 <option key={dado.id} value={dado.descricao}>
                   {dado.descricao}
@@ -197,41 +182,29 @@ export default function RelatorioDizimoGeral({ match }) {
           Filtrar <FaSearch />
         </button>
       </Form>
-      <Listagem>
-        <h3>Relatório de dizimo</h3>
+      <Listagem hidden={hidden}>
+        <h3>Relatório de Presença</h3>
         <center>
           <Table className="table table-striped">
             <thead>
               <tr>
-                <th scope="col">Data</th>
+                <th scope="col">Data da aula</th>
                 <th scope="col">Nome do Membro</th>
-                <th scope="col">Congregação</th>
-                <th scope="col">Editar</th>
+                <th scope="col">Classe</th>
                 <th scope="col">Excluir</th>
               </tr>
             </thead>
             <tbody>
-              {listMovimentacao.map((dado, index) => (
+              {listAlunos.map((dado, index) => (
                 <tr key={String(dado.id)}>
-                  <td>{dado.dataOp}</td>
-                  <td>{dado.nomeMembro}</td>
-                  <td>{dado.setorDesc}</td>
+                  <td>{dado.dataAula}</td>
+                  <td>{dado.nomeAluno}</td>
+                  <td>{dado.classeDesc}</td>
 
                   <td>
                     <Link
-                      onClick={(e) => {
-                        e.preventDefault();
-                        history.push(`/dizimo/${dado.id}/edit`);
-                      }}
-                      to={`/dizimo/${dado.id}/edit`}
-                    >
-                      <FaEdit size={16} />
-                    </Link>
-                  </td>
-                  <td>
-                    <Link
                       onClick={() => handleShow(dado.id, index)}
-                      to="/relatorioDizimo"
+                      to="/relatorioPresencaEbd"
                     >
                       <FaWindowClose size={16} />
                     </Link>
@@ -245,6 +218,6 @@ export default function RelatorioDizimoGeral({ match }) {
     </Container>
   );
 }
-RelatorioDizimoGeral.protoTypes = {
+RelatorioPresencaDetalhada.protoTypes = {
   match: PropTypes.shape({}).isRequired,
 };

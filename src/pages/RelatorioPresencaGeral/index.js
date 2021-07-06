@@ -38,6 +38,8 @@ export default function RelatorioPresencaGeral({ match }) {
 
   useEffect(() => {
     async function getData() {
+      const alunos = await axios.get('/aluno');
+      setListAlunos(alunos.data);
       const response = await axios.get('/classe');
       const listaClasse = [];
       response.data.map((dado) => {
@@ -64,29 +66,41 @@ export default function RelatorioPresencaGeral({ match }) {
         dataAula: dataFormatada,
       });
     });
-    setIsLoading(false);
     setHidden(false);
-    setListAlunos(novaLista);
     contadorPresenca(novaLista);
   };
 
-  const contadorPresenca = (list) => {
+  const contadorPresenca = async (list) => {
+    // contador de presenca
     const novaLista = [];
     classes.map((classe) => {
-      let contador = 0;
-      list.map((dado) => {
-        if (dado.classeId === classe.id) {
-          contador += 1;
+      let alunosPresente = 0;
+      let qtdeAlunos = 0;
+
+      listAlunos.map((aluno) => {
+        if (aluno.classe_id === 6) {
+          qtdeAlunos += 1;
         }
       });
+
+      list.map((dado) => {
+        if (dado.classeId === classe.id) {
+          alunosPresente += 1;
+        }
+      });
+
+      // renderiza a lista com os dados
       novaLista.push({
         idClasse: classe.id,
         nomeClasse: classe.descricao,
-        contador,
+        alunosPresente,
+        qtdeAlunos,
+        faltas: qtdeAlunos - alunosPresente,
       });
     });
     setPresenca(novaLista);
     console.log(novaLista);
+    setIsLoading(false);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -107,52 +121,10 @@ export default function RelatorioPresencaGeral({ match }) {
     }
   };
 
-  const handleClose = () => {
-    setShow(false);
-  };
-
-  const handleShow = (idFuncao, index) => {
-    setIdParaDelecao(idFuncao);
-    setIndiceDelecao(index);
-    setShow(true);
-  };
-
-  const handleFunctionConfirm = async () => {
-    try {
-      setIsLoading(true);
-      await axios.delete(`/chamada/${idParaDelecao}`);
-      const novaList = [...listAlunos];
-      novaList.splice(indiceDelecao, 1);
-      setListAlunos(novaList);
-      toast.success('Presença excluida com sucesso');
-      setShow(false);
-
-      setIsLoading(false);
-    } catch (error) {
-      const status = get(error, 'response.data.status', 0);
-      if (status === 401) {
-        toast.error('Voce precisa fazer loggin');
-      } else {
-        toast.error('Erro ao excluir a membro');
-      }
-      setIsLoading(false);
-    }
-  };
-
   return (
     <Container>
-      {/* <h1>Relatório de presença geral {isLoggedIn}</h1> */}
+      <h1>Relatório de presença geral </h1>
       <Loading isLoading={isLoading} />
-
-      <Modal
-        title="Atenção!!!"
-        handleClose={handleClose}
-        show={show}
-        text="Deseja exluir esse registro"
-        buttonCancel="Não"
-        buttonConfirm="Sim"
-        handleFunctionConfirm={handleFunctionConfirm}
-      />
 
       <Form onSubmit={handleSubmit}>
         <div>
@@ -189,7 +161,9 @@ export default function RelatorioPresencaGeral({ match }) {
             <thead>
               <tr>
                 <th scope="col">Nome da Classe</th>
+                <th scope="col">Total de aluno</th>
                 <th scope="col">Total de presenca</th>
+                <th scope="col">Total de faltas</th>
                 {/* <th scope="col">Excluir</th> */}
               </tr>
             </thead>
@@ -197,7 +171,9 @@ export default function RelatorioPresencaGeral({ match }) {
               {presenca.map((dado, index) => (
                 <tr key={String(dado.idClasse)}>
                   <td>{dado.nomeClasse}</td>
-                  <td>{dado.contador}</td>
+                  <td>{dado.qtdeAlunos}</td>
+                  <td>{dado.alunosPresente}</td>
+                  <td>{dado.faltas}</td>
 
                   {/* <td>
                     <Link

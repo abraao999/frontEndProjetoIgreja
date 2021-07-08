@@ -199,9 +199,9 @@ export default function RelatorioPresencaGeral({ match }) {
             <thead>
               <tr>
                 <th scope="col">Nome da Classe</th>
-                <th scope="col">Total de aluno</th>
-                <th scope="col">Total de presenca</th>
+                <th scope="col">Total de presença</th>
                 <th scope="col">Total de faltas</th>
+                <th scope="col">Percentual de presença</th>
                 {/* <th scope="col">Excluir</th> */}
               </tr>
             </thead>

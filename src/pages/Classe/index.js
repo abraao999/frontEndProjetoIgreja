@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
 import { FaEdit, FaWindowClose, FaExclamation } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
@@ -24,6 +24,8 @@ export default function Classe({ match }) {
   const [descricao, setDescricao] = useState('');
   const [descricaoList, setDescricaoList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const dataStorage = useSelector((state) => state.auth);
 
   useEffect(() => {
     async function getData() {
@@ -46,7 +48,10 @@ export default function Classe({ match }) {
     if (formErrors) return;
     try {
       if (!id) {
-        const response = await axios.post('/classe', { descricao });
+        const response = await axios.post('/classe', {
+          descricao,
+          setor_id: dataStorage.user.setor_id,
+        });
         console.log(response);
         const novaLista = await axios.get('/classe');
         setDescricaoList(novaLista.data);

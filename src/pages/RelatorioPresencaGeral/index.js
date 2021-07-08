@@ -17,25 +17,32 @@ import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
 import history from '../../services/history';
 import ModalMembro from '../../components/ModalMembro';
+import {
+  fimPrimeiroTrimestre,
+  fimQuartoTrimestre,
+  fimSegundoTrimestre,
+  fimTerceiroTrimestre,
+  inicioPrimeiroTrimestre,
+  inicioQuartoTrimestre,
+  inicioSegundoTrimestre,
+  inicioTerceiroTrimestre,
+  trimestres,
+} from '../../util';
 
 export default function RelatorioPresencaGeral({ match }) {
   const [show, setShow] = useState(false);
-
-  const [congregacaoId, setCongregacaoId] = useState('Selecione uma classe');
-  const [idParaDelecao, setIdParaDelecao] = useState('');
-  const [indiceDelecao, setIndiceDelecao] = useState('');
-
-  const [dataInicial, setDataInicial] = useState('');
-  const [dataFinal, setDataFinal] = useState('');
 
   const [classes, setClasses] = useState([]);
   const [listAlunos, setListAlunos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hidden, setHidden] = useState(true);
-  const [setorSeletected, setSetorSeletected] = useState(0);
-  const dataStorage = useSelector((state) => state.auth);
+  const [classeSeletected, setClasseSeletected] = useState(0);
+  const [classeNome, setClasseNome] = useState('');
   const [presenca, setPresenca] = useState([]);
 
+  const dataStorage = useSelector((state) => state.auth);
+
+  const [idTrimestre, setIdTrimestre] = useState('');
   useEffect(() => {
     async function getData() {
       const alunos = await axios.get('/aluno');
@@ -52,75 +59,104 @@ export default function RelatorioPresencaGeral({ match }) {
     getData();
   }, []);
 
-  const renderizaLista = (list, mes) => {
+  const contadorPresenca = async (listPresenca) => {
+    // contador de presenca
     const novaLista = [];
-    list.map((dado) => {
-      const data = new Date(dado.data_aula);
-      const dataFormatada = `${data.getDate()}/
-      ${data.getMonth() + 1}/${data.getFullYear()}`;
+    const qtdeAlunos = 0;
+
+    console.log(listPresenca);
+    listAlunos.map((aluno) => {
+      let contador = 0;
+
+      listPresenca.map((dado) => {
+        if (dado.aluno_id === aluno.id) {
+          contador += 1;
+        }
+      });
+
+      // 100 --- 13
+      // x --- presenca
+      // x = (presenca*100)/13
+      // renderiza a lista com os dados
       novaLista.push({
-        id: dado.id,
-        nomeAluno: dado.desc_aluno,
-        classeId: dado.id_classe,
-        classeDesc: dado.desc_classes,
-        dataAula: dataFormatada,
+        id: aluno.id,
+        nomeAluno: aluno.nome,
+        frequencia: contador,
+        faltas: 13 - contador,
+        porcentagem: ((contador * 100) / 13).toFixed(2),
       });
     });
     setHidden(false);
-    contadorPresenca(novaLista);
-  };
-
-  const contadorPresenca = async (list) => {
-    // contador de presenca
-    const novaLista = [];
-    classes.map((classe) => {
-      let alunosPresente = 0;
-      let qtdeAlunos = 0;
-
-      listAlunos.map((aluno) => {
-        if (aluno.classe_id === 6) {
-          qtdeAlunos += 1;
-        }
-      });
-
-      list.map((dado) => {
-        if (dado.classeId === classe.id) {
-          alunosPresente += 1;
-        }
-      });
-
-      // renderiza a lista com os dados
-      novaLista.push({
-        idClasse: classe.id,
-        nomeClasse: classe.descricao,
-        alunosPresente,
-        qtdeAlunos,
-        faltas: qtdeAlunos - alunosPresente,
-      });
-    });
     setPresenca(novaLista);
     console.log(novaLista);
     setIsLoading(false);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    let dataInicial;
+    let dataFinal;
     setIsLoading(true);
     const novaList = [];
-    if (dataInicial && dataFinal) {
-      axios.get(`/chamada`).then((dados) => {
-        dados.data.map((dado) => {
-          if (dado.data_aula >= dataInicial && dado.data_aula <= dataFinal) {
-            novaList.push(dado);
-          }
-        });
-        renderizaLista(novaList);
-      });
-    } else {
-      toast.error('Selecione todos os campos para filtrar');
-      setIsLoading(false);
-    }
-  };
 
+    switch (idTrimestre) {
+      case 0: {
+        dataInicial = inicioPrimeiroTrimestre;
+        dataFinal = fimPrimeiroTrimestre;
+
+        break;
+      }
+      case 1: {
+        dataInicial = inicioSegundoTrimestre;
+        dataFinal = fimSegundoTrimestre;
+
+        break;
+      }
+      case 2: {
+        dataInicial = inicioTerceiroTrimestre;
+        dataFinal = fimTerceiroTrimestre;
+
+        break;
+      }
+      case 3: {
+        dataInicial = inicioQuartoTrimestre;
+        dataFinal = fimQuartoTrimestre;
+
+        break;
+      }
+
+      default:
+        break;
+    }
+    axios.get(`/chamada`).then((dados) => {
+      dados.data.map((dado) => {
+        // const banana = new Date(dado.data_aula);
+        console.log(dado.data_aula);
+        if (
+          dado.data_aula >= dataInicial &&
+          dado.data_aula <= dataFinal &&
+          dado.id_classe === classeSeletected
+        ) {
+          novaList.push(dado);
+        }
+      });
+      contadorPresenca(novaList);
+      console.log(novaList);
+    });
+  };
+  const handleIdTrimestre = async (e) => {
+    const valor = Number(e.target.value);
+
+    setIdTrimestre(valor);
+  };
+  const handleGetIdCongregacao = (e) => {
+    const nome = e.target.value;
+    setClasseNome(e.target.value);
+
+    classes.map((dado) => {
+      if (nome === dado.descricao) setClasseSeletected(dado.id);
+    });
+  };
   return (
     <Container>
       <h1>Relatório de presença geral </h1>
@@ -128,25 +164,27 @@ export default function RelatorioPresencaGeral({ match }) {
 
       <Form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="dataInicial">
-            Data Inicial
-            <input
-              type="date"
-              value={dataInicial}
-              onChange={(e) => {
-                setDataInicial(e.target.value);
-              }}
-            />
+          <label htmlFor="congregacao">
+            Selecione a classe
+            <select onChange={handleGetIdCongregacao} value={classeNome}>
+              <option value="nada">Selecione a classe</option>
+              {classes.map((dado) => (
+                <option key={dado.id} value={dado.descricao}>
+                  {dado.descricao}
+                </option>
+              ))}
+            </select>
           </label>
-          <label htmlFor="dataInicial">
-            Data Final
-            <input
-              type="date"
-              value={dataFinal}
-              onChange={(e) => {
-                setDataFinal(e.target.value);
-              }}
-            />
+          <label htmlFor="trimestre">
+            Filtrar por trimestre
+            <select onChange={handleIdTrimestre}>
+              <option value="nada">Selecione a classe</option>
+              {trimestres.map((dado) => (
+                <option key={dado.id} value={dado.id}>
+                  {dado.descricao}
+                </option>
+              ))}
+            </select>
           </label>
         </div>
 
@@ -169,11 +207,11 @@ export default function RelatorioPresencaGeral({ match }) {
             </thead>
             <tbody>
               {presenca.map((dado, index) => (
-                <tr key={String(dado.idClasse)}>
-                  <td>{dado.nomeClasse}</td>
-                  <td>{dado.qtdeAlunos}</td>
-                  <td>{dado.alunosPresente}</td>
+                <tr key={String(dado.id)}>
+                  <td>{dado.nomeAluno}</td>
+                  <td>{dado.frequencia}</td>
                   <td>{dado.faltas}</td>
+                  <td>{dado.porcentagem}</td>
 
                   {/* <td>
                     <Link

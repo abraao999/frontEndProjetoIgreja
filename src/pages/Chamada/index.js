@@ -167,9 +167,9 @@ export default function Chamada({ match }) {
       <Form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="congregacao">
-            Filtrar por congregação
+            Selecione a classe
             <select onChange={handleGetIdCongregacao} value={congregacaoId}>
-              <option value="nada">Selecione a congregação</option>
+              <option value="nada">Selecione a classe</option>
               {classes.map((dado) => (
                 <option key={dado.id} value={dado.descricao}>
                   {dado.descricao}

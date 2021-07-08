@@ -13,18 +13,15 @@ import { Form, Table, Listagem } from './styled';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
-import history from '../../services/history';
-import ModalMembro from '../../components/ModalMembro';
 
-export default function RelatorioPresencaDetalhada({ match }) {
+export default function PresencaDetalhada({ match }) {
   const [show, setShow] = useState(false);
 
   const [congregacaoId, setCongregacaoId] = useState('Selecione uma classe');
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
 
-  const [dataInicial, setDataInicial] = useState('');
-  const [dataFinal, setDataFinal] = useState('');
+  const [dataAula, setDataAula] = useState('');
 
   const [setores, setSetores] = useState([]);
   const [listAlunos, setListAlunos] = useState([]);
@@ -68,14 +65,13 @@ export default function RelatorioPresencaDetalhada({ match }) {
     e.preventDefault();
     setIsLoading(true);
     const novaList = [];
-    if (dataInicial && dataFinal) {
+    if (dataAula) {
       axios.get(`/chamada`).then((dados) => {
         dados.data.map((dado) => {
           console.log(dado.data_aula);
-          console.log('data', dataInicial);
+          console.log('data', dataAula);
           if (
-            dado.data_aula >= dataInicial &&
-            dado.data_aula <= dataFinal &&
+            dado.data_aula >= dataAula &&
             dado.id_classe === setorSeletected
           ) {
             novaList.push(dado);
@@ -156,23 +152,13 @@ export default function RelatorioPresencaDetalhada({ match }) {
               ))}
             </select>
           </label>
-          <label htmlFor="dataInicial">
-            Data Inicial
+          <label htmlFor="dataAula">
+            Data aula
             <input
               type="date"
-              value={dataInicial}
+              value={dataAula}
               onChange={(e) => {
-                setDataInicial(e.target.value);
-              }}
-            />
-          </label>
-          <label htmlFor="dataInicial">
-            Data Final
-            <input
-              type="date"
-              value={dataFinal}
-              onChange={(e) => {
-                setDataFinal(e.target.value);
+                setDataAula(e.target.value);
               }}
             />
           </label>
@@ -218,6 +204,6 @@ export default function RelatorioPresencaDetalhada({ match }) {
     </Container>
   );
 }
-RelatorioPresencaDetalhada.protoTypes = {
+PresencaDetalhada.protoTypes = {
   match: PropTypes.shape({}).isRequired,
 };

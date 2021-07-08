@@ -57,14 +57,17 @@ export default function Header() {
     { desc: 'CHAMADA', path: '/chamada' },
     { desc: 'LISTA DE ALUNOS', path: '/listAluno' },
     {
-      desc: 'RELATÓRIO DE PRESENÇA DETALHADA',
-      path: '/relatorioPresencaDetalhada',
+      desc: 'RELATÓRIO DE PRESENÇA DIARIA',
+      path: '/relatorioPresencaDiaria',
     },
     {
       desc: 'RELATÓRIO DE PRESENÇA GERAL',
       path: '/relatorioPresencaGeral',
     },
-    { desc: 'FUNÇÕES', path: '/funcao' },
+    {
+      desc: 'PRESENÇA DETALHADA',
+      path: '/PresencaDetalhada',
+    },
   ];
   return (
     <Nav>
@@ -79,7 +82,7 @@ export default function Header() {
         )}
         {isLoggedIn && <Dropdown nome="CONFIGURAÇÕES" opcoes={configuracoes} />}
         {isLoggedIn && <Dropdown nome="SECRETARIA" opcoes={secretaria} />}
-        {/* {isLoggedIn && <Dropdown nome="CAIXA" opcoes={caixa} />} */}
+        {isLoggedIn && <Dropdown nome="CAIXA" opcoes={caixa} />}
         {isLoggedIn && <Dropdown nome="EBD" opcoes={ebd} />}
 
         {!isLoggedIn && (

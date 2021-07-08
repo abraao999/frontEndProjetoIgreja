@@ -27,8 +27,9 @@ import CadAluno from '../pages/CadAluno';
 import ListAluno from '../pages/ListAluno';
 import DetailAluno from '../pages/DetailAluno';
 import Chamada from '../pages/Chamada';
-import RelatorioPresencaDetalhada from '../pages/RelatorioPresencaDetalhada';
+import RelatorioPresencaDiaria from '../pages/RelatorioPresencaDiaria';
 import RelatorioPresencaGeral from '../pages/RelatorioPresencaGeral';
+import PresencaDetalhada from '../pages/PresencaDetalhada';
 
 export default function Routes() {
   return (
@@ -81,8 +82,13 @@ export default function Routes() {
       <MyRoute path="/chamada/" component={Chamada} isClosed />
       <MyRoute path="/detailAluno/:id" component={DetailAluno} isClosed />
       <MyRoute
-        path="/relatorioPresencaDetalhada/"
-        component={RelatorioPresencaDetalhada}
+        path="/PresencaDetalhada/"
+        component={PresencaDetalhada}
+        isClosed
+      />
+      <MyRoute
+        path="/relatorioPresencaDiaria/"
+        component={RelatorioPresencaDiaria}
         isClosed
       />
       <MyRoute

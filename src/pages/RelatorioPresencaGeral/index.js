@@ -45,8 +45,6 @@ export default function RelatorioPresencaGeral({ match }) {
   const [idTrimestre, setIdTrimestre] = useState('');
   useEffect(() => {
     async function getData() {
-      const alunos = await axios.get('/aluno');
-      setListAlunos(alunos.data);
       const response = await axios.get('/classe');
       const listaClasse = [];
       response.data.map((dado) => {
@@ -59,21 +57,21 @@ export default function RelatorioPresencaGeral({ match }) {
     getData();
   }, []);
 
-  const contadorPresenca = async (listPresenca) => {
+  const contadorPresenca = async (listPresenca, alunos) => {
     // contador de presenca
     const novaLista = [];
     const qtdeAlunos = 0;
 
     console.log(listPresenca);
-    listAlunos.map((aluno) => {
+    alunos.map((aluno) => {
       let contador = 0;
 
+      console.log(contador);
       listPresenca.map((dado) => {
         if (dado.aluno_id === aluno.id) {
           contador += 1;
         }
       });
-
       // 100 --- 13
       // x --- presenca
       // x = (presenca*100)/13
@@ -93,6 +91,14 @@ export default function RelatorioPresencaGeral({ match }) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const alunos = [];
+
+    axios.get('/aluno').then((response) => {
+      response.data.map((aluno) => {
+        if (aluno.classe_id === classeSeletected) alunos.push(aluno);
+      });
+      setListAlunos(alunos);
+    });
 
     let dataInicial;
     let dataFinal;
@@ -130,8 +136,6 @@ export default function RelatorioPresencaGeral({ match }) {
     }
     axios.get(`/chamada`).then((dados) => {
       dados.data.map((dado) => {
-        // const banana = new Date(dado.data_aula);
-        console.log(dado.data_aula);
         if (
           dado.data_aula >= dataInicial &&
           dado.data_aula <= dataFinal &&
@@ -140,8 +144,7 @@ export default function RelatorioPresencaGeral({ match }) {
           novaList.push(dado);
         }
       });
-      contadorPresenca(novaList);
-      console.log(novaList);
+      contadorPresenca(novaList, alunos);
     });
   };
   const handleIdTrimestre = async (e) => {

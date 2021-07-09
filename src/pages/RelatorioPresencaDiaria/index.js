@@ -86,17 +86,26 @@ export default function RelatorioPresencaDiaria({ match }) {
       });
     });
     setPresenca(novaLista);
-    console.log(novaLista);
     setIsLoading(false);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     const novaList = [];
+
     if (dataAula) {
       axios.get(`/chamada`).then((dados) => {
         dados.data.map((dado) => {
-          if (dado.data_aula === dataAula) {
+          let dataSelect = new Date(dataAula);
+          let dataBD = new Date(dado.data_aula);
+
+          dataSelect = `${dataSelect.getDate() + 1}-${dataSelect.getMonth() + 1
+            }-${dataSelect.getFullYear()}`;
+
+          dataBD = `${dataBD.getDate()}-${dataBD.getMonth() + 1
+            }-${dataBD.getFullYear()}`;
+
+          if (dataSelect === dataBD) {
             novaList.push(dado);
           }
         });
@@ -110,7 +119,7 @@ export default function RelatorioPresencaDiaria({ match }) {
 
   return (
     <Container>
-      <h1>Relatório de presença geral </h1>
+      <h1>Relatório de presença diária </h1>
       <Loading isLoading={isLoading} />
 
       <Form onSubmit={handleSubmit}>
@@ -145,7 +154,7 @@ export default function RelatorioPresencaDiaria({ match }) {
               </tr>
             </thead>
             <tbody>
-              {presenca.map((dado, index) => (
+              {presenca.map((dado) => (
                 <tr key={String(dado.idClasse)}>
                   <td>{dado.nomeClasse}</td>
                   <td>{dado.qtdeAlunos}</td>

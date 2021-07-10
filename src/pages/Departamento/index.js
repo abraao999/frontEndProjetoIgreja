@@ -192,7 +192,7 @@ export default function Departamento({ match }) {
         <button type="submit">Salvar</button>
       </Form>
       <Listagem>
-        <h3>Lista de Funções</h3>
+        <h3>Lista de Departamentos</h3>
         <center>
           <Table className="table table-striped">
             <thead>

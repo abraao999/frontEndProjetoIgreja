@@ -121,7 +121,7 @@ export default function Congregacao({ match }) {
       />
       <Form onSubmit={handleSubmit}>
         <label htmlFor="descricao">
-          Nome da setor:
+          Nome da cogregação:
           <input
             type="text"
             value={descricao}
@@ -132,7 +132,7 @@ export default function Congregacao({ match }) {
         <button type="submit">Salvar</button>
       </Form>
       <Listagem>
-        <h3>Lista de congregação</h3>
+        <h3>Lista de congregações</h3>
         <center>
           <Table className="table table-striped">
             <thead>

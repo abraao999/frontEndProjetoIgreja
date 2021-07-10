@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 
+import { useSelector } from 'react-redux';
 import MyRoute from './MyRoute';
 import Aluno from '../pages/Aluno';
 import Fotos from '../pages/Fotos';
@@ -32,6 +33,17 @@ import RelatorioPresencaGeral from '../pages/RelatorioPresencaGeral';
 import PresencaDetalhada from '../pages/PresencaDetalhada';
 
 export default function Routes() {
+  const idFuncao = useSelector((state) => state.auth.user.function_id);
+
+  /*
+    1 - Admistrador
+    2 - Dirigente
+    3 - Tesoureiro
+    4 - Secretario
+    5 - Coordenador
+    6 - Tesoureiro EBD
+    7 -  Professor
+  */
   return (
     <Switch>
       <MyRoute exact path="/" component={Home} isClosed={false} />
@@ -40,60 +52,228 @@ export default function Routes() {
       <MyRoute path="/fotos/:id" component={Fotos} isClosed />
       <MyRoute path="/login/" component={Login} isClosed={false} />
       <MyRoute path="/register/" component={Register} isClosed={false} />
-      <MyRoute path="/funcao/:id/edit" component={Funcao} isClosed />
-      <MyRoute path="/funcao/" component={Funcao} isClosed />
-      <MyRoute path="/cargo/:id/edit" component={Cargo} isClosed />
-      <MyRoute path="/cargo/" component={Cargo} isClosed />
-      <MyRoute path="/classe/:id/edit" component={Classe} isClosed />
-      <MyRoute path="/classe/" component={Classe} isClosed />
-      <MyRoute path="/cadMembro/:id/edit" component={CadMembro} isClosed />
-      <MyRoute path="/cadMembro/" component={CadMembro} isClosed />
+      <MyRoute
+        path="/funcao/:id/edit"
+        component={Funcao}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/funcao/"
+        component={Funcao}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/cargo/:id/edit"
+        component={Cargo}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 4 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/cargo/"
+        component={Cargo}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 4 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/classe/:id/edit"
+        component={Classe}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 5 }, { id: 7 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/classe/"
+        component={Classe}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 5 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/cadMembro/:id/edit"
+        component={CadMembro}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 4 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/cadMembro/"
+        component={CadMembro}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 4 }]}
+        isClosed
+      />
       <MyRoute
         path="/departamento/:id/edit"
         component={Departamento}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 4 }]}
         isClosed
       />
-      <MyRoute path="/departamento/" component={Departamento} isClosed />
-      <MyRoute path="/congregacao/:id/edit" component={Congregacao} isClosed />
-      <MyRoute path="/congregacao/" component={Congregacao} isClosed />
-      <MyRoute path="/listMembros/" component={ListMembros} isClosed />
-      <MyRoute path="/detailtMembro/:id" component={DetailMembro} isClosed />
-      <MyRoute path="/caixa/:id/edit" component={Caixa} isClosed />
-      <MyRoute path="/caixa/" component={Caixa} isClosed />
-      <MyRoute path="/abatimento/:id/edit" component={Abatimento} isClosed />
-      <MyRoute path="/abatimento/" component={Abatimento} isClosed />
-      <MyRoute path="/dizimo/:id/edit" component={Dizimo} isClosed />
-      <MyRoute path="/dizimo/" component={Dizimo} isClosed />
-      <MyRoute path="/relatorioCaixa/" component={RelatorioCaixa} isClosed />
-      <MyRoute path="/relatorioDizimo/" component={RelatorioDizimo} isClosed />
+      <MyRoute
+        path="/departamento/"
+        component={Departamento}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 4 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/congregacao/:id/edit"
+        component={Congregacao}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 4 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/congregacao/"
+        component={Congregacao}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 4 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/listMembros/"
+        component={ListMembros}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 4 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/detailtMembro/:id"
+        component={DetailMembro}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 4 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/caixa/:id/edit"
+        component={Caixa}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/caixa/"
+        component={Caixa}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/abatimento/:id/edit"
+        component={Abatimento}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 3 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/abatimento/"
+        component={Abatimento}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 3 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/dizimo/:id/edit"
+        component={Dizimo}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/dizimo/"
+        component={Dizimo}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/relatorioCaixa/"
+        component={RelatorioCaixa}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/relatorioDizimo/"
+        component={RelatorioDizimo}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        isClosed
+      />
       <MyRoute
         path="/relatorioDizimoGeral/"
         component={RelatorioDizimoGeral}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
         isClosed
       />
       <MyRoute
         path="/relatorioAbatimento/"
         component={RelatorioAbatimento}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 3 }]}
         isClosed
       />
-      <MyRoute path="/cadAluno/:id/edit" component={CadAluno} isClosed />
-      <MyRoute path="/cadAluno/" component={CadAluno} isClosed />
-      <MyRoute path="/listAluno/" component={ListAluno} isClosed />
-      <MyRoute path="/chamada/" component={Chamada} isClosed />
-      <MyRoute path="/detailAluno/:id" component={DetailAluno} isClosed />
+      <MyRoute
+        path="/cadAluno/:id/edit"
+        component={CadAluno}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 5 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/cadAluno/"
+        component={CadAluno}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 5 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/listAluno/"
+        component={ListAluno}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 5 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/chamada/"
+        component={Chamada}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 5 }, { id: 7 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/detailAluno/:id"
+        component={DetailAluno}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 5 }]}
+        isClosed
+      />
       <MyRoute
         path="/PresencaDetalhada/"
         component={PresencaDetalhada}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 5 }]}
         isClosed
       />
       <MyRoute
         path="/relatorioPresencaDiaria/"
         component={RelatorioPresencaDiaria}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 5 }, { id: 7 }]}
         isClosed
       />
       <MyRoute
         path="/relatorioPresencaGeral/"
         component={RelatorioPresencaGeral}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 5 }]}
         isClosed
       />
       <MyRoute path="*" component={Page404} />

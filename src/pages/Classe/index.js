@@ -125,7 +125,7 @@ export default function Classe({ match }) {
       />
       <Form onSubmit={handleSubmit}>
         <label htmlFor="descricao">
-          Nome da função:
+          Nome da classe:
           <input
             type="text"
             value={descricao}
@@ -136,7 +136,7 @@ export default function Classe({ match }) {
         <button type="submit">Salvar</button>
       </Form>
       <Listagem>
-        <h3>Lista de Funções</h3>
+        <h3>Lista de Classes</h3>
         <center>
           <Table className="table table-striped">
             <thead>

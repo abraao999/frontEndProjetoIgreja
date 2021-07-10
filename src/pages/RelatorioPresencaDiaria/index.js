@@ -65,7 +65,7 @@ export default function RelatorioPresencaDiaria({ match }) {
       let qtdeAlunos = 0;
 
       listAlunos.map((aluno) => {
-        if (aluno.classe_id === 6) {
+        if (aluno.classe_id === classe.id) {
           qtdeAlunos += 1;
         }
       });

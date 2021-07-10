@@ -31,6 +31,8 @@ export default function Caixa({ match }) {
 
   const [tipoMovimentacaoBox, setTipoMovimentacaoBox] = useState('');
   const [tipoMovimentacao, setTipoMovimentacao] = useState();
+  const [investimentoBox, setInvestimentoBox] = useState('');
+  const [investimento, setInvestimento] = useState();
   const [valor, setValor] = useState('');
   const [dataMovimentacao, setDataMovimentacao] = useState('');
 
@@ -58,6 +60,7 @@ export default function Caixa({ match }) {
         setDataMovimentacao(dado.data.data_operacao);
         setSetorId(dado.data.setor_id);
         setDepartamentoId(dado.data.departamento_id);
+        setInvestimento(dado.data.investimento);
       }
       const response = await axios.get('/setor');
       setSetores(response.data);
@@ -84,6 +87,7 @@ export default function Caixa({ match }) {
           descricao,
           valor,
           tipo: tipoMovimentacao,
+          investimento,
           data_operacao: dataMovimentacao,
           setor_id: setorId,
           departamento_id: departmanetoId,
@@ -99,6 +103,7 @@ export default function Caixa({ match }) {
           descricao,
           valor,
           tipo: tipoMovimentacao,
+          investimento,
           data_operacao: dataMovimentacao,
           setor_id: setorId,
           departamento_id: departmanetoId,
@@ -129,6 +134,12 @@ export default function Caixa({ match }) {
     setTipoMovimentacaoBox(e.target.value);
     if (nome === 'entrada') setTipoMovimentacao(true);
     else setTipoMovimentacao(false);
+  };
+  const handleInvestimento = (e) => {
+    const nome = e.target.value;
+    setInvestimentoBox(e.target.value);
+    if (nome === 'Investimento') setInvestimento(true);
+    else setInvestimento(false);
   };
   const handleGetIdCongregacao = (e) => {
     const nome = e.target.value;
@@ -221,6 +232,14 @@ export default function Caixa({ match }) {
               <option value="nada">Escolha um tipo de movimentação</option>
               <option value="entrada">Entrada</option>
               <option value="saida">Saída</option>
+            </select>
+          </label>
+          <label htmlFor="congregacao">
+            Investimentos/Dispesas
+            <select onChange={handleInvestimento} value={investimentoBox}>
+              <option value="nada">Escolha um tipo</option>
+              <option value="Investimento">Investimento</option>
+              <option value="Dispesa">Dispesa</option>
             </select>
           </label>
         </div>

@@ -23,6 +23,9 @@ export default function RelatorioCaixa({ match }) {
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
+
+  const [investimentoBox, setInvestimentoBox] = useState('');
+  const [investimento, setInvestimento] = useState('');
   const [msg, setMsg] = useState(true);
   const [filtro, setFiltro] = useState(false);
   const [filtroDep, setFiltroDep] = useState(false);
@@ -67,9 +70,8 @@ export default function RelatorioCaixa({ match }) {
     const novaLista = [];
     list.map((dado) => {
       const data = new Date(dado.data_operacao);
-      const dataFormatada = `${data.getDate()}/${
-        data.getMonth() + 1
-      }/${data.getFullYear()}`;
+      const dataFormatada = `${data.getDate()}/
+      ${data.getMonth() + 1}/${data.getFullYear()}`;
       novaLista.push({
         id: dado.id,
         descricao: dado.descricao,
@@ -203,6 +205,14 @@ export default function RelatorioCaixa({ match }) {
       if (nome === dado.descricao) setSetorSeletected(dado.id);
     });
   };
+  const handleInvestimento = (e) => {
+    const nome = e.target.value;
+    setInvestimentoBox(e.target.value);
+    setores.map((dado) => {
+      if (nome === 'Invesimento') setInvestimento(true);
+      else setInvestimento(false);
+    });
+  };
   const handleGetIdDepartamento = (e) => {
     const nome = e.target.value;
     setDepartamentoId(e.target.value);
@@ -240,6 +250,14 @@ export default function RelatorioCaixa({ match }) {
                   {dado.descricao}
                 </option>
               ))}
+            </select>
+          </label>
+          <label htmlFor="investimento">
+            Investimento/Despesa
+            <select onChange={handleInvestimento} value={investimentoBox}>
+              <option value="nada">Selecione a opção</option>
+              <option value="Investimento">Invesimento</option>
+              <option value="Despesa">Despesa</option>
             </select>
           </label>
         </div>

@@ -9,11 +9,12 @@ import { useDispatch } from 'react-redux';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
-import { Form, Table, Listagem } from './styled';
+import { Label, Listagem } from './styled';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
 import history from '../../services/history';
+import { Row, Table, Form, Col } from 'react-bootstrap';
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function ListMembros({ match }) {
@@ -116,7 +117,7 @@ export default function ListMembros({ match }) {
   };
   return (
     <Container>
-      <h1>{id ? 'Editar Departamento' : 'Novo Departamento'}</h1>
+      <h2>Lista de membros</h2>
       <Loading isLoading={isLoading} />
       <Modal
         title="Atenção!!!"
@@ -129,10 +130,13 @@ export default function ListMembros({ match }) {
       />
 
       <Form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="descricao">
-            Insira um nome para filtrar:
-            <input
+        <Row>
+          <Col sm={12} md={6} className="my-1">
+
+            <Form.Label htmlFor="descricao">
+              Insira um nome para filtrar:
+            </Form.Label>
+            <Form.Control
               id="input"
               type="text"
               value={descricao}
@@ -141,20 +145,22 @@ export default function ListMembros({ match }) {
               }}
               placeholder="Nome para filtro"
             />
-          </label>
+          </Col>
+          <Col sm={12} md={6} className="my-1">
 
-          <label htmlFor="congregacao">
-            Filtrar por congregação
-            <select onChange={handleGetIdCongregacao} value={congregacaoId}>
-              <option value="nada">Selecione a congregação</option>
-              {setores.map((dado) => (
-                <option key={dado.id} value={dado.descricao}>
-                  {dado.descricao}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
+            <Label htmlFor="congregacao">
+              Filtrar por congregação
+              <select onChange={handleGetIdCongregacao} value={congregacaoId}>
+                <option value="nada">Selecione a congregação</option>
+                {setores.map((dado) => (
+                  <option key={dado.id} value={dado.descricao}>
+                    {dado.descricao}
+                  </option>
+                ))}
+              </select>
+            </Label>
+          </Col>
+        </Row>
 
         <button type="submit">
           Filtrar <FaSearch />
@@ -163,7 +169,7 @@ export default function ListMembros({ match }) {
       <Listagem>
         <h3>Lista de Membros</h3>
         <center>
-          <Table className="table table-striped">
+          <Table responsive striped bordered hover>
             <thead>
               <tr>
                 <th scope="col">Nº Ficha</th>

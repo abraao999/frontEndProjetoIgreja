@@ -26,3 +26,24 @@ export const Combo = styled.select`
     border: 1px solid ${colors.primaryColor};
   }
 `;
+export const Label = styled.label`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* margin-bottom: 20px; */
+  small {
+    color: red;
+    display: block;
+  }
+  select {
+    height: 40px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    padding: 0 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+    &:focus {
+      border: 4px solid ${colors.inputBorder};
+    }
+  }
+`;

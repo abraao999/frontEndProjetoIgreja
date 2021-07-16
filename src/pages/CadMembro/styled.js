@@ -1,7 +1,8 @@
+import { Form } from 'react-bootstrap';
 import styled from 'styled-components';
 import * as colors from '../../config/colors';
 
-export const Form = styled.form`
+export const Form2 = styled.form`
   display: flex;
   flex-direction: column;
   margin-top: 20px;
@@ -56,5 +57,26 @@ export const Listagem = styled.div`
     margin: 30px;
     display: flex;
     justify-content: center;
+  }
+`;
+export const Label = styled.label`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* margin-bottom: 20px; */
+  small {
+    color: red;
+    display: block;
+  }
+  input {
+    height: 40px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    padding: 0 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+    &:focus {
+      border: 4px solid ${colors.inputBorder};
+    }
   }
 `;

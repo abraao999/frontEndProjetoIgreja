@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
 import * as colors from '../../config/colors';
-import { CancelarButton } from './styled';
+import { Label } from './styled';
 // eslint-disable-next-line react/prop-types
 export default function ComboBox({
   title,
@@ -14,7 +14,7 @@ export default function ComboBox({
   handleFunctionConfirm,
 }) {
   return (
-    <label htmlFor="congregacao">
+    <Label htmlFor="congregacao">
       {title}
       <select onChange={onChange} value={value}>
         <option value="nada">{title}</option>
@@ -24,7 +24,7 @@ export default function ComboBox({
           </option>
         ))}
       </select>
-    </label>
+    </Label>
   );
 }
 

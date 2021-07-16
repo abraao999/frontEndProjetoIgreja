@@ -9,26 +9,28 @@ import InputMask from 'react-input-mask';
 import { isEmail, isDate } from 'validator';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
+import Form from 'react-bootstrap/Form';
+import { Col, FormLabel, Row } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
-import { Form } from './styled';
+import { Label } from './styled';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
 import history from '../../services/history';
 import ComboBox from '../../components/ComboBox';
 // import * as actions from '../../store/modules/auth/actions';
-
 export default function CadMembro({ match }) {
   const dispath = useDispatch();
   const id = get(match, 'params.id', '');
-  const [show, setShow] = useState(false);
 
   const [maxId, setMaxId] = useState(0);
   const [setores, setSetores] = useState([]);
   const [funcoes, setFuncoes] = useState([]);
   const [cargos, setCargos] = useState([]);
 
-  const [nomeMembro, setNomeMembro] = useState(' ');
+  const [validated, setValidated] = useState(false);
+
+  const [nomeMembro, setNomeMembro] = useState('');
   const [rg, setRg] = useState('');
   const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');
@@ -37,6 +39,7 @@ export default function CadMembro({ match }) {
   const [estacoCivil, setEstacoCivil] = useState('');
   const [profissao, setProfissao] = useState('');
   const [email, setEmail] = useState('');
+  const [observacao, setObservacao] = useState('');
   const [password, setPassword] = useState('');
   const [cargo, setCargo] = useState('');
   const [cargoId, setCargoId] = useState(0);
@@ -66,6 +69,7 @@ export default function CadMembro({ match }) {
         setTelefone(response.data.telefone);
         setEstacoCivil(response.data.estado_civil);
         setProfissao(response.data.profissao);
+        setObservacao(response.data.observacao);
         setCargoId(response.data.cargo_id);
         setFunctionId(response.data.function_id);
         setSetorId(response.data.setor_id);
@@ -89,6 +93,7 @@ export default function CadMembro({ match }) {
     setTelefone('');
     setEstacoCivil('');
     setProfissao('');
+    setObservacao('');
     setSetor('Selecione a Congregação');
     setFunctionNome('Selecione a função');
     setCargo('Selecione o cargo');
@@ -98,6 +103,13 @@ export default function CadMembro({ match }) {
   };
   async function handleSubmit(e) {
     e.preventDefault();
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      // e.preventDefault();
+      e.stopPropagation();
+    }
+    setValidated(true);
+
     setIsLoading(true);
     let formErrors = false;
 
@@ -129,6 +141,7 @@ export default function CadMembro({ match }) {
           estado_civil: estacoCivil,
           telefone,
           email,
+          observacao,
           password,
           cargo_id: cargoId,
           function_id: functionId,
@@ -147,6 +160,7 @@ export default function CadMembro({ match }) {
           data_batismo: dataBatismo || null,
           data_nascimento: dataNascimento || null,
           profissao,
+          observacao,
           estado_civil: estacoCivil,
           telefone,
           cargo_id: cargoId,
@@ -171,11 +185,6 @@ export default function CadMembro({ match }) {
     }
   }
 
-  const handleClose = () => {
-    setShow(false);
-  };
-
-  const handleFunctionConfirm = async () => {};
   const handleGetIdCongregacao = (e) => {
     const nome = e.target.value;
     setSetor(e.target.value);
@@ -219,76 +228,77 @@ export default function CadMembro({ match }) {
     <Container>
       <h1> Novo Membro</h1>
       <Loading isLoading={isLoading} />
-      <Modal
-        title="Atenção!!!"
-        handleClose={handleClose}
-        show={show}
-        text="Deseja exluir esse registro"
-        buttonCancel="Não"
-        buttonConfirm="Sim"
-        handleFunctionConfirm={handleFunctionConfirm}
-      />
 
-      <Form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="id">
-            Número da ficha:
+      <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Row className="align-items-center">
+          <Col sm={12} md={3} className="my-1">
+            <Form.Label htmlFor="id">Número da ficha:</Form.Label>
             {id ? (
-              <input id="id" type="text" value={id} disabled />
+              <Form.Control id="id" type="text" value={id} disabled />
             ) : (
-              <input id="maxId" type="text" value={maxId} disabled />
+              <Form.Control id="maxId" type="text" value={maxId} disabled />
             )}
-          </label>
-          <label htmlFor="nome">
-            Nome completo:
-            <input
+          </Col>
+          <Col sm={12} md={9} className="my-1">
+            <Form.Label htmlFor="nome">Nome completo:</Form.Label>
+            <Form.Control
               id="nome"
               type="text"
               value={nomeMembro}
               onChange={(e) => {
-                setNomeMembro(e.target.value);
-                handleInput(e, 'nome');
+                setNomeMembro(e.target.value.toLocaleUpperCase());
+                // handleInput(e, 'nome');
               }}
               placeholder="Nome"
+              required
             />
-            <small>Minimo de 3 caracteres</small>
-          </label>
-        </div>
-        <div>
-          <label htmlFor="rg">
-            RG:
-            <input
+            <Form.Control.Feedback type="invalid">
+              Minimo de 3 caracteres
+            </Form.Control.Feedback>
+          </Col>
+        </Row>
+        <Row className="align-items-center">
+          <Col sm={12} md={6} className="my-1">
+            <Form.Label htmlFor="rg">RG:</Form.Label>
+            <Form.Control
               id="rg"
               type="text"
               value={rg}
               onChange={(e) => {
                 setRg(e.target.value);
-                handleInput(e, 'rg');
+                // handleInput(e, 'rg');
               }}
               placeholder="RG"
+              required
             />
-            <small>Minimo de 3 caracteres</small>
-          </label>
-          <label htmlFor="cpf">
-            CPF:
-            <InputMask
-              mask="999.999.999-99"
-              id="cpf"
-              type="text"
-              value={cpf}
-              onChange={(e) => {
-                setCpf(e.target.value);
-                handleInput(e, 'cpf');
-              }}
-              placeholder="000.000.000-00"
-            />
-            <small>Minimo de 3 caracteres</small>
-          </label>
-        </div>
-        <div>
-          <label htmlFor="dataNascimento">
-            Data de Nascimento:
-            <input
+            <Form.Control.Feedback type="invalid">
+              Minimo de 3 caracteres
+            </Form.Control.Feedback>
+          </Col>
+          <Col sm={12} md={6} className="my-1">
+            <Label htmlFor="cpf">
+              CPF:
+              <InputMask
+                mask="999.999.999-99"
+                id="cpf"
+                type="text"
+                value={cpf}
+                onChange={(e) => {
+                  setCpf(e.target.value);
+                  // handleInput(e, 'cpf');
+                }}
+                placeholder="000.000.000-00"
+              />
+              {/* <small>Minimo de 3 caracteres</small> */}
+            </Label>
+          </Col>
+        </Row>
+        <Row className="align-items-center">
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="dataNascimento">
+              Data de Nascimento:
+            </Form.Label>
+            <Form.Control
               id="dataNascimento"
               type="date"
               value={dataNascimento}
@@ -296,111 +306,154 @@ export default function CadMembro({ match }) {
                 setDataNascimento(e.target.value);
                 handleInput(e, 'dataNascimento');
               }}
+              required
             />
-            <small>Insira uma data valida</small>
-          </label>
-          <label htmlFor="dataBatismo">
-            Data de Batismo:
-            <input
+            <Form.Control.Feedback type="invalid">
+              Insira uma data valida
+            </Form.Control.Feedback>
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="dataBatismo">Data de Batismo:</Form.Label>
+            <Form.Control
               id="dataBatismo"
               type="date"
               value={dataBatismo}
               onChange={(e) => {
                 setDataBatismo(e.target.value);
-                handleInput(e, 'dataBatismo');
+                // handleInput(e, 'dataBatismo');
               }}
+              required
             />
-            <small>Insira uma data valida</small>
-          </label>
-          <label htmlFor="telefone">
-            Celular:
-            <InputMask
-              mask="(99) 99999-9999"
-              id="telefone"
-              type="text"
-              value={telefone}
-              onChange={(e) => {
-                setTelefone(e.target.value);
-                handleInput(e, 'telefone');
-              }}
-              placeholder="(00) 00000-0000"
+            <Form.Control.Feedback type="invalid">
+              Insira uma data valida
+            </Form.Control.Feedback>
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Label htmlFor="telefone">
+              Celular:
+              <InputMask
+                mask="(99) 99999-9999"
+                id="telefone"
+                type="text"
+                value={telefone}
+                onChange={(e) => {
+                  setTelefone(e.target.value);
+                  // handleInput(e, 'telefone');
+                }}
+                placeholder="(00) 00000-0000"
+              />
+              {/* <small>Insira um número válido</small> */}
+            </Label>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12} md={6} className="my-1">
+            <ComboBox
+              title="Estado Civil"
+              list={listEstadoCivil}
+              text="Selecione o estado civil"
+              value={estacoCivil}
+              onChange={(e) => setEstacoCivil(e.target.value)}
             />
-            <small>Insira um número válido</small>
-          </label>
-        </div>
-        <div>
-          <ComboBox
-            title="Estado Civil"
-            list={listEstadoCivil}
-            text="Selecione o estado civil"
-            value={estacoCivil}
-            onChange={(e) => setEstacoCivil(e.target.value)}
-          />
-          <label htmlFor="profissao">
-            Profissão:
-            <input
+          </Col>
+          <Col sm={12} md={6} className="my-1">
+            <Form.Label htmlFor="profissao">Profissão:</Form.Label>
+            <Form.Control
               id="profissao"
               type="text"
               value={profissao}
               onChange={(e) => {
-                setProfissao(e.target.value);
-                handleInput(e, 'profissao');
+                setProfissao(e.target.value.toLocaleUpperCase());
+                // handleInput(e, 'profissao');
               }}
               placeholder="Insira a profissão"
+              required
             />
-            <small>Insira uma data valida</small>
-          </label>
-        </div>
-        <div>
-          <ComboBox
-            title="Selecione a Congregação"
-            list={setores}
-            value={setor}
-            onChange={handleGetIdCongregacao}
-          />
-          <ComboBox
-            title="Selecione o cargo"
-            list={cargos}
-            value={cargo}
-            onChange={handleGetIdCargo}
-          />
-          <ComboBox
-            title="Selecione a função"
-            list={funcoes}
-            value={functionNome}
-            onChange={handleGetIdFuncao}
-          />
-        </div>
-        <div>
-          <label htmlFor="email">
-            E-mail:
-            <input
+            <Form.Control.Feedback type="invalid">
+              Insira uma data valida
+            </Form.Control.Feedback>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12} md={4} className="my-1">
+            <ComboBox
+              title="Selecione a Congregação"
+              list={setores}
+              value={setor}
+              onChange={handleGetIdCongregacao}
+            />
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <ComboBox
+              title="Selecione o cargo"
+              list={cargos}
+              value={cargo}
+              onChange={handleGetIdCargo}
+            />
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <ComboBox
+              title="Selecione a função"
+              list={funcoes}
+              value={functionNome}
+              onChange={handleGetIdFuncao}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12} md={6} className="my-1">
+            <Form.Label htmlFor="email">E-mail:</Form.Label>
+            <Form.Control
               id="email"
               type="email"
               value={email}
               onChange={(e) => {
-                setEmail(e.target.value);
-                handleInput(e, 'email');
+                setEmail(e.target.value.toLocaleLowerCase());
+                // handleInput(e, 'email');
               }}
               placeholder="exemplo@email.com"
+              required
             />
-            <small>Insira um e-mail válido</small>
-          </label>
-          <label htmlFor="password">
-            Senha:
-            <input
+            <Form.Control.Feedback type="invalid">
+              Insira um e-mail válido
+            </Form.Control.Feedback>
+          </Col>
+          <Col sm={12} md={6} className="my-1">
+            <Form.Label htmlFor="password">Senha:</Form.Label>
+            <Form.Control
               id="password"
               type="password"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
-                handleInput(e, 'password');
+                // handleInput(e, 'password');
               }}
               placeholder="Senha"
+              required
             />
-            <small>Minimo de 3 caracteres</small>
-          </label>
-        </div>
+            <Form.Control.Feedback type="invalid">
+              Minimo de 3 caracteres
+            </Form.Control.Feedback>
+          </Col>
+        </Row>
+        <Row>
+          <Form.Label htmlFor="observacao">Observação:</Form.Label>
+          <Form.Control
+            as="textarea"
+            id="observacao"
+            type="observacao"
+            value={observacao}
+            onChange={(e) => {
+              setObservacao(e.target.value);
+              // handleInput(e, 'email');
+            }}
+            placeholder="Observação"
+            required
+          />
+          <Form.Control.Feedback type="invalid">
+            A observação não pode ter mais que 200 caracteres válido
+          </Form.Control.Feedback>
+        </Row>
 
         <button type="submit">Salvar</button>
       </Form>

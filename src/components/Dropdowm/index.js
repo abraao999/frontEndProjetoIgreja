@@ -2,30 +2,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { NavDropdown } from 'react-bootstrap';
 
 // eslint-disable-next-line react/prop-types
 export default function Dropdown({ nome, opcoes }) {
   return (
-    <div className="dropdown">
-      <button
-        className=" dropdown-toggle"
-        type="button"
-        id="dropdownMenuButton1"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        {nome}
-      </button>
-      <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-        {opcoes.map((opcao) => (
-          <li key={opcao.desc}>
-            <Link className="dropdown-item" to={opcao.path}>
-              {opcao.desc}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <NavDropdown title={nome} id="collasible-nav-dropdown">
+
+
+      {opcoes.map((opcao) => (
+        <NavDropdown.Item key={opcao.desc} href={opcao.path}>{opcao.desc}</NavDropdown.Item>
+
+      ))}
+    </NavDropdown>
   );
 }
 

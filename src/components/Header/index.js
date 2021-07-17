@@ -12,9 +12,10 @@ import { Link } from 'react-router-dom';
 import * as actions from '../../store/modules/auth/actions';
 import history from '../../services/history';
 import logo from '../../assets/images/logo.png';
-import { Nav, Conteiner } from './styled';
+// import { Nav, Conteiner } from './styled';
 import Dropdown from '../Dropdowm';
-
+import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import * as colors from '../../config/colors'
 export default function Header() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const dispath = useDispatch();
@@ -70,38 +71,49 @@ export default function Header() {
     },
   ];
   return (
-    <Nav>
-      <Conteiner>
-        <img src={logo} alt="" srcSet="" />
-
-        <Link to="/">
-          <span>HOME</span>
-        </Link>
-        {!isLoggedIn && (
-          <Dropdown nome="DEPARTAMENTOS" opcoes={departamentos} />
-        )}
-        {isLoggedIn && <Dropdown nome="CONFIGURAÇÕES" opcoes={configuracoes} />}
-        {isLoggedIn && <Dropdown nome="SECRETARIA" opcoes={secretaria} />}
-        {isLoggedIn && <Dropdown nome="CAIXA" opcoes={caixa} />}
-        {isLoggedIn && <Dropdown nome="EBD" opcoes={ebd} />}
-
-        {!isLoggedIn && (
-          <Link to="/contato">
-            <span>FALE CONOSCO</span>
-          </Link>
-        )}
-        {isLoggedIn ? (
-          <Link onClick={handleLogout} to="/login">
-            <FaSignOutAlt size={24} />
-            <span>Sair</span>
-          </Link>
-        ) : (
-          <Link to="/login">
-            <FaSignInAlt size={24} />
-            <span>Entrar</span>
-          </Link>
-        )}
-      </Conteiner>
-    </Nav>
+    <Navbar style={{ background: colors.primaryColor }} expand="lg" variant="dark">
+      <Container>
+        <img
+          src={logo}
+          width="30"
+          height="30"
+          style={{ marginRight: 5 }}
+          className="d-inline-block align-top"
+          alt="React Bootstrap logo"
+        />
+        <Navbar.Brand href="/">AD BELÉM OLIMPIA</Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="/">HOME</Nav.Link>
+            {!isLoggedIn && (
+              <Dropdown nome="DEPARTAMENTOS" opcoes={departamentos} />
+            )}
+            {isLoggedIn && <Dropdown nome="CONFIGURAÇÕES" opcoes={configuracoes} />}
+            {isLoggedIn && <Dropdown nome="SECRETARIA" opcoes={secretaria} />}
+            {isLoggedIn && <Dropdown nome="CAIXA" opcoes={caixa} />}
+            {isLoggedIn && <Dropdown nome="EBD" opcoes={ebd} />}
+            {!isLoggedIn && (
+              <Nav.Link href="/contato">
+                FALE CONOSCO
+              </Nav.Link>
+            )}
+          </Nav>
+          <Nav>
+            {isLoggedIn ? (
+              <Nav.Link onClick={handleLogout} href="/login">
+                <FaSignOutAlt size={24} />
+                Sair
+              </Nav.Link>
+            ) : (
+              <Nav.Link href="/login">
+                <FaSignInAlt size={24} />
+                Entrar
+              </Nav.Link>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 }

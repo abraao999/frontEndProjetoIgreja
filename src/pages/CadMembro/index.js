@@ -34,6 +34,7 @@ export default function CadMembro({ match }) {
   const [rg, setRg] = useState('');
   const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');
+  const [telefone2, setTelefone2] = useState('');
   const [dataBatismo, setDataBatismo] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [estacoCivil, setEstacoCivil] = useState('');
@@ -42,12 +43,22 @@ export default function CadMembro({ match }) {
   const [observacao, setObservacao] = useState('');
   const [password, setPassword] = useState('');
   const [cargo, setCargo] = useState('');
+  const [rua, setRua] = useState('');
+  const [numero, setNumero] = useState('');
+  const [complemento, setComplemento] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [cep, setCep] = useState('');
+  const [nomeConjuge, setNomeConjuge] = useState('');
   const [cargoId, setCargoId] = useState(0);
   const [functionNome, setFunctionNome] = useState('');
   const [functionId, setFunctionId] = useState(0);
   const [setor, setSetor] = useState('');
   const [setorId, setSetorId] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [casado, setCasado] = useState(true);
+  const [batizado, setBatizado] = useState(false);
+  const [checado, setChecado] = useState(true);
 
   const listEstadoCivil = [
     { id: 1, descricao: 'Solteiro(a)' },
@@ -67,9 +78,17 @@ export default function CadMembro({ match }) {
         setRg(response.data.rg);
         setCpf(response.data.cpf);
         setTelefone(response.data.telefone);
+        setTelefone2(response.data.telefone2);
         setEstacoCivil(response.data.estado_civil);
         setProfissao(response.data.profissao);
         setObservacao(response.data.observacao);
+        setRua(response.data.rua);
+        setNumero(response.data.numero);
+        setComplemento(response.data.complemento);
+        setBairro(response.data.bairro);
+        setCidade(response.data.cidade);
+        setCep(response.data.cep);
+        setNomeConjuge(response.data.nomeConjuge);
         setCargoId(response.data.cargo_id);
         setFunctionId(response.data.function_id);
         setSetorId(response.data.setor_id);
@@ -140,9 +159,17 @@ export default function CadMembro({ match }) {
           profissao,
           estado_civil: estacoCivil,
           telefone,
+          telefone2,
           email,
           observacao,
-          password,
+          password: password || '123456',
+          rua,
+          numero,
+          complemento,
+          bairro,
+          cidade,
+          cep,
+          nomeConjuge,
           cargo_id: cargoId,
           function_id: functionId,
           setor_id: setorId,
@@ -163,6 +190,14 @@ export default function CadMembro({ match }) {
           observacao,
           estado_civil: estacoCivil,
           telefone,
+          telefone2,
+          rua,
+          numero,
+          complemento,
+          bairro,
+          cidade,
+          cep,
+          nomeConjuge,
           cargo_id: cargoId,
           function_id: functionId,
           setor_id: setorId,
@@ -258,7 +293,7 @@ export default function CadMembro({ match }) {
           </Col>
         </Row>
         <Row className="align-items-center">
-          <Col sm={12} md={6} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="rg">RG:</Form.Label>
             <Form.Control
               id="rg"
@@ -275,7 +310,7 @@ export default function CadMembro({ match }) {
               Minimo de 3 caracteres
             </Form.Control.Feedback>
           </Col>
-          <Col sm={12} md={6} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <Label htmlFor="cpf">
               CPF:
               <InputMask
@@ -292,8 +327,6 @@ export default function CadMembro({ match }) {
               {/* <small>Minimo de 3 caracteres</small> */}
             </Label>
           </Col>
-        </Row>
-        <Row className="align-items-center">
           <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="dataNascimento">
               Data de Nascimento:
@@ -312,7 +345,21 @@ export default function CadMembro({ match }) {
               Insira uma data valida
             </Form.Control.Feedback>
           </Col>
-          <Col sm={12} md={4} className="my-1">
+        </Row>
+        <Row className="align-items-center">
+          <Col sm={12} md={3} className="my-1">
+            <Form.Label htmlFor="batizado">Batizado</Form.Label>
+            <Form.Check id="sim" checked={checado} type="radio" label="Sim" />
+            <Form.Check
+              type="radio"
+              label="Nao"
+              onChange={() => {
+                setBatizado(true);
+                setChecado(false);
+              }}
+            />
+          </Col>
+          <Col sm={12} md={3} className="my-1">
             <Form.Label htmlFor="dataBatismo">Data de Batismo:</Form.Label>
             <Form.Control
               id="dataBatismo"
@@ -322,13 +369,13 @@ export default function CadMembro({ match }) {
                 setDataBatismo(e.target.value);
                 // handleInput(e, 'dataBatismo');
               }}
-              required
+              disabled={batizado}
             />
             <Form.Control.Feedback type="invalid">
               Insira uma data valida
             </Form.Control.Feedback>
           </Col>
-          <Col sm={12} md={4} className="my-1">
+          <Col sm={12} md={3} className="my-1">
             <Label htmlFor="telefone">
               Celular:
               <InputMask
@@ -345,18 +392,55 @@ export default function CadMembro({ match }) {
               {/* <small>Insira um número válido</small> */}
             </Label>
           </Col>
+          <Col sm={12} md={3} className="my-1">
+            <Label htmlFor="telefone2">
+              Telefone 2:
+              <InputMask
+                mask="(99) 99999-9999"
+                id="telefone2"
+                type="text"
+                value={telefone2}
+                onChange={(e) => {
+                  setTelefone2(e.target.value);
+                  // handleInput(e, 'telefone');
+                }}
+                placeholder="(00) 00000-0000"
+              />
+              {/* <small>Insira um número válido</small> */}
+            </Label>
+          </Col>
         </Row>
         <Row>
-          <Col sm={12} md={6} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <ComboBox
               title="Estado Civil"
               list={listEstadoCivil}
               text="Selecione o estado civil"
               value={estacoCivil}
-              onChange={(e) => setEstacoCivil(e.target.value)}
+              onChange={(e) => {
+                setEstacoCivil(e.target.value);
+                if (e.target.value === 'Casado(a)') setCasado(false);
+              }}
             />
           </Col>
-          <Col sm={12} md={6} className="my-1">
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="cidade">Nome do Cônjuge:</Form.Label>
+            <Form.Control
+              id="nomeConjuge"
+              type="text"
+              value={nomeConjuge}
+              onChange={(e) => {
+                setNomeConjuge(e.target.value);
+                // handleInput(e, 'nomeConjuge');
+              }}
+              placeholder="Nome do Conjuge"
+              disabled={casado}
+            />
+            <Form.Control.Feedback type="invalid">
+              Minimo de 3 caracteres
+            </Form.Control.Feedback>
+          </Col>
+          <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="profissao">Profissão:</Form.Label>
             <Form.Control
               id="profissao"
@@ -434,6 +518,112 @@ export default function CadMembro({ match }) {
             <Form.Control.Feedback type="invalid">
               Minimo de 3 caracteres
             </Form.Control.Feedback>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12} md={6} className="my-1">
+            <Form.Label htmlFor="email">Rua:</Form.Label>
+            <Form.Control
+              id="rua"
+              type="text"
+              value={rua}
+              onChange={(e) => {
+                setRua(e.target.value.toLocaleLowerCase());
+                // handleInput(e, 'email');
+              }}
+              placeholder="Nome da rua"
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              Insira um nome de rua válido
+            </Form.Control.Feedback>
+          </Col>
+          <Col sm={12} md={2} className="my-1">
+            <Form.Label htmlFor="numero">Número:</Form.Label>
+            <Form.Control
+              id="numero"
+              type="text"
+              value={numero}
+              onChange={(e) => {
+                setNumero(e.target.value);
+                // handleInput(e, 'numero');
+              }}
+              placeholder="Número"
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              Minimo de 3 caracteres
+            </Form.Control.Feedback>
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="numero">Complemento:</Form.Label>
+            <Form.Control
+              id="complemento"
+              type="text"
+              value={complemento}
+              onChange={(e) => {
+                setComplemento(e.target.value);
+                // handleInput(e, 'complemento');
+              }}
+              placeholder="Complemento"
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              Minimo de 3 caracteres
+            </Form.Control.Feedback>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="email">Bairro:</Form.Label>
+            <Form.Control
+              id="bairro"
+              type="text"
+              value={bairro}
+              onChange={(e) => {
+                setBairro(e.target.value.toLocaleLowerCase());
+                // handleInput(e, 'email');
+              }}
+              placeholder="Bairro"
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              Insira um nome de rua válido
+            </Form.Control.Feedback>
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="cidade">Cidade:</Form.Label>
+            <Form.Control
+              id="cidade"
+              type="text"
+              value={cidade}
+              onChange={(e) => {
+                setCidade(e.target.value);
+                // handleInput(e, 'cidade');
+              }}
+              placeholder="Cidade"
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              Minimo de 3 caracteres
+            </Form.Control.Feedback>
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Label htmlFor="cep">
+              CEP:
+              <InputMask
+                mask="99999-999"
+                id="telefone"
+                type="text"
+                value={cep}
+                onChange={(e) => {
+                  setCep(e.target.value);
+                  // handleInput(e, 'telefone');
+                }}
+                placeholder="15400-000"
+              />
+              {/* <small>Insira um número válido</small> */}
+            </Label>
           </Col>
         </Row>
         <Row>

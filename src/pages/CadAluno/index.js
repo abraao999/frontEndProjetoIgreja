@@ -27,7 +27,7 @@ export default function CadAluno({ match }) {
   const [setores, setSetores] = useState([]);
   const [classes, setClasses] = useState([]);
 
-  const [nomeMembro, setNomeMembro] = useState(' ');
+  const [nomeMembro, setNomeMembro] = useState('');
 
   const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');

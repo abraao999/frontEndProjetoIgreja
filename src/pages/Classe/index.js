@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
-import { FaEdit, FaWindowClose, FaExclamation } from 'react-icons/fa';
-import { useDispatch, useSelector } from 'react-redux';
+import { FaEdit, FaWindowClose } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
@@ -15,7 +15,6 @@ import history from '../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function Classe({ match }) {
-  const dispath = useDispatch();
   const id = get(match, 'params.id', '');
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');

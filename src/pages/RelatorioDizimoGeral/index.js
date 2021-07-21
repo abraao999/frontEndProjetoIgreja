@@ -1,7 +1,6 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
 import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
@@ -14,27 +13,20 @@ import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
 import history from '../../services/history';
-import ModalMembro from '../../components/ModalMembro';
 
-export default function RelatorioDizimoGeral({ match }) {
+export default function RelatorioDizimoGeral() {
   const [show, setShow] = useState(false);
-  const [showMembro, setShowMembro] = useState(false);
 
-  const [filtroDep, setFiltroDep] = useState(false);
   const [congregacaoId, setCongregacaoId] = useState(
     'Selecione uma congregação'
   );
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
 
-  const [idMembro, setIdMembro] = useState('');
-  const [nomeMembro, setNomeMembro] = useState('');
-
   const [dataInicial, setDataInicial] = useState('');
   const [dataFinal, setDataFinal] = useState('');
 
   const [setores, setSetores] = useState([]);
-  const [membros, setMembros] = useState([]);
   const [listMovimentacao, setListMovimentacao] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [setorSeletected, setSetorSeletected] = useState(0);
@@ -245,6 +237,3 @@ export default function RelatorioDizimoGeral({ match }) {
     </Container>
   );
 }
-RelatorioDizimoGeral.protoTypes = {
-  match: PropTypes.shape({}).isRequired,
-};

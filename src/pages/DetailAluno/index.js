@@ -17,14 +17,11 @@ export default function DetailAluno({ match }) {
   const id = get(match, 'params.id', '');
 
   const [nomeMembro, setNomeMembro] = useState('');
-  const [rg, setRg] = useState('');
+
   const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');
-  const [dataBatismo, setDataBatismo] = useState('');
+
   const [dataNascimento, setDataNascimento] = useState('');
-  const [estacoCivil, setEstacoCivil] = useState('');
-  const [profissao, setProfissao] = useState('');
-  const [cargo, setCargo] = useState('');
   const [classe, setClasse] = useState('');
   const [setor, setSetor] = useState('');
 

@@ -1,35 +1,22 @@
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
-import PropTypes, { string } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
-import {
-  FaEdit,
-  FaWindowClose,
-  FaRegListAlt,
-  FaSearch,
-  FaSave,
-} from 'react-icons/fa';
-
-import { useDispatch } from 'react-redux';
-import { get, indexOf } from 'lodash';
-import { Link } from 'react-router-dom';
+import { FaSearch, FaSave } from 'react-icons/fa';
+import { get } from 'lodash';
 import { Container } from '../../styles/GlobalStyles';
 import { Form, Table, Listagem } from './styled';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
-import history from '../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function Chamada({ match }) {
-  const dispath = useDispatch();
-  const id = get(match, 'params.id', '');
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
-  const [msg, setMsg] = useState(true);
   const [filtro, setFiltro] = useState(false);
   const [classes, setClasses] = useState([]);
   const [setorSeletected, setSetorSeletected] = useState(0);
@@ -38,7 +25,6 @@ export default function Chamada({ match }) {
   );
 
   const [aluno, setAluno] = useState([]);
-  const [descricao, setDescricao] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [aparecer, setAparecer] = useState(true);
   const [check, setCheck] = useState(false);
@@ -82,11 +68,6 @@ export default function Chamada({ match }) {
 
   const handleClose = () => {
     setShow(false);
-  };
-  const handleShow = (idFuncao, index) => {
-    setIdParaDelecao(idFuncao);
-    setIndiceDelecao(index);
-    setShow(true);
   };
   const handleFunctionConfirm = async () => {
     try {

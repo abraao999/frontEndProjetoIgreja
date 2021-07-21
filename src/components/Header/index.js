@@ -1,21 +1,15 @@
+/* eslint-disable import/order */
 import React from 'react';
-import {
-  FaCircle,
-  FaHome,
-  FaPowerOff,
-  FaSignInAlt,
-  FaUserAlt,
-  FaSignOutAlt,
-} from 'react-icons/fa';
+import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import * as actions from '../../store/modules/auth/actions';
 import history from '../../services/history';
 import logo from '../../assets/images/logo.png';
 // import { Nav, Conteiner } from './styled';
 import Dropdown from '../Dropdowm';
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
-import * as colors from '../../config/colors'
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import * as colors from '../../config/colors';
+
 export default function Header() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const dispath = useDispatch();
@@ -71,7 +65,11 @@ export default function Header() {
     },
   ];
   return (
-    <Navbar style={{ background: colors.primaryColor }} expand="lg" variant="dark">
+    <Navbar
+      style={{ background: colors.primaryColor }}
+      expand="lg"
+      variant="dark"
+    >
       <Container>
         <img
           src={logo}
@@ -89,15 +87,13 @@ export default function Header() {
             {!isLoggedIn && (
               <Dropdown nome="DEPARTAMENTOS" opcoes={departamentos} />
             )}
-            {isLoggedIn && <Dropdown nome="CONFIGURAÇÕES" opcoes={configuracoes} />}
+            {isLoggedIn && (
+              <Dropdown nome="CONFIGURAÇÕES" opcoes={configuracoes} />
+            )}
             {isLoggedIn && <Dropdown nome="SECRETARIA" opcoes={secretaria} />}
             {isLoggedIn && <Dropdown nome="CAIXA" opcoes={caixa} />}
             {isLoggedIn && <Dropdown nome="EBD" opcoes={ebd} />}
-            {!isLoggedIn && (
-              <Nav.Link href="/contato">
-                FALE CONOSCO
-              </Nav.Link>
-            )}
+            {!isLoggedIn && <Nav.Link href="/contato">FALE CONOSCO</Nav.Link>}
           </Nav>
           <Nav>
             {isLoggedIn ? (

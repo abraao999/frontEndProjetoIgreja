@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
-import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
+import { FaWindowClose, FaSearch } from 'react-icons/fa';
 
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';

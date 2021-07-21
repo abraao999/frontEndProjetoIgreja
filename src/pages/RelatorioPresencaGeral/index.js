@@ -4,19 +4,14 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { toast } from 'react-toastify';
-import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 
-import { get } from 'lodash';
-import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Container } from '../../styles/GlobalStyles';
 import { Form, Table, Listagem } from './styled';
 import axios from '../../services/axios';
-import Modal from '../../components/Modal';
+
 import Loading from '../../components/Loading';
-import history from '../../services/history';
-import ModalMembro from '../../components/ModalMembro';
 import {
   fimPrimeiroTrimestre,
   fimQuartoTrimestre,
@@ -30,8 +25,6 @@ import {
 } from '../../util';
 
 export default function RelatorioPresencaGeral({ match }) {
-  const [show, setShow] = useState(false);
-
   const [classes, setClasses] = useState([]);
   const [listAlunos, setListAlunos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);

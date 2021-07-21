@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
 
 import InputMask from 'react-input-mask';
 import { get } from 'lodash';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Container } from '../../styles/GlobalStyles';
 import { Form } from './styled';
 import axios from '../../services/axios';
@@ -41,15 +39,13 @@ export default function DetailMembro({ match }) {
       setCpf(response.data.cpf);
 
       const data = new Date(response.data.data_batismo);
-      const dataFormatada = `${data.getDate()}/${
-        data.getMonth() + 1
-      }/${data.getFullYear()}`;
+      const dataFormatada = `${data.getDate()}/${data.getMonth() + 1
+        }/${data.getFullYear()}`;
       setDataBatismo(dataFormatada);
 
       const data2 = new Date(response.data.data_nascimento);
-      const dataNasicmentoFormatada = `${data2.getDate()}/${
-        data2.getMonth() + 1
-      }/${data2.getFullYear()}`;
+      const dataNasicmentoFormatada = `${data2.getDate()}/${data2.getMonth() + 1
+        }/${data2.getFullYear()}`;
       setDataNascimento(dataNasicmentoFormatada);
 
       setTelefone(response.data.telefone);

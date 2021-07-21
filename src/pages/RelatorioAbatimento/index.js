@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
 import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
-
-import { useDispatch } from 'react-redux';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
@@ -18,30 +16,19 @@ import history from '../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function RelatorioAbatimento({ match }) {
-  const dispath = useDispatch();
-  const id = get(match, 'params.id', '');
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
-  const [msg, setMsg] = useState(true);
   const [filtro, setFiltro] = useState(false);
-  const [filtroDep, setFiltroDep] = useState(false);
 
-  const [valorTotal, setValorTotal] = useState(0);
   const [setores, setSetores] = useState([]);
   const [setorSeletected, setSetorSeletected] = useState(0);
-  const [departamentoSeletected, setDepatamentoSeletected] = useState(0);
   const [congregacaoId, setCongregacaoId] = useState(
     'Selecione uma congregação'
   );
-  const [departamentoId, setDepartamentoId] = useState(
-    'Selecione um departamento'
-  );
 
-  const [departamentos, setDepartamentos] = useState([]);
   const [listMovimentacao, setListMovimentacao] = useState([]);
   const [descricao, setDescricao] = useState('');
-  const [descricaoList, setDescricaoList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -66,9 +53,8 @@ export default function RelatorioAbatimento({ match }) {
     const novaLista = [];
     list.map((dado) => {
       const data = new Date(dado.data_operacao);
-      const dataFormatada = `${data.getDate()}/${
-        data.getMonth() + 1
-      }/${data.getFullYear()}`;
+      const dataFormatada = `${data.getDate()}/${data.getMonth() + 1
+        }/${data.getFullYear()}`;
       novaLista.push({
         id: dado.id,
         descricao: dado.descricao,

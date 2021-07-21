@@ -6,21 +6,18 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import InputMask from 'react-input-mask';
-import { isEmail, isDate } from 'validator';
+import { isDate } from 'validator';
 import { get } from 'lodash';
-import { Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
-import { Col, FormLabel, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
 import { Label } from './styled';
 import axios from '../../services/axios';
-import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
 import history from '../../services/history';
 import ComboBox from '../../components/ComboBox';
 // import * as actions from '../../store/modules/auth/actions';
 export default function CadMembro({ match }) {
-  const dispath = useDispatch();
   const id = get(match, 'params.id', '');
 
   const [maxId, setMaxId] = useState(0);

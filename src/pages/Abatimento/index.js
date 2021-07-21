@@ -3,28 +3,18 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
-import { FaEdit, FaWindowClose } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
-import { get, isEqual } from 'lodash';
-import { Link } from 'react-router-dom';
+import { get } from 'lodash';
 import { Container } from '../../styles/GlobalStyles';
-import { Form, Table, Listagem } from './styled';
+import { Form } from './styled';
 import axios from '../../services/axios';
-import Modal from '../../components/Modal';
 import ComboBox from '../../components/ComboBox';
 import Loading from '../../components/Loading';
-import history from '../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function Abatimento({ match }) {
-  const dispath = useDispatch();
   const id = get(match, 'params.id', '');
 
   const [maxId, setMaxId] = useState(0);
-  const [show, setShow] = useState(false);
-  const [idParaDelecao, setIdParaDelecao] = useState('');
-  const [indiceDelecao, setIndiceDelecao] = useState('');
-  const [msg, setMsg] = useState(true);
 
   const [setorId, setSetorId] = useState('');
   const [setor, setSetor] = useState('');
@@ -33,8 +23,6 @@ export default function Abatimento({ match }) {
   const [comboBoxCongregacao, setComboBoxCongregacao] = useState(
     'Selecione uma congregação'
   );
-  const [tipoMovimentacaoBox, setTipoMovimentacaoBox] = useState('');
-  const [tipoMovimentacao, setTipoMovimentacao] = useState();
   const [valor, setValor] = useState('');
   const [dataMovimentacao, setDataMovimentacao] = useState('');
 
@@ -42,7 +30,6 @@ export default function Abatimento({ match }) {
   const [departamento, setDepartamento] = useState('');
   const [departamentos, setDepartamentos] = useState([]);
   const [descricao, setDescricao] = useState('');
-  const [descricaoList, setDescricaoList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {

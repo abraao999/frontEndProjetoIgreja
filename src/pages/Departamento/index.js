@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
 import { FaEdit, FaWindowClose } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
-import { get, isEqual } from 'lodash';
+import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
 import { Form, Table, Listagem } from './styled';
@@ -16,7 +15,6 @@ import history from '../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function Departamento({ match }) {
-  const dispath = useDispatch();
   const id = get(match, 'params.id', '');
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
@@ -31,7 +29,6 @@ export default function Departamento({ match }) {
 
   const [departamento, setDepartamento] = useState([]);
   const [descricao, setDescricao] = useState('');
-  const [descricaoList, setDescricaoList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {

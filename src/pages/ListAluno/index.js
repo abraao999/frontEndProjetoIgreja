@@ -1,11 +1,10 @@
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
-import PropTypes, { string } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
 import { FaEdit, FaWindowClose, FaRegListAlt, FaSearch } from 'react-icons/fa';
 
-import { useDispatch } from 'react-redux';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
@@ -17,12 +16,10 @@ import history from '../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function ListAluno({ match }) {
-  const dispath = useDispatch();
   const id = get(match, 'params.id', '');
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
-  const [msg, setMsg] = useState(true);
   const [filtro, setFiltro] = useState(false);
   const [classes, setClasses] = useState([]);
   const [setorSeletected, setSetorSeletected] = useState(0);

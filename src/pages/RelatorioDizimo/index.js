@@ -1,7 +1,6 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable array-callback-return */
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 
 import { toast } from 'react-toastify';
 import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
@@ -16,7 +15,7 @@ import Loading from '../../components/Loading';
 import history from '../../services/history';
 import ModalMembro from '../../components/ModalMembro';
 
-export default function RelatorioDizimo({ match }) {
+export default function RelatorioDizimo() {
   const [show, setShow] = useState(false);
   const [showMembro, setShowMembro] = useState(false);
 
@@ -33,15 +32,12 @@ export default function RelatorioDizimo({ match }) {
   const [listMovimentacao, setListMovimentacao] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {}, []);
-
   const renderizaLista = (list) => {
     const novaLista = [];
     list.map((dado) => {
       const data = new Date(dado.data_operacao);
-      const dataFormatada = `${data.getDate()}/${
-        data.getMonth() + 1
-      }/${data.getFullYear()}`;
+      const dataFormatada = `${data.getDate()}/${data.getMonth() + 1
+        }/${data.getFullYear()}`;
       novaLista.push({
         id: dado.id,
         nomeMembro: nomeMembro || dado.nome,
@@ -270,6 +266,3 @@ export default function RelatorioDizimo({ match }) {
     </Container>
   );
 }
-RelatorioDizimo.protoTypes = {
-  match: PropTypes.shape({}).isRequired,
-};

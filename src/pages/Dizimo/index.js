@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
-import PropTypes, { nominalTypeHack } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
@@ -8,7 +8,6 @@ import { get } from 'lodash';
 import { Container } from '../../styles/GlobalStyles';
 import { Form } from './styled';
 import axios from '../../services/axios';
-import ComboBox from '../../components/ComboBox';
 import Loading from '../../components/Loading';
 import history from '../../services/history';
 import * as actions from '../../store/modules/auth/actions';

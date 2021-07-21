@@ -1,11 +1,10 @@
+/* eslint-disable import/order */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
-import PropTypes, { string } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
 import { FaEdit, FaWindowClose, FaRegListAlt, FaSearch } from 'react-icons/fa';
-
-import { useDispatch } from 'react-redux';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
@@ -18,12 +17,9 @@ import { Row, Table, Form, Col } from 'react-bootstrap';
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function ListMembros({ match }) {
-  const dispath = useDispatch();
-  const id = get(match, 'params.id', '');
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
-  const [msg, setMsg] = useState(true);
   const [filtro, setFiltro] = useState(false);
   const [setores, setSetores] = useState([]);
   const [setorSeletected, setSetorSeletected] = useState(0);
@@ -132,7 +128,6 @@ export default function ListMembros({ match }) {
       <Form onSubmit={handleSubmit}>
         <Row>
           <Col sm={12} md={6} className="my-1">
-
             <Form.Label htmlFor="descricao">
               Insira um nome para filtrar:
             </Form.Label>
@@ -147,7 +142,6 @@ export default function ListMembros({ match }) {
             />
           </Col>
           <Col sm={12} md={6} className="my-1">
-
             <Label htmlFor="congregacao">
               Filtrar por congregação
               <select onChange={handleGetIdCongregacao} value={congregacaoId}>

@@ -1,13 +1,11 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
-import PropTypes, { string } from 'prop-types';
 
 import { toast } from 'react-toastify';
-import { FaEdit, FaWindowClose, FaRegListAlt, FaSearch } from 'react-icons/fa';
+import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
 
-import { useDispatch } from 'react-redux';
-import { get, isEqual } from 'lodash';
+import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
 import { Form, Table, Listagem } from './styled';
@@ -17,9 +15,7 @@ import Loading from '../../components/Loading';
 import history from '../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
-export default function RelatorioCaixa({ match }) {
-  const dispath = useDispatch();
-  const id = get(match, 'params.id', '');
+export default function RelatorioCaixa() {
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
@@ -45,7 +41,6 @@ export default function RelatorioCaixa({ match }) {
   const [membros, setMembros] = useState([]);
   const [listMovimentacao, setListMovimentacao] = useState([]);
   const [descricao, setDescricao] = useState('');
-  const [descricaoList, setDescricaoList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -370,6 +365,3 @@ export default function RelatorioCaixa({ match }) {
     </Container>
   );
 }
-RelatorioCaixa.protoTypes = {
-  match: PropTypes.shape({}).isRequired,
-};

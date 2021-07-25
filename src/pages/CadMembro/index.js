@@ -84,11 +84,13 @@ export default function CadMembro({ match }) {
         setComplemento(response.data.complemento);
         setBairro(response.data.bairro);
         setCidade(response.data.cidade);
+        setEmail(response.data.email);
         setCep(response.data.cep);
         setNomeConjuge(response.data.nomeConjuge);
         setCargoId(response.data.cargo_id);
         setFunctionId(response.data.function_id);
         setSetorId(response.data.setor_id);
+        if (response.data.estado_civil === 'Casado(a)') setCasado(false);
       }
       const response4 = await axios.get('/funcao');
       setFuncoes(response4.data);
@@ -190,6 +192,7 @@ export default function CadMembro({ match }) {
           telefone2,
           rua,
           numero,
+          email,
           complemento,
           bairro,
           cidade,
@@ -525,7 +528,7 @@ export default function CadMembro({ match }) {
               type="text"
               value={rua}
               onChange={(e) => {
-                setRua(e.target.value.toLocaleLowerCase());
+                setRua(e.target.value.toUpperCase());
                 // handleInput(e, 'email');
               }}
               placeholder="Nome da rua"
@@ -553,13 +556,13 @@ export default function CadMembro({ match }) {
             </Form.Control.Feedback>
           </Col>
           <Col sm={12} md={4} className="my-1">
-            <Form.Label htmlFor="numero">Complemento:</Form.Label>
+            <Form.Label htmlFor="complemento">Complemento:</Form.Label>
             <Form.Control
               id="complemento"
               type="text"
               value={complemento}
               onChange={(e) => {
-                setComplemento(e.target.value);
+                setComplemento(e.target.value.toUpperCase());
                 // handleInput(e, 'complemento');
               }}
               placeholder="Complemento"
@@ -572,13 +575,13 @@ export default function CadMembro({ match }) {
         </Row>
         <Row>
           <Col sm={12} md={4} className="my-1">
-            <Form.Label htmlFor="email">Bairro:</Form.Label>
+            <Form.Label htmlFor="bairro">Bairro:</Form.Label>
             <Form.Control
               id="bairro"
               type="text"
               value={bairro}
               onChange={(e) => {
-                setBairro(e.target.value.toLocaleLowerCase());
+                setBairro(e.target.value.toUpperCase());
                 // handleInput(e, 'email');
               }}
               placeholder="Bairro"
@@ -595,7 +598,7 @@ export default function CadMembro({ match }) {
               type="text"
               value={cidade}
               onChange={(e) => {
-                setCidade(e.target.value);
+                setCidade(e.target.value.toUpperCase());
                 // handleInput(e, 'cidade');
               }}
               placeholder="Cidade"

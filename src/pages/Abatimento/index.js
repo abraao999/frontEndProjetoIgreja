@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
 import { get } from 'lodash';
+import { Row, Form, Col } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
-import { Form } from './styled';
 import axios from '../../services/axios';
 import ComboBox from '../../components/ComboBox';
 import Loading from '../../components/Loading';
@@ -26,8 +26,6 @@ export default function Abatimento({ match }) {
   const [valor, setValor] = useState('');
   const [dataMovimentacao, setDataMovimentacao] = useState('');
 
-  const [departmanetoId, setDepartamentoId] = useState('');
-  const [departamento, setDepartamento] = useState('');
   const [departamentos, setDepartamentos] = useState([]);
   const [descricao, setDescricao] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -110,13 +108,7 @@ export default function Abatimento({ match }) {
       if (nome === dado.descricao) setSetorId(dado.id);
     });
   };
-  const handleGetIdDepartamento = (e) => {
-    const nome = e.target.value;
-    setDepartamento(e.target.value);
-    departamentos.map((dado) => {
-      if (nome === dado.descricao) setDepartamentoId(dado.id);
-    });
-  };
+
   const handleInput = (e, idTag) => {
     const element = document.getElementById(idTag);
     const next = e.currentTarget.nextElementSibling;
@@ -136,33 +128,35 @@ export default function Abatimento({ match }) {
       <Loading isLoading={isLoading} />
 
       <Form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="id">
-            F.E.:
+        <Row className="align-items-center">
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="id">F.E.:</Form.Label>
             {id ? (
-              <input id="id" type="text" value={id} disabled />
+              <Form.Control id="id" type="text" value={id} disabled />
             ) : (
-              <input id="maxId" type="text" value={maxId} disabled />
+              <Form.Control id="maxId" type="text" value={maxId} disabled />
             )}
-          </label>
+          </Col>
 
-          <label htmlFor="descricao">
-            Descrição
-            <input
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="descricao">Descrição</Form.Label>
+            <Form.Control
               id="input"
               type="text"
               value={descricao}
               onChange={(e) => {
-                handleInput(e, 'input');
                 setDescricao(e.target.value);
               }}
               placeholder="Descricao"
+              required
             />
-            <small>Minimo de 3 caracteres</small>
-          </label>
-          <label htmlFor="valor">
-            Valor
-            <input
+            <Form.Control.Feedback type="invalid">
+              Minimo de 3 caracteres
+            </Form.Control.Feedback>
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="valor">Valor</Form.Label>
+            <Form.Control
               id="valor"
               type="number"
               value={valor}
@@ -170,13 +164,15 @@ export default function Abatimento({ match }) {
                 setValor(e.target.value);
               }}
             />
-            <small>Minimo de 3 caracteres</small>
-          </label>
-        </div>
-        <div>
-          <label htmlFor="dataBatismo">
-            Data da operação:
-            <input
+            <Form.Control.Feedback type="invalid">
+              Minimo de 3 caracteres
+            </Form.Control.Feedback>
+          </Col>
+        </Row>
+        <Row className="align-items-center">
+          <Col sm={12} md={6} className="my-1">
+            <Form.Label htmlFor="dataBatismo">Data da operação:</Form.Label>
+            <Form.Control
               id="dataBatismo"
               type="date"
               value={dataMovimentacao}
@@ -184,17 +180,19 @@ export default function Abatimento({ match }) {
                 setDataMovimentacao(e.target.value);
               }}
             />
-          </label>
-
-          <ComboBox
-            title="Selecione a Congregação"
-            list={setores}
-            value={setor}
-            onChange={handleGetIdCongregacao}
-          />
-        </div>
-
-        <button type="submit">Salvar</button>
+          </Col>
+          <Col sm={12} md={6} className="my-1">
+            <ComboBox
+              title="Selecione a Congregação"
+              list={setores}
+              value={setor}
+              onChange={handleGetIdCongregacao}
+            />
+          </Col>
+        </Row>
+        <Row className="align-items-center">
+          <button type="submit">Salvar</button>
+        </Row>
       </Form>
     </Container>
   );

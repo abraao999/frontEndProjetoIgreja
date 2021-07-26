@@ -7,13 +7,14 @@ import { toast } from 'react-toastify';
 import InputMask from 'react-input-mask';
 import { isDate } from 'validator';
 import { get } from 'lodash';
+import { Row, Form, Col } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
-import { Form } from './styled';
 import axios from '../../services/axios';
 
 import Loading from '../../components/Loading';
 import history from '../../services/history';
 import ComboBox from '../../components/ComboBox';
+import { Label } from './styled';
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function CadAluno({ match }) {
@@ -173,18 +174,10 @@ export default function CadAluno({ match }) {
       <Loading isLoading={isLoading} />
 
       <Form onSubmit={handleSubmit}>
-        <div>
-          {/* <label htmlFor="id">
-            R.A:
-            {id ? (
-              <input id="id" type="text" value={id} disabled />
-            ) : (
-              <input id="maxId" type="text" value={maxId} disabled />
-            )}
-          </label> */}
-          <label htmlFor="nome">
-            Nome completo:
-            <input
+        <Row className="align-items-center">
+          <Col sm={12} md={12} className="my-1">
+            <Form.Label htmlFor="nome">Nome completo:</Form.Label>
+            <Form.Control
               id="nome"
               type="text"
               value={nomeMembro}
@@ -193,30 +186,34 @@ export default function CadAluno({ match }) {
                 handleInput(e, 'nome');
               }}
               placeholder="Nome"
+              required
             />
-            <small>Minimo de 3 caracteres</small>
-          </label>
-        </div>
-        <div>
-          <label htmlFor="cpf">
-            CPF:
-            <InputMask
-              mask="999.999.999-99"
-              id="cpf"
-              type="text"
-              value={cpf}
-              onChange={(e) => {
-                setCpf(e.target.value);
-                handleInput(e, 'cpf');
-              }}
-              placeholder="000.000.000-00"
-            />
-            <small>Minimo de 3 caracteres</small>
-          </label>
-
-          <label htmlFor="dataNascimento">
-            Data de Nascimento:
-            <input
+            <Form.Control.Feedback type="invalid">
+              Minimo de 3 caracteres
+            </Form.Control.Feedback>
+          </Col>
+        </Row>
+        <Row className="align-items-center">
+          <Col sm={12} md={4} className="my-1">
+            <Label htmlFor="cpf">
+              CPF:
+              <InputMask
+                mask="999.999.999-99"
+                id="cpf"
+                type="text"
+                value={cpf}
+                onChange={(e) => {
+                  setCpf(e.target.value);
+                }}
+                placeholder="000.000.000-00"
+              />
+            </Label>
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="dataNascimento">
+              Data de Nascimento:
+            </Form.Label>
+            <Form.Control
               id="dataNascimento"
               type="date"
               value={dataNascimento}
@@ -225,41 +222,50 @@ export default function CadAluno({ match }) {
                 handleInput(e, 'dataNascimento');
               }}
             />
-            <small>Insira uma data valida</small>
-          </label>
-          <label htmlFor="telefone">
-            Celular:
-            <InputMask
-              mask="(99) 99999-9999"
-              id="telefone"
-              type="text"
-              value={telefone}
-              onChange={(e) => {
-                setTelefone(e.target.value);
-                handleInput(e, 'telefone');
-              }}
-              placeholder="(00) 00000-0000"
+            <Form.Control.Feedback type="invalid">
+              Insira uma data valida
+            </Form.Control.Feedback>
+          </Col>
+          <Col sm={12} md={3} className="my-1">
+            <Label htmlFor="telefone">
+              Celular:
+              <InputMask
+                mask="(99) 99999-9999"
+                id="telefone"
+                type="text"
+                value={telefone}
+                onChange={(e) => {
+                  setTelefone(e.target.value);
+                  // handleInput(e, 'telefone');
+                }}
+                placeholder="(00) 00000-0000"
+              />
+            </Label>
+          </Col>
+        </Row>
+
+        <Row className="align-items-center">
+          <Col sm={12} md={{ span: 3, offset: 3 }} className="my-1">
+            <ComboBox
+              title="Selecione a Congregação"
+              list={setores}
+              value={setor}
+              onChange={handleGetIdCongregacao}
             />
-            <small>Insira um número válido</small>
-          </label>
-        </div>
+          </Col>
 
-        <div>
-          <ComboBox
-            title="Selecione a Congregação"
-            list={setores}
-            value={setor}
-            onChange={handleGetIdCongregacao}
-          />
-          <ComboBox
-            title="Selecione o cargo"
-            list={classes}
-            value={classe}
-            onChange={handleGetIdClasse}
-          />
-        </div>
-
-        <button type="submit">Salvar</button>
+          <Col sm={12} md={3} className="my-1">
+            <ComboBox
+              title="Selecione o cargo"
+              list={classes}
+              value={classe}
+              onChange={handleGetIdClasse}
+            />
+          </Col>
+        </Row>
+        <Row style={{ marginTop: 10 }} className="align-items-center">
+          <button type="submit">Salvar</button>
+        </Row>
       </Form>
     </Container>
   );

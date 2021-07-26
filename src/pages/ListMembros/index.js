@@ -189,9 +189,9 @@ export default function ListMembros({ match }) {
                       onClick={(e) => {
                         e.preventDefault();
                         setDescricao(dado.dep_descricao);
-                        history.push(`/detailtMembro/${dado.id}`);
+                        history.push(`/detailMembro/${dado.id}`);
                       }}
-                      to={`/detailtMembro/${dado.id}`}
+                      to={`/detailMembro/${dado.id}`}
                     >
                       <FaRegListAlt size={16} />
                     </Link>

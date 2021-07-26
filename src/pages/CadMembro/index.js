@@ -83,6 +83,7 @@ export default function CadMembro({ match }) {
         setNumero(response.data.numero);
         setComplemento(response.data.complemento);
         setBairro(response.data.bairro);
+        setPassword(response.data.password);
         setCidade(response.data.cidade);
         setEmail(response.data.email);
         setCep(response.data.cep);
@@ -197,6 +198,7 @@ export default function CadMembro({ match }) {
           bairro,
           cidade,
           cep,
+          password,
           nomeConjuge,
           cargo_id: cargoId,
           function_id: functionId,
@@ -206,7 +208,7 @@ export default function CadMembro({ match }) {
         limpaCampos();
         toast.success('Membro editado com sucesso');
 
-        history.push(`/cadMembro/${id}/edit`);
+        history.push('/listMembros');
         setIsLoading(false);
       }
     } catch (error) {
@@ -430,7 +432,7 @@ export default function CadMembro({ match }) {
               type="text"
               value={nomeConjuge}
               onChange={(e) => {
-                setNomeConjuge(e.target.value);
+                setNomeConjuge(e.target.value.toLocaleUpperCase());
                 // handleInput(e, 'nomeConjuge');
               }}
               placeholder="Nome do Conjuge"
@@ -513,7 +515,6 @@ export default function CadMembro({ match }) {
                 // handleInput(e, 'password');
               }}
               placeholder="Senha"
-              required
             />
             <Form.Control.Feedback type="invalid">
               Minimo de 3 caracteres
@@ -566,7 +567,6 @@ export default function CadMembro({ match }) {
                 // handleInput(e, 'complemento');
               }}
               placeholder="Complemento"
-              required
             />
             <Form.Control.Feedback type="invalid">
               Minimo de 3 caracteres
@@ -638,7 +638,6 @@ export default function CadMembro({ match }) {
               // handleInput(e, 'email');
             }}
             placeholder="Observação"
-            required
           />
           <Form.Control.Feedback type="invalid">
             A observação não pode ter mais que 200 caracteres válido

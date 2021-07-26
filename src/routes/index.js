@@ -144,7 +144,7 @@ export default function Routes() {
         isClosed
       />
       <MyRoute
-        path="/detailtMembro/:id"
+        path="/detailMembro/:id"
         component={DetailMembro}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 4 }]}

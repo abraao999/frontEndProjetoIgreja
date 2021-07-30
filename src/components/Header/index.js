@@ -36,6 +36,7 @@ export default function Header() {
     { desc: 'JOVENS', path: '/jovens' },
   ];
   const secretaria = [
+    { desc: 'LISTA DE ANIVERSÁRIOS', path: '/listAniversario' },
     { desc: 'CADASTRO DE MEMBROS', path: '/cadMembro' },
     { desc: 'LISTA DE MEMBROS', path: '/listMembros' },
   ];

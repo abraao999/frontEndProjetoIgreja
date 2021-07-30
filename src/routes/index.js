@@ -31,6 +31,7 @@ import Chamada from '../pages/Chamada';
 import RelatorioPresencaDiaria from '../pages/RelatorioPresencaDiaria';
 import RelatorioPresencaGeral from '../pages/RelatorioPresencaGeral';
 import PresencaDetalhada from '../pages/PresencaDetalhada';
+import ListaAniversario from '../pages/ListaAniversario';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.user.function_id);
@@ -141,6 +142,13 @@ export default function Routes() {
         component={ListMembros}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 4 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/listAniversario/"
+        component={ListaAniversario}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 4 }]}
         isClosed
       />
       <MyRoute

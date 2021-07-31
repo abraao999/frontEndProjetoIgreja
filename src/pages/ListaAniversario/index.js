@@ -195,7 +195,6 @@ export default function ListaAniversario() {
               <tr>
                 <th scope="col">Nome</th>
                 <th scope="col">Data</th>
-                {/* <th scope="col">Excluir</th> */}
               </tr>
             </thead>
             <tbody>
@@ -203,15 +202,6 @@ export default function ListaAniversario() {
                 <tr key={String(dado.id)}>
                   <td>{dado.nome}</td>
                   <td>{dado.dataAniversario}</td>
-
-                  {/* <td>
-                    <Link
-                      onClick={() => handleShow(dado.id, index)}
-                      to="/relatorioPresencaEbd"
-                    >
-                      <FaWindowClose size={16} />
-                    </Link>
-                  </td> */}
                 </tr>
               ))}
             </tbody>

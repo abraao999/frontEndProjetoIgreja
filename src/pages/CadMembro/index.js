@@ -71,6 +71,7 @@ export default function CadMembro({ match }) {
         setMaxId(dado.data + 1);
       } else {
         const response = await axios.get(`/membro/${id}`);
+        console.log(response.data);
         setNomeMembro(response.data.nome);
         setRg(response.data.rg);
         setCpf(response.data.cpf);
@@ -83,7 +84,6 @@ export default function CadMembro({ match }) {
         setNumero(response.data.numero);
         setComplemento(response.data.complemento);
         setBairro(response.data.bairro);
-        setPassword(response.data.password);
         setCidade(response.data.cidade);
         setEmail(response.data.email);
         setCep(response.data.cep);
@@ -179,7 +179,7 @@ export default function CadMembro({ match }) {
         toast.success('Membro criado com sucesso');
         history.push('/listMembros');
         setIsLoading(false);
-      } else {
+      } else if (password.length > 2) {
         const response = await axios.put(`/membro/${id}`, {
           nome: nomeMembro,
           rg,
@@ -199,6 +199,30 @@ export default function CadMembro({ match }) {
           cidade,
           cep,
           password,
+          nomeConjuge,
+          cargo_id: cargoId,
+          function_id: functionId,
+          setor_id: setorId,
+        });
+      } else {
+        const response = await axios.put(`/membro/${id}`, {
+          nome: nomeMembro,
+          rg,
+          cpf,
+          data_batismo: dataBatismo || null,
+          data_nascimento: dataNascimento || null,
+          profissao,
+          observacao,
+          estado_civil: estacoCivil,
+          telefone,
+          telefone2,
+          rua,
+          numero,
+          email,
+          complemento,
+          bairro,
+          cidade,
+          cep,
           nomeConjuge,
           cargo_id: cargoId,
           function_id: functionId,

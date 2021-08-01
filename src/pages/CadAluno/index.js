@@ -182,7 +182,7 @@ export default function CadAluno({ match }) {
               type="text"
               value={nomeMembro}
               onChange={(e) => {
-                setNomeMembro(e.target.value);
+                setNomeMembro(e.target.value.toLocaleUpperCase());
                 handleInput(e, 'nome');
               }}
               placeholder="Nome"
@@ -256,7 +256,7 @@ export default function CadAluno({ match }) {
 
           <Col sm={12} md={3} className="my-1">
             <ComboBox
-              title="Selecione o cargo"
+              title="Selecione a classe"
               list={classes}
               value={classe}
               onChange={handleGetIdClasse}

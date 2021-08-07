@@ -29,7 +29,7 @@ function* registerRequest({ payload }) {
 
   try {
     if (id) {
-      yield call(axios.put, '/users/', {
+      yield call(axios.put, '/membro/', {
         email,
         password: password || undefined,
         nome,
@@ -37,7 +37,7 @@ function* registerRequest({ payload }) {
       toast.success('Conta alterado  com sucesso');
       yield put(actions.registerUpdateSuccess({ email, password, nome }));
     } else {
-      yield call(axios.post, '/users/', { nome, password, email });
+      yield call(axios.post, '/membro/', { nome, password, email });
       toast.success('cadastro realizado com sucesso');
       yield put(actions.regiterCreatedSuccess());
 

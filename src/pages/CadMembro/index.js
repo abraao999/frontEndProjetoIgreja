@@ -204,6 +204,12 @@ export default function CadMembro({ match }) {
           function_id: functionId,
           setor_id: setorId,
         });
+        console.log(response);
+        limpaCampos();
+        toast.success('Membro editado com sucesso');
+
+        history.push('/listMembros');
+        setIsLoading(false);
       } else {
         const response = await axios.put(`/membro/${id}`, {
           nome: nomeMembro,

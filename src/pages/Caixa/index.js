@@ -138,8 +138,10 @@ export default function Caixa({ match }) {
   const handleInvestimento = (e) => {
     const nome = e.target.value;
     setInvestimentoBox(e.target.value);
-    if (nome === 'Investimento') setInvestimento(true);
-    else setInvestimento(false);
+    if (nome === 'Investimento') {
+      console.log(e.target.value);
+      setInvestimento(true);
+    } else setInvestimento(false);
   };
   const handleGetIdCongregacao = (e) => {
     const nome = e.target.value;
@@ -190,8 +192,7 @@ export default function Caixa({ match }) {
               type="text"
               value={descricao}
               onChange={(e) => {
-                handleInput(e, 'input');
-                setDescricao(e.target.value);
+                setDescricao(e.target.value.toLocaleUpperCase());
               }}
               placeholder="Descricao"
               required

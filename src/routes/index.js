@@ -32,6 +32,7 @@ import RelatorioPresencaDiaria from '../pages/RelatorioPresencaDiaria';
 import RelatorioPresencaGeral from '../pages/RelatorioPresencaGeral';
 import PresencaDetalhada from '../pages/PresencaDetalhada';
 import ListaAniversario from '../pages/ListaAniversario';
+import EditPass from '../pages/EditPass';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.user.function_id);
@@ -105,6 +106,13 @@ export default function Routes() {
       <MyRoute
         path="/cadMembro/"
         component={CadMembro}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 4 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/editPass/"
+        component={EditPass}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 4 }]}
         isClosed

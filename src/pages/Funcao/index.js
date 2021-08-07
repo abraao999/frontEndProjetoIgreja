@@ -5,8 +5,9 @@ import { toast } from 'react-toastify';
 import { FaEdit, FaWindowClose } from 'react-icons/fa';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
+import { Col, Form, Row, Table } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
-import { Form, Table, Listagem } from './styled';
+import { Listagem } from './styled';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 
@@ -121,16 +122,21 @@ export default function Funcao({ match }) {
         handleFunctionConfirm={handleFunctionConfirm}
       />
       <Form onSubmit={handleSubmit}>
-        <label htmlFor="descricao">
-          Nome da função:
-          <input
-            type="text"
-            value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
-            placeholder="Função"
-          />
-        </label>
-        <button type="submit">Salvar</button>
+        <Row className="align-items-center">
+          <Col sm={12} md={12} className="my-1">
+            <Form.Label htmlFor="descricao">Nome da congregação:</Form.Label>
+
+            <Form.Control
+              type="text"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              placeholder="Congregação"
+            />
+          </Col>
+        </Row>
+        <Row>
+          <button type="submit">Salvar</button>
+        </Row>
       </Form>
       <Listagem>
         <h3>Lista de Funções</h3>

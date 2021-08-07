@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { get } from 'lodash';
+import { Col, Form, Row } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
-import { Form } from './styled';
 import axios from '../../services/axios';
 import ComboBox from '../../components/ComboBox';
 import Loading from '../../components/Loading';
 import history from '../../services/history';
 import * as actions from '../../store/modules/auth/actions';
-
+import { Label } from './styled';
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function Caixa({ match }) {
@@ -174,19 +174,18 @@ export default function Caixa({ match }) {
       <Loading isLoading={isLoading} />
 
       <Form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="id">
-            R.F.:
+        <Row>
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="id">R.F.:</Form.Label>
             {id ? (
-              <input id="id" type="text" value={id} disabled />
+              <Form.Control id="id" type="text" value={id} disabled />
             ) : (
-              <input id="maxId" type="text" value={maxId} disabled />
+              <Form.Control id="maxId" type="text" value={maxId} disabled />
             )}
-          </label>
-
-          <label htmlFor="descricao">
-            Descrição
-            <input
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="descricao">Descrição</Form.Label>
+            <Form.Control
               id="input"
               type="text"
               value={descricao}
@@ -195,26 +194,32 @@ export default function Caixa({ match }) {
                 setDescricao(e.target.value);
               }}
               placeholder="Descricao"
+              required
             />
-            <small>Minimo de 3 caracteres</small>
-          </label>
-          <label htmlFor="valor">
-            Valor
-            <input
+            <Form.Control.Feedback type="invalid">
+              Minimo de 3 caracteres
+            </Form.Control.Feedback>
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="valor">Valor</Form.Label>
+            <Form.Control
               id="valor"
               type="number"
               value={valor}
               onChange={(e) => {
                 setValor(e.target.value);
               }}
+              required
             />
-            <small>Minimo de 3 caracteres</small>
-          </label>
-        </div>
-        <div>
-          <label htmlFor="dataBatismo">
-            Data da operação:
-            <input
+            <Form.Control.Feedback type="invalid">
+              Minimo de 3 caracteres
+            </Form.Control.Feedback>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="dataBatismo">Data da operação:</Form.Label>
+            <Form.Control
               id="dataBatismo"
               type="date"
               value={dataMovimentacao}
@@ -222,43 +227,52 @@ export default function Caixa({ match }) {
                 setDataMovimentacao(e.target.value);
               }}
             />
-          </label>
-          <label htmlFor="congregacao">
-            Tipo de movimentação
-            <select
-              onChange={handleTipoMovimentacao}
-              value={tipoMovimentacaoBox}
-            >
-              <option value="nada">Escolha um tipo de movimentação</option>
-              <option value="entrada">Entrada</option>
-              <option value="saida">Saída</option>
-            </select>
-          </label>
-          <label htmlFor="congregacao">
-            Investimentos/Dispesas
-            <select onChange={handleInvestimento} value={investimentoBox}>
-              <option value="nada">Escolha um tipo</option>
-              <option value="Investimento">Investimento</option>
-              <option value="Dispesa">Dispesa</option>
-            </select>
-          </label>
-        </div>
-        <div>
-          <ComboBox
-            title="Selecione a Congregação"
-            list={setores}
-            value={setor}
-            onChange={handleGetIdCongregacao}
-          />
-          <ComboBox
-            title="Selecione o departamento"
-            list={departamentos}
-            value={departamento}
-            onChange={handleGetIdDepartamento}
-          />
-        </div>
-
-        <button type="submit">Salvar</button>
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Label htmlFor="congregacao">
+              Tipo de movimentação
+              <select
+                onChange={handleTipoMovimentacao}
+                value={tipoMovimentacaoBox}
+              >
+                <option value="nada">Escolha um tipo de movimentação</option>
+                <option value="entrada">Entrada</option>
+                <option value="saida">Saída</option>
+              </select>
+            </Label>
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Label htmlFor="congregacao">
+              Investimentos/Dispesas
+              <select onChange={handleInvestimento} value={investimentoBox}>
+                <option value="nada">Escolha um tipo</option>
+                <option value="Investimento">Investimento</option>
+                <option value="Dispesa">Dispesa</option>
+              </select>
+            </Label>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12} md={{ span: 3, offset: 3 }} className="my-1">
+            <ComboBox
+              title="Selecione a Congregação"
+              list={setores}
+              value={setor}
+              onChange={handleGetIdCongregacao}
+            />
+          </Col>
+          <Col sm={12} md={3} className="my-1">
+            <ComboBox
+              title="Selecione o departamento"
+              list={departamentos}
+              value={departamento}
+              onChange={handleGetIdDepartamento}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <button type="submit">Salvar</button>
+        </Row>
       </Form>
     </Container>
   );

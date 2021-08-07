@@ -6,8 +6,9 @@ import { toast } from 'react-toastify';
 import { FaEdit, FaWindowClose } from 'react-icons/fa';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
+import { Col, Form, Row, Table } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
-import { Form, Table, Listagem } from './styled';
+import { Label, Listagem } from './styled';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
@@ -150,48 +151,41 @@ export default function Departamento({ match }) {
       />
 
       <Form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="descricao">
-            Nome do departamento:
-            <input
+        <Row>
+          <Col sm={12} md={6} className="my-1">
+            <Form.Label htmlFor="descricao">Nome do departamento:</Form.Label>
+            <Form.Control
               id="input"
               type="text"
               value={descricao}
               onChange={(e) => {
-                const banana = document.getElementById('input');
-                if (e.target.value.length < 3) {
-                  setMsg(false);
-                  banana.setAttribute('style', 'border-color:red');
-                  banana.style.borderWidth = '2px';
-                } else {
-                  banana.removeAttribute('style');
-                  setMsg(true);
-                }
                 setDescricao(e.target.value);
               }}
               placeholder="Departamento"
             />
-            <small hidden={msg}>Minimo de 3 caracteres</small>
-          </label>
-          <label htmlFor="congregacao">
-            Nome da congregação
-            <select onChange={handleGetIdClasse} value={comboBoxCongregacao}>
-              <option value="nada">Selecione a congregação</option>
-              {setores.map((dado) => (
-                <option key={dado.id} value={dado.descricao}>
-                  {dado.descricao}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-
-        <button type="submit">Salvar</button>
+          </Col>
+          <Col sm={12} md={6} className="my-1">
+            <Label htmlFor="congregacao">
+              Nome da congregação
+              <select onChange={handleGetIdClasse} value={comboBoxCongregacao}>
+                <option value="nada">Selecione a congregação</option>
+                {setores.map((dado) => (
+                  <option key={dado.id} value={dado.descricao}>
+                    {dado.descricao}
+                  </option>
+                ))}
+              </select>
+            </Label>
+          </Col>
+        </Row>
+        <Row>
+          <button type="submit">Salvar</button>
+        </Row>
       </Form>
       <Listagem>
         <h3>Lista de Departamentos</h3>
         <center>
-          <Table className="table table-striped">
+          <Table responsive striped bordered hover>
             <thead>
               <tr>
                 <th scope="col">Departamento</th>

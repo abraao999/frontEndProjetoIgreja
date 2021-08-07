@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { get } from 'lodash';
+import { Col, Form, Row } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
-import { Form } from './styled';
 import axios from '../../services/axios';
 import Loading from '../../components/Loading';
 import history from '../../services/history';
@@ -85,7 +85,7 @@ export default function Dizimo({ match }) {
         toast.error('Voce precisa fazer loggin');
         dispath(actions.loginFailure());
       } else {
-        toast.error('Erro ao excluir uma Classe');
+        toast.error('Erro ao inseriro dizimo');
       }
       setIsLoading(false);
     }
@@ -145,11 +145,11 @@ export default function Dizimo({ match }) {
       <Loading isLoading={isLoading} />
 
       <Form onSubmit={handleSubmit}>
-        <div>
-          {!id ? (
-            <label htmlFor="id">
-              Código Membro:
-              <input
+        <Row className="align-items-center">
+          <Col sm={12} md={3} className="my-1">
+            <Form.Label htmlFor="id">Código Membro:</Form.Label>
+            {!id ? (
+              <Form.Control
                 id="id"
                 onChange={(e) => {
                   setIdMembro(e.target.value);
@@ -160,17 +160,14 @@ export default function Dizimo({ match }) {
                 type="text"
                 value={idMembro}
               />
-            </label>
-          ) : (
-            <label htmlFor="id">
-              Código Membro:
-              <input disabled type="text" value={idMembro} />
-            </label>
-          )}
-          {!id ? (
-            <label htmlFor="descricao">
-              Nome do Membro
-              <input
+            ) : (
+              <Form.Control disabled type="text" value={idMembro} />
+            )}
+          </Col>
+          <Col sm={12} md={3} className="my-1">
+            <Form.Label htmlFor="descricao">Nome do Membro</Form.Label>
+            {!id ? (
+              <Form.Control
                 id="input"
                 type="text"
                 value={nomeMembro}
@@ -183,17 +180,13 @@ export default function Dizimo({ match }) {
                 }}
                 placeholder="Nome"
               />
-              <small>Minimo de 3 caracteres</small>
-            </label>
-          ) : (
-            <label htmlFor="descricao">
-              Nome do Membro
-              <input type="text" value={nomeMembro} disabled />
-            </label>
-          )}
-          <label htmlFor="valor">
-            Valor
-            <input
+            ) : (
+              <Form.Control type="text" value={nomeMembro} disabled />
+            )}
+          </Col>
+          <Col sm={12} md={3} className="my-1">
+            <Form.Label htmlFor="valor">Valor</Form.Label>
+            <Form.Control
               id="valor"
               type="number"
               value={valor}
@@ -201,13 +194,12 @@ export default function Dizimo({ match }) {
                 setValor(e.target.value);
               }}
             />
-            <small>Minimo de 3 caracteres</small>
-          </label>
-        </div>
-        <div>
-          <label htmlFor="dataMovimentacao">
-            Data da operação:
-            <input
+          </Col>
+          <Col sm={12} md={3} className="my-1">
+            <Form.Label htmlFor="dataMovimentacao">
+              Data da operação:
+            </Form.Label>
+            <Form.Control
               id="dataMovimentacao"
               type="date"
               value={dataMovimentacao}
@@ -215,10 +207,11 @@ export default function Dizimo({ match }) {
                 setDataMovimentacao(e.target.value);
               }}
             />
-          </label>
-        </div>
-
-        <button type="submit">Salvar</button>
+          </Col>
+        </Row>
+        <Row>
+          <button type="submit">Salvar</button>
+        </Row>
       </Form>
     </Container>
   );

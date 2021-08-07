@@ -6,8 +6,9 @@ import { FaEdit, FaWindowClose } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
+import { Col, Row, Form, Table } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
-import { Form, Table, Listagem } from './styled';
+import { Listagem } from './styled';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
@@ -123,21 +124,26 @@ export default function Classe({ match }) {
         handleFunctionConfirm={handleFunctionConfirm}
       />
       <Form onSubmit={handleSubmit}>
-        <label htmlFor="descricao">
-          Nome da classe:
-          <input
-            type="text"
-            value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
-            placeholder="Classe"
-          />
-        </label>
-        <button type="submit">Salvar</button>
+        <Row className="align-items-center">
+          <Col sm={12} md={12} className="my-1">
+            <Form.Label htmlFor="descricao">Nome da Classe:</Form.Label>
+
+            <Form.Control
+              type="text"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              placeholder="Classe"
+            />
+          </Col>
+        </Row>
+        <Row>
+          <button type="submit">Salvar</button>
+        </Row>
       </Form>
       <Listagem>
         <h3>Lista de Classes</h3>
         <center>
-          <Table className="table table-striped">
+          <Table responsive striped bordered hover>
             <thead>
               <tr>
                 <th scope="col">Descição</th>

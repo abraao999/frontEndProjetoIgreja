@@ -7,8 +7,9 @@ import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
 
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
+import { Col, Form, Row, Table } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
-import { Form, Table, Listagem } from './styled';
+import { Label, Listagem } from './styled';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
@@ -150,49 +151,52 @@ export default function RelatorioDizimoGeral() {
         handleFunctionConfirm={handleFunctionConfirm}
       />
 
-      <Form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="congregacao">
-            Filtrar por congregação
-            <select onChange={handleGetIdCongregacao} value={congregacaoId}>
-              <option value="nada">Selecione a congregação</option>
-              {setores.map((dado) => (
-                <option key={dado.id} value={dado.descricao}>
-                  {dado.descricao}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label htmlFor="dataInicial">
-            Data Inicial
-            <input
+      <Form>
+        <Row>
+          <Col sm={12} md={4} className="my-1">
+            <Label htmlFor="congregacao">
+              Filtrar por congregação
+              <select onChange={handleGetIdCongregacao} value={congregacaoId}>
+                <option value="nada">Selecione a congregação</option>
+                {setores.map((dado) => (
+                  <option key={dado.id} value={dado.descricao}>
+                    {dado.descricao}
+                  </option>
+                ))}
+              </select>
+            </Label>
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="dataInicial">Data Inicial</Form.Label>
+            <Form.Control
               type="date"
               value={dataInicial}
               onChange={(e) => {
                 setDataInicial(e.target.value);
               }}
             />
-          </label>
-          <label htmlFor="dataInicial">
-            Data Final
-            <input
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="dataInicial">Data Final</Form.Label>
+            <Form.Control
               type="date"
               value={dataFinal}
               onChange={(e) => {
                 setDataFinal(e.target.value);
               }}
             />
-          </label>
-        </div>
-
-        <button type="submit">
-          Filtrar <FaSearch />
-        </button>
+          </Col>
+        </Row>
+        <Row>
+          <button type="submit">
+            Filtrar <FaSearch />
+          </button>
+        </Row>
       </Form>
       <Listagem>
         <h3>Relatório de dizimo</h3>
         <center>
-          <Table className="table table-striped">
+          <Table responsive striped bordered hover>
             <thead>
               <tr>
                 <th scope="col">Data</th>

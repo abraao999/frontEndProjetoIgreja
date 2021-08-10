@@ -7,8 +7,9 @@ import { toast } from 'react-toastify';
 import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
+import { Form, Row, Table } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
-import { Form, Table, Listagem } from './styled';
+import { Label, Listagem } from './styled';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
@@ -146,8 +147,8 @@ export default function RelatorioAbatimento({ match }) {
       />
 
       <Form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="congregacao">
+        <Row>
+          <Label htmlFor="congregacao">
             Filtrar por congregação
             <select onChange={handleGetIdCongregacao} value={congregacaoId}>
               <option value="nada">Selecione a congregação</option>
@@ -157,12 +158,13 @@ export default function RelatorioAbatimento({ match }) {
                 </option>
               ))}
             </select>
-          </label>
-        </div>
-
-        <button type="submit">
-          Filtrar <FaSearch />
-        </button>
+          </Label>
+        </Row>
+        <Row>
+          <button type="submit">
+            Filtrar <FaSearch />
+          </button>
+        </Row>
       </Form>
       <Listagem>
         <h3>Relatório de Abatimento</h3>

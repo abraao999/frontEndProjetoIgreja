@@ -21,7 +21,9 @@ export default function RelatorioCaixa() {
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
 
+  const [idCongregacao, setIdCongregacao] = useState('');
   const [investimentoBox, setInvestimentoBox] = useState('');
+  const [congregacaoBox, setCongregacaoBox] = useState('');
   const [tipoBox, setTipoBox] = useState('');
   const [investimento, setInvestimento] = useState('');
   const [msg, setMsg] = useState(true);
@@ -29,6 +31,7 @@ export default function RelatorioCaixa() {
   const [filtroDep, setFiltroDep] = useState(false);
   const [filtroInvestimento, setFiltroInvestimento] = useState(false);
   const [filtroTipo, setFiltroTipo] = useState(false);
+  const [filtroCongregacao, setFiltroCongregacao] = useState(false);
 
   const [valorTotal, setValorTotal] = useState(0);
   const [setores, setSetores] = useState([]);
@@ -110,8 +113,12 @@ export default function RelatorioCaixa() {
     if (!filtro) {
       setFiltro(true);
       if (descricao.length > 1) {
-        membros.map((dados) => {
-          if (String(dados.nome).toLowerCase().includes(String(descricao))) {
+        listMovimentacao.map((dados) => {
+          if (
+            String(dados.descricao)
+              .toUpperCase()
+              .includes(String(descricao.toUpperCase()))
+          ) {
             novaLista.push(dados);
           }
         });
@@ -195,13 +202,6 @@ export default function RelatorioCaixa() {
       setIsLoading(false);
     }
   };
-  const handleGetIdCongregacao = (e) => {
-    const nome = e.target.value;
-    setCongregacaoId(e.target.value);
-    setores.map((dado) => {
-      if (nome === dado.descricao) setSetorSeletected(dado.id);
-    });
-  };
   const handleInvestimento = (e) => {
     const nome = e.target.value;
     let op;
@@ -211,8 +211,8 @@ export default function RelatorioCaixa() {
     else op = 0;
 
     const novaLista = [];
-    if (!filtroDep) {
-      setFiltroDep(true);
+    if (!filtroInvestimento) {
+      setFiltroInvestimento(true);
       listMovimentacao.map((dados) => {
         if (dados.investimento === op) {
           novaLista.push(dados);
@@ -222,7 +222,7 @@ export default function RelatorioCaixa() {
       calculaValor(novaLista);
       setDepartamentoId('Selecione o departamento');
     } else {
-      setFiltro(false);
+      setFiltroInvestimento(false);
       axios.get('/caixa').then(async (dado) => {
         dado.data.map((dados) => {
           if (dados.investimento === op) {
@@ -233,6 +233,44 @@ export default function RelatorioCaixa() {
         calculaValor(novaLista);
       });
       setDepartamentoId('Selecione o departamento');
+    }
+    setIsLoading(false);
+  };
+  const handleCongregacao = (e) => {
+    const nome = e.target.value;
+    let id;
+    setCongregacaoBox(e.target.value);
+    setores.map((dado) => {
+      if (dado.descricao === nome) {
+        setIdCongregacao(dado.id);
+        id = dado.id;
+      }
+    });
+    setIsLoading(true);
+
+    const novaLista = [];
+    if (!filtroCongregacao) {
+      setFiltroCongregacao(true);
+      listMovimentacao.map((dados) => {
+        if (dados.idSetor === id) {
+          novaLista.push(dados);
+        }
+      });
+      setListMovimentacao(novaLista);
+      calculaValor(novaLista);
+      setDepartamentoId('Selecione o departamento');
+    } else {
+      setFiltroCongregacao(false);
+      axios.get('/caixa').then(async (dado) => {
+        dado.data.map((dados) => {
+          if (dados.idSetor === id) {
+            novaLista.push(dados);
+          }
+        });
+        renderizaLista(novaLista);
+        calculaValor(novaLista);
+      });
+      setCongregacaoBox('Selecione a congregação');
     }
     setIsLoading(false);
   };
@@ -256,7 +294,7 @@ export default function RelatorioCaixa() {
       calculaValor(novaLista);
       setDepartamentoId('Selecione o departamento');
     } else {
-      setFiltro(false);
+      setFiltroTipo(false);
       axios.get('/caixa').then(async (dado) => {
         dado.data.map((dados) => {
           if (dados.tipo === op) {
@@ -304,7 +342,7 @@ export default function RelatorioCaixa() {
               <select onChange={handleGetIdDepartamento} value={departamentoId}>
                 <option value="nada">Selecione o departamento</option>
                 {departamentos.map((dado) => (
-                  <option key={dado.id} value={dado.descricao}>
+                  <option key={dado.id} id={dado.id} value={dado.descricao}>
                     {dado.descricao}
                   </option>
                 ))}
@@ -342,7 +380,7 @@ export default function RelatorioCaixa() {
               type="text"
               value={descricao}
               onChange={(e) => {
-                setDescricao(e.target.value);
+                setDescricao(e.target.value.toLocaleUpperCase());
               }}
               placeholder="Nome para filtro"
             />
@@ -350,7 +388,7 @@ export default function RelatorioCaixa() {
           <Col sm={12} md={4} className="my-1">
             <Label htmlFor="congregacao">
               Filtrar por congregação
-              <select onChange={handleGetIdCongregacao} value={congregacaoId}>
+              <select onChange={handleCongregacao} value={congregacaoBox}>
                 <option value="nada">Selecione a congregação</option>
                 {setores.map((dado) => (
                   <option key={dado.id} value={dado.descricao}>
@@ -388,7 +426,7 @@ export default function RelatorioCaixa() {
       <Listagem>
         <h3>Relatório de Movimentação</h3>
         <center>
-          <Table className="table table-striped">
+          <Table responsive striped bordered hover>
             <thead>
               <tr>
                 <th scope="col">R.F</th>

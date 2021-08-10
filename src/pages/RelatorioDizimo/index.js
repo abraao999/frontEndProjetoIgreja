@@ -7,8 +7,9 @@ import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
 
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
+import { Col, Form, Row, Table } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
-import { Form, Table, Listagem } from './styled';
+import { Listagem } from './styled';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
@@ -157,10 +158,10 @@ export default function RelatorioDizimo() {
       />
 
       <Form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="id">
-            Código Membro:
-            <input
+        <Row>
+          <Col sm={12} md={2} className="my-1">
+            <Form.Label htmlFor="id">Código Membro:</Form.Label>
+            <Form.Control
               id="id"
               onChange={(e) => {
                 setIdMembro(e.target.value);
@@ -171,11 +172,10 @@ export default function RelatorioDizimo() {
               type="text"
               value={idMembro}
             />
-          </label>
-
-          <label htmlFor="descricao">
-            Nome do Membro
-            <input
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="descricao">Nome do Membro</Form.Label>
+            <Form.Control
               id="input"
               type="text"
               value={nomeMembro}
@@ -188,38 +188,39 @@ export default function RelatorioDizimo() {
               }}
               placeholder="Nome"
             />
-          </label>
-
-          <label htmlFor="dataInicial">
-            Data Inicial
-            <input
+          </Col>
+          <Col sm={12} md={3} className="my-1">
+            <Form.Label htmlFor="dataInicial">Data Inicial</Form.Label>
+            <Form.Control
               type="date"
               value={dataInicial}
               onChange={(e) => {
                 setDataInicial(e.target.value);
               }}
             />
-          </label>
-          <label htmlFor="dataInicial">
-            Data Final
-            <input
+          </Col>
+          <Col sm={12} md={3} className="my-1">
+            <Form.Label htmlFor="dataInicial">Data Final</Form.Label>
+            <Form.Control
               type="date"
               value={dataFinal}
               onChange={(e) => {
                 setDataFinal(e.target.value);
               }}
             />
-          </label>
-        </div>
+          </Col>
+        </Row>
 
-        <button type="submit">
-          Filtrar <FaSearch />
-        </button>
+        <Row>
+          <button type="submit">
+            Filtrar <FaSearch />
+          </button>
+        </Row>
       </Form>
       <Listagem>
         <h3>Relatório de dizimo</h3>
         <center>
-          <Table className="table table-striped">
+          <Table responsive striped bordered hover>
             <thead>
               <tr>
                 <th scope="col">R.F</th>

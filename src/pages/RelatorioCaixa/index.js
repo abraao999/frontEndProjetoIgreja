@@ -112,33 +112,23 @@ export default function RelatorioCaixa() {
     const novaLista = [];
     if (!filtro) {
       setFiltro(true);
-      if (descricao.length > 1) {
-        listMovimentacao.map((dados) => {
-          if (
-            String(dados.descricao)
-              .toUpperCase()
-              .includes(String(descricao.toUpperCase()))
-          ) {
-            novaLista.push(dados);
-          }
-        });
-      } else {
-        listMovimentacao.map((dados) => {
-          if (dados.idSetor === setorSeletected) {
-            novaLista.push(dados);
-          }
-        });
-      }
+
+      listMovimentacao.map((dados) => {
+        if (
+          String(dados.descricao)
+            .toUpperCase()
+            .includes(String(descricao.toUpperCase()))
+        ) {
+          novaLista.push(dados);
+        }
+      });
     } else {
       setFiltro(false);
-      axios
-        .get('/caixa')
-        .then(async (dado) => {
-          setListMovimentacao(dado.data);
-          renderizaLista(dado.data);
-        })
-        .then((dado) => dado);
-      setCongregacaoId('Selecione a congregação');
+      setDescricao('');
+      axios.get('/caixa').then(async (dado) => {
+        setListMovimentacao(dado.data);
+        renderizaLista(dado.data);
+      });
     }
     setIsLoading(false);
     calculaValor(novaLista);

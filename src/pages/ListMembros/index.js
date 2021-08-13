@@ -8,14 +8,19 @@ import { FaEdit, FaWindowClose, FaRegListAlt, FaSearch } from 'react-icons/fa';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/GlobalStyles';
-import { Label, Listagem } from './styled';
+import { Header, Label, Listagem } from './styled';
+import { AiFillPrinter } from 'react-icons/ai';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
 import history from '../../services/history';
 import { Row, Table, Form, Col } from 'react-bootstrap';
 // import * as actions from '../../store/modules/auth/actions';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { Impressao } from '../../printers/impMembros';
 
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export default function ListMembros({ match }) {
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
@@ -111,9 +116,32 @@ export default function ListMembros({ match }) {
       if (nome === dado.descricao) setSetorSeletected(dado.id);
     });
   };
+  const visualizarImpressao = async () => {
+    const novaLista = [];
+    membros.map((dado) => {
+      const data = new Date(dado.data_nascimento);
+      const dataFormatada = `${data.getDate()}/${data.getMonth() + 1
+        }/${data.getFullYear()}`;
+      novaLista.push({
+        nome: dado.nome,
+        telefone: dado.telefone,
+        desc_setor: dado.desc_setor,
+        desc_cargo: dado.desc_cargo,
+        aniversario: dataFormatada,
+      });
+    });
+    const classeImpressao = new Impressao(novaLista);
+    const documento = await classeImpressao.PreparaDocumento();
+    pdfMake.createPdf(documento).open({}, window.open('', '_blank'));
+  };
   return (
     <Container>
-      <h2>Lista de membros</h2>
+      <Header>
+        <h2>Lista de membros</h2>
+        <button type="button" onClick={visualizarImpressao}>
+          <AiFillPrinter size={35} />
+        </button>
+      </Header>
       <Loading isLoading={isLoading} />
       <Modal
         title="Atenção!!!"
@@ -155,10 +183,11 @@ export default function ListMembros({ match }) {
             </Label>
           </Col>
         </Row>
-
-        <button type="submit">
-          Filtrar <FaSearch />
-        </button>
+        <Row>
+          <button type="submit">
+            Filtrar <FaSearch />
+          </button>
+        </Row>
       </Form>
       <Listagem>
         <h3>Lista de Membros</h3>

@@ -57,6 +57,11 @@ export const Listagem = styled.div`
     justify-content: center;
   }
 `;
+export const Header = styled.div`
+  margin: 30px;
+  display: flex;
+  justify-content: space-between;
+`;
 export const ProfilePicture = styled.div`
   display: flex;
   justify-content: center;

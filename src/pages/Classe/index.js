@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Col, Row, Form, Table } from 'react-bootstrap';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Container } from '../../styles/GlobalStyles';
 import { Listagem } from './styled';
 import axios from '../../services/axios';
@@ -15,6 +17,9 @@ import Loading from '../../components/Loading';
 import history from '../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
+import { Impressao } from '../../printers/impressao';
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export default function Classe({ match }) {
   const id = get(match, 'params.id', '');
   const [show, setShow] = useState(false);
@@ -109,6 +114,11 @@ export default function Classe({ match }) {
       setIsLoading(false);
     }
   };
+  const visualizarImpressao = async () => {
+    const classeImpressao = new Impressao(descricaoList);
+    const documento = await classeImpressao.PreparaDocumento();
+    pdfMake.createPdf(documento).open({}, window.open('', '_blank'));
+  };
 
   return (
     <Container>
@@ -138,6 +148,9 @@ export default function Classe({ match }) {
         </Row>
         <Row>
           <button type="submit">Salvar</button>
+          <button type="button" className="btn" onClick={visualizarImpressao}>
+            Visualizar documento
+          </button>
         </Row>
       </Form>
       <Listagem>

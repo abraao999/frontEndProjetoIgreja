@@ -58,7 +58,6 @@ export const Listagem = styled.div`
   }
 `;
 export const Header = styled.div`
-  margin: 30px;
   display: flex;
   justify-content: space-between;
 `;

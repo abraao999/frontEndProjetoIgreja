@@ -33,6 +33,7 @@ import RelatorioPresencaGeral from '../pages/RelatorioPresencaGeral';
 import PresencaDetalhada from '../pages/PresencaDetalhada';
 import ListaAniversario from '../pages/ListaAniversario';
 import EditPass from '../pages/EditPass';
+import RelatorioDiario from '../pages/RelatorioDiario';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.user.function_id);
@@ -164,6 +165,13 @@ export default function Routes() {
         component={DetailMembro}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 4 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/relatorioDiario"
+        component={RelatorioDiario}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
         isClosed
       />
       <MyRoute

@@ -1,19 +1,23 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
+import { AiFillPrinter } from 'react-icons/ai';
 
 import { toast } from 'react-toastify';
 import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
-
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Col, Form, Row, Table } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
-import { Label, Listagem } from './styled';
+import { Header, Label, Listagem } from './styled';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
 import history from '../../services/history';
+import { Impressao } from '../../printers/impRelatorioDizimoGeral';
+import { getMes } from '../../util';
 
 export default function RelatorioDizimoGeral() {
   const [show, setShow] = useState(false);
@@ -36,21 +40,30 @@ export default function RelatorioDizimoGeral() {
     async function getData() {
       const response = await axios.get('/setor');
       setSetores(response.data);
+      const novaLista = [];
+      const mes = new Date().getMonth() + 1;
+      console.log(mes);
+      axios.get(`/dizimo`).then((dado) => {
+        dado.data.map((valor) => {
+          if (getMes(valor.data_operacao) === mes) novaLista.push(valor);
+        });
 
-      // const mes = new Date().getMonth();
-      // axios.get(`/dizimo`).then((dado) => {
-      //   renderizaLista(dado.data, mes);
-      // });
+        renderizaLista(novaLista);
+      });
     }
     getData();
   }, []);
-
+  const visualizarImpressao = async () => {
+    const classeImpressao = new Impressao(listMovimentacao);
+    const documento = await classeImpressao.PreparaDocumento();
+    pdfMake.createPdf(documento).open({}, window.open('', '_blank'));
+  };
   const renderizaLista = (list, mes) => {
     const novaLista = [];
     list.map((dado) => {
       const data = new Date(dado.data_operacao);
-      const dataFormatada = `${data.getDate()}/
-      ${data.getMonth() + 1}/${data.getFullYear()}`;
+      const dataFormatada = `${data.getDate()}/${data.getMonth() + 1
+        }/${data.getFullYear()}`;
       if (data.getMonth() === mes) {
         novaLista.push({
           id: dado.id,
@@ -138,7 +151,6 @@ export default function RelatorioDizimoGeral() {
 
   return (
     <Container>
-      <h1>Relatório de dízimo geral</h1>
       <Loading isLoading={isLoading} />
 
       <Modal
@@ -150,7 +162,12 @@ export default function RelatorioDizimoGeral() {
         buttonConfirm="Sim"
         handleFunctionConfirm={handleFunctionConfirm}
       />
-
+      <Header>
+        <h1>Relatório de dízimo geral</h1>
+        <button type="button" onClick={visualizarImpressao}>
+          <AiFillPrinter size={35} />
+        </button>
+      </Header>
       <Form>
         <Row>
           <Col sm={12} md={4} className="my-1">

@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import * as colors from '../../config/colors';
 
+export const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 export const Form = styled.form`
   display: flex;
   flex-direction: column;

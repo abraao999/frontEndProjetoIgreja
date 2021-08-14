@@ -8,13 +8,17 @@ import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Col, Form, Row, Table } from 'react-bootstrap';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { AiFillPrinter } from 'react-icons/ai';
 import { Container } from '../../styles/GlobalStyles';
-import { Label, Listagem } from './styled';
+import { Header, Label, Listagem } from './styled';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
 import history from '../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
+import { Impressao } from '../../printers/impRelatorioDiario';
 
 export default function RelatorioCaixa() {
   const [show, setShow] = useState(false);
@@ -310,9 +314,28 @@ export default function RelatorioCaixa() {
     });
     handleDepartamentoSubmit(idDep);
   };
+  const visualizarImpressao = async () => {
+    const novaLista = [];
+    listMovimentacao.map((dado) => {
+      novaLista.push({
+        id: dado.id,
+        descricao: dado.descricao,
+        dataOp: dado.descricao,
+        valor: dado.valor,
+        tipo: dado.tipo ? 'Entrada' : 'Saída',
+        investimento: dado.investimento ? 'Investimento' : 'Despesa',
+        idDepartamento: dado.departamento_id,
+        idSetor: dado.setor_id,
+        descDepartamento: dado.desc_departamento,
+        descSetor: dado.desc_setor,
+      });
+    });
+    const classeImpressao = new Impressao(novaLista, valorTotal);
+    const documento = await classeImpressao.PreparaDocumento();
+    pdfMake.createPdf(documento).open({}, window.open('', '_blank'));
+  };
   return (
     <Container>
-      <h1>Relatório em caixa</h1>
       <Loading isLoading={isLoading} />
       <Modal
         title="Atenção!!!"
@@ -323,7 +346,12 @@ export default function RelatorioCaixa() {
         buttonConfirm="Sim"
         handleFunctionConfirm={handleFunctionConfirm}
       />
-
+      <Header>
+        <h2>Relatório de caixa</h2>
+        <button type="button" onClick={visualizarImpressao}>
+          <AiFillPrinter size={35} />
+        </button>
+      </Header>
       <Form onSubmit={handleSubmit}>
         <Row>
           <Col sm={12} md={4} className="my-1">

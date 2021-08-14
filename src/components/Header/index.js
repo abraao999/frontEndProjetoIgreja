@@ -28,6 +28,7 @@ export default function Header() {
     { desc: 'LANÇAMENTO', path: '/caixa' },
     { desc: 'RELATÓRIO', path: '/relatorioCaixa' },
     { desc: 'RELATÓRIO ABATIMENTO', path: '/relatorioAbatimento' },
+    { desc: 'RELATÓRIO DIÁRIO', path: '/relatorioDiario' },
     { desc: 'RELATÓRIO DÍZIMO', path: '/relatorioDizimo' },
     { desc: 'RELATÓRIO DÍZIMO GERAL', path: '/relatorioDizimoGeral' },
   ];

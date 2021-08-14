@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 export const inicioPrimeiroTrimestre = '2021-01-01';
 export const fimPrimeiroTrimestre = '2021-03-31';
 export const inicioSegundoTrimestre = '2021-04-01';
@@ -27,3 +28,25 @@ export const listMeses = [
   { id: 10, descricao: 'Novembro' },
   { id: 11, descricao: 'Dezembro' },
 ];
+export const getToday = () => {
+  let dataAtual = new Date();
+  dataAtual = `${dataAtual.getDate()}/${dataAtual.getMonth() + 1
+    }/${dataAtual.getFullYear()}`;
+  return dataAtual;
+};
+export const getDataDB = (valor) => {
+  valor = `${valor.getDate() + 1}/${valor.getMonth() + 1
+    }/${valor.getFullYear()}`;
+  return valor;
+};
+export const formataDataInput = (valor) => {
+  valor = new Date(valor);
+  valor = `${valor.getDate() + 1}/${valor.getMonth() + 1
+    }/${valor.getFullYear()}`;
+  return valor;
+};
+export const getMes = (valor) => {
+  valor = new Date(valor);
+  valor = valor.getMonth() + 1;
+  return valor;
+};

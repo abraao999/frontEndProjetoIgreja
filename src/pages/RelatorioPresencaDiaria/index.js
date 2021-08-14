@@ -16,6 +16,7 @@ import Loading from '../../components/Loading';
 export default function RelatorioPresencaDiaria({ match }) {
   const [dataAula, setDataAula] = useState('');
 
+  const [presencaTotal, setPresencaTotal] = useState([]);
   const [classes, setClasses] = useState([]);
   const [listAlunos, setListAlunos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,6 +56,7 @@ export default function RelatorioPresencaDiaria({ match }) {
     });
     setHidden(false);
     contadorPresenca(novaLista);
+    setPresencaTotal(list.length);
   };
 
   const contadorPresenca = async (listaPresenca) => {
@@ -174,6 +176,7 @@ export default function RelatorioPresencaDiaria({ match }) {
             </tbody>
           </Table>
         </center>
+        <h3>Presença Total: {presencaTotal}</h3>
       </Listagem>
     </Container>
   );

@@ -6,11 +6,13 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { FaSearch, FaSave } from 'react-icons/fa';
 import { get } from 'lodash';
+import { useSelector } from 'react-redux';
 import { Container } from '../../styles/GlobalStyles';
 import { Form, Table, Listagem } from './styled';
 import axios from '../../services/axios';
 import Modal from '../../components/Modal';
 import Loading from '../../components/Loading';
+import history from '../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function Chamada({ match }) {
@@ -23,6 +25,7 @@ export default function Chamada({ match }) {
   const [congregacaoId, setCongregacaoId] = useState(
     'Selecione uma congregação'
   );
+  const dataStorage = useSelector((state) => state.auth);
 
   const [aluno, setAluno] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,8 +35,15 @@ export default function Chamada({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get('/classe');
-      setClasses(response.data);
+      const lista = [];
+      axios.get('/classe').then((response) => {
+        response.data.map((valor) => {
+          if (dataStorage.user.setor_id === valor.setor_id) {
+            lista.push(valor);
+          }
+        });
+        setClasses(lista);
+      });
       const response2 = await axios.get('/aluno');
       setAluno(response2.data);
       setIsLoading(false);
@@ -45,7 +55,6 @@ export default function Chamada({ match }) {
     setIsLoading(true);
     const novaLista = [];
 
-    console.log(filtro);
     if (!filtro) {
       aluno.map((dados) => {
         if (dados.classe_id === setorSeletected) {
@@ -126,6 +135,7 @@ export default function Chamada({ match }) {
         });
       });
       toast.success('Chamada feita com sucesso');
+      history.push('/PresencaDetalhada');
     } catch (error) {
       toast.error('Erro ao atribuir as presenças');
     }

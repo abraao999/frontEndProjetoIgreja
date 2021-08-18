@@ -8,6 +8,7 @@ import { Container } from '../../styles/GlobalStyles';
 import Loading from '../../components/Loading';
 import axios from '../../services/axios';
 import ModalMembro from '../../components/ModalMembro';
+import history from '../../services/history';
 
 export default function EditPass() {
   const dispath = useDispatch();
@@ -32,6 +33,7 @@ export default function EditPass() {
       });
       console.log(response);
       toast.success('Alterada com sucesso');
+      history.push('/home');
     } catch (er) {
       toast.error('Erro ao alterar a senha');
     }

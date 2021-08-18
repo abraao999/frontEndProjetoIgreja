@@ -8,6 +8,7 @@ import { FaWindowClose, FaSearch } from 'react-icons/fa';
 
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Container } from '../../styles/GlobalStyles';
 import { Form, Table, Listagem } from './styled';
 import axios from '../../services/axios';
@@ -23,16 +24,24 @@ export default function PresencaDetalhada({ match }) {
 
   const [dataAula, setDataAula] = useState('');
 
-  const [setores, setSetores] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [listAlunos, setListAlunos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hidden, setHidden] = useState(true);
   const [setorSeletected, setSetorSeletected] = useState(0);
+  const dataStorage = useSelector((state) => state.auth);
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get('/classe');
-      setSetores(response.data);
+      const lista = [];
+      axios.get('/classe').then((response) => {
+        response.data.map((valor) => {
+          if (dataStorage.user.setor_id === valor.setor_id) {
+            lista.push(valor);
+          }
+        });
+        setClasses(lista);
+      });
 
       // const mes = new Date().getMonth();
       // axios.get(`/dizimo`).then((dado) => {
@@ -116,10 +125,10 @@ export default function PresencaDetalhada({ match }) {
       setIsLoading(false);
     }
   };
-  const handleGetIdCongregacao = (e) => {
+  const handleGetClasseId = (e) => {
     const nome = e.target.value;
     setCongregacaoId(e.target.value);
-    setores.map((dado) => {
+    classes.map((dado) => {
       if (nome === dado.descricao) setSetorSeletected(dado.id);
     });
   };
@@ -143,9 +152,9 @@ export default function PresencaDetalhada({ match }) {
         <div>
           <label htmlFor="congregacao">
             Filtrar por classe
-            <select onChange={handleGetIdCongregacao} value={congregacaoId}>
+            <select onChange={handleGetClasseId} value={congregacaoId}>
               <option value="nada">Selecione a classe</option>
-              {setores.map((dado) => (
+              {classes.map((dado) => (
                 <option key={dado.id} value={dado.descricao}>
                   {dado.descricao}
                 </option>

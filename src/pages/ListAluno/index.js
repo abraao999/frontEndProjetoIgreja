@@ -8,6 +8,7 @@ import { FaEdit, FaWindowClose, FaRegListAlt, FaSearch } from 'react-icons/fa';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Row, Form, Table, Col, Button } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { Container } from '../../styles/GlobalStyles';
 import { Listagem, Label } from './styled';
 import axios from '../../services/axios';
@@ -23,7 +24,8 @@ export default function ListAluno({ match }) {
   const [indiceDelecao, setIndiceDelecao] = useState('');
   const [filtro, setFiltro] = useState(false);
   const [classes, setClasses] = useState([]);
-  const [setorSeletected, setSetorSeletected] = useState(0);
+  const [setors, setSetors] = useState([]);
+  const [classeSeletected, setClasseSeletected] = useState(0);
   const [congregacaoId, setCongregacaoId] = useState(
     'Selecione uma congregação'
   );
@@ -31,14 +33,32 @@ export default function ListAluno({ match }) {
   const [aluno, setAluno] = useState([]);
   const [descricao, setDescricao] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const dataStorage = useSelector((state) => state.auth);
 
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get('/classe');
-      setClasses(response.data);
-      const response2 = await axios.get('/aluno');
-      setAluno(response2.data);
+      const lista = [];
+      axios.get('/classe').then((res) => {
+        res.data.map((valor) => {
+          if (dataStorage.user.setor_id === valor.setor_id) {
+            lista.push(valor);
+          }
+        });
+
+        setClasses(lista);
+      });
+      const listaAluno = [];
+      axios.get('/aluno').then((res) => {
+        console.log(res.data, dataStorage.user.setor_id);
+        res.data.map((valor) => {
+          if (dataStorage.user.setor_id === valor.setor_id) {
+            listaAluno.push(valor);
+          }
+        });
+
+        setAluno(listaAluno);
+      });
       setIsLoading(false);
     }
     getData();
@@ -54,10 +74,10 @@ export default function ListAluno({ match }) {
         }
       });
     } else {
-      console.log(filtro);
+      console.log(aluno);
       if (!filtro) {
         aluno.map((dados) => {
-          if (dados.classe_id === setorSeletected) {
+          if (dados.classe_id === classeSeletected) {
             novaLista.push(dados);
           }
         });
@@ -65,7 +85,7 @@ export default function ListAluno({ match }) {
       } else {
         const response = await axios.get('/aluno');
         response.data.map((dados) => {
-          if (dados.classe_id === setorSeletected) {
+          if (dados.classe_id === classeSeletected) {
             novaLista.push(dados);
           }
         });
@@ -109,12 +129,12 @@ export default function ListAluno({ match }) {
     setCongregacaoId(e.target.value);
 
     classes.map((dado) => {
-      if (nome === dado.descricao) setSetorSeletected(dado.id);
+      if (nome === dado.descricao) setClasseSeletected(dado.id);
     });
   };
   return (
     <Container>
-      <h1>{id ? 'Editar Aluno' : 'Novo Aluno'}</h1>
+      <h1>Lista de Alunos</h1>
       <Loading isLoading={isLoading} />
       <Modal
         title="Atenção!!!"
@@ -144,9 +164,9 @@ export default function ListAluno({ match }) {
           </Col>
           <Col sm={12} md={6} className="my-1">
             <Label htmlFor="congregacao">
-              Filtrar por congregação
+              Filtrar por classe
               <select onChange={handleGetIdCongregacao} value={congregacaoId}>
-                <option value="nada">Selecione a congregação</option>
+                <option value="nada">Selecione a classe</option>
                 {classes.map((dado) => (
                   <option key={dado.id} value={dado.descricao}>
                     {dado.descricao}

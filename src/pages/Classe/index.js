@@ -35,8 +35,17 @@ export default function Classe({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get('/classe');
-      setDescricaoList(response.data);
+      const lista = [];
+
+      axios.get('/classe').then((response) => {
+        response.data.map((valor) => {
+          if (dataStorage.user.setor_id === valor.setor_id) {
+            lista.push(valor);
+          }
+        });
+
+        setDescricaoList(lista);
+      });
       setIsLoading(false);
     }
     getData();
@@ -57,7 +66,6 @@ export default function Classe({ match }) {
           descricao,
           setor_id: dataStorage.user.setor_id,
         });
-        console.log(response);
         const novaLista = await axios.get('/classe');
         setDescricaoList(novaLista.data);
         setDescricao('');
@@ -65,7 +73,6 @@ export default function Classe({ match }) {
         setIsLoading(false);
       } else {
         const response = await axios.put(`/classe/${id}`, { descricao });
-        console.log(response);
         const novaLista = await axios.get('/classe');
         setDescricaoList(novaLista.data);
         setDescricao('');
@@ -148,9 +155,6 @@ export default function Classe({ match }) {
         </Row>
         <Row>
           <button type="submit">Salvar</button>
-          <button type="button" className="btn" onClick={visualizarImpressao}>
-            Visualizar documento
-          </button>
         </Row>
       </Form>
       <Listagem>

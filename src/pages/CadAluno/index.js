@@ -8,6 +8,7 @@ import InputMask from 'react-input-mask';
 import { isDate } from 'validator';
 import { get } from 'lodash';
 import { Row, Form, Col } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { Container } from '../../styles/GlobalStyles';
 import axios from '../../services/axios';
 
@@ -34,6 +35,7 @@ export default function CadAluno({ match }) {
   const [classe, setClasse] = useState('');
   const [classeId, setClasseId] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const dataStorage = useSelector((state) => state.auth);
 
   useEffect(() => {
     async function getData() {
@@ -53,9 +55,9 @@ export default function CadAluno({ match }) {
         setDataNascimento(dataform2);
       }
       const response2 = await axios.get('/setor');
+      const lista = [];
       setSetores(response2.data);
-      const response3 = await axios.get('/classe');
-      setClasses(response3.data);
+
       setIsLoading(false);
     }
     getData();
@@ -137,9 +139,23 @@ export default function CadAluno({ match }) {
 
   const handleGetIdCongregacao = (e) => {
     const nome = e.target.value;
+    let idCongregacao = 0;
+    const lista = [];
     setSetor(e.target.value);
     setores.map((dado) => {
-      if (nome === dado.descricao) setSetorId(dado.id);
+      if (nome === dado.descricao) {
+        setSetorId(dado.id);
+        idCongregacao = dado.id;
+      }
+    });
+    axios.get('/classe').then((res) => {
+      res.data.map((valor) => {
+        if (idCongregacao === valor.setor_id) {
+          lista.push(valor);
+        }
+      });
+      console.log(idCongregacao);
+      setClasses(lista);
     });
   };
   const handleGetIdClasse = (e) => {

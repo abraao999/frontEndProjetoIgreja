@@ -12,7 +12,7 @@ import { Label, Listagem } from './styled';
 import axios from '../../services/axios';
 
 import Loading from '../../components/Loading';
-import { listMeses } from '../../util';
+import { getDataDB, listMeses } from '../../util';
 
 export default function ListaAniversario() {
   const [membros, setMembros] = useState([]);
@@ -51,8 +51,7 @@ export default function ListaAniversario() {
     list.map((dado) => {
       const data = new Date(dado.data_nascimento);
 
-      const dataFormatada = `${data.getDate()}/${data.getMonth() + 1
-        }/${data.getFullYear()}`;
+      const dataFormatada = getDataDB(data);
       novaLista.push({
         id: dado.id,
         nome: dado.nome,

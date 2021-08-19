@@ -174,7 +174,7 @@ export default function RelatorioPresencaGeral({ match }) {
           <label htmlFor="trimestre">
             Filtrar por trimestre
             <select onChange={handleIdTrimestre}>
-              <option value="nada">Selecione a classe</option>
+              <option value="nada">Selecione a trimestre</option>
               {trimestres.map((dado) => (
                 <option key={dado.id} value={dado.id}>
                   {dado.descricao}

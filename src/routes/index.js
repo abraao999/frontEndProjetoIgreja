@@ -18,6 +18,7 @@ import CadMembro from '../pages/CadMembro';
 import ListMembros from '../pages/ListMembros';
 import DetailMembro from '../pages/DetailMembro';
 import Caixa from '../pages/Caixa';
+import CaixaEbd from '../pages/CaixaEbd';
 import RelatorioCaixa from '../pages/RelatorioCaixa';
 import Abatimento from '../pages/Abatimento';
 import RelatorioAbatimento from '../pages/RelatorioAbatimento';
@@ -34,6 +35,7 @@ import PresencaDetalhada from '../pages/PresencaDetalhada';
 import ListaAniversario from '../pages/ListaAniversario';
 import EditPass from '../pages/EditPass';
 import RelatorioDiario from '../pages/RelatorioDiario';
+import RelatorioCaixaEbd from '../pages/RelatorioCaixaEbd';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.user.function_id);
@@ -46,6 +48,7 @@ export default function Routes() {
     5 - Coordenador
     6 - Tesoureiro EBD
     7 -  Professor
+    8 - Coordenador Congregacao
   */
   return (
     <Switch>
@@ -186,6 +189,45 @@ export default function Routes() {
         component={Caixa}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/caixaEbd/:id/edit"
+        component={CaixaEbd}
+        idFuncao={idFuncao}
+        usuarioPermitido={[
+          { id: 1 },
+          { id: 2 },
+          { id: 5 },
+          { id: 6 },
+          { id: 8 },
+        ]}
+        isClosed
+      />
+      <MyRoute
+        path="/caixaEbd/"
+        component={CaixaEbd}
+        idFuncao={idFuncao}
+        usuarioPermitido={[
+          { id: 1 },
+          { id: 2 },
+          { id: 5 },
+          { id: 6 },
+          { id: 8 },
+        ]}
+        isClosed
+      />
+      <MyRoute
+        path="/relatorioCaixaEbd/"
+        component={RelatorioCaixaEbd}
+        idFuncao={idFuncao}
+        usuarioPermitido={[
+          { id: 1 },
+          { id: 2 },
+          { id: 5 },
+          { id: 6 },
+          { id: 8 },
+        ]}
         isClosed
       />
       <MyRoute

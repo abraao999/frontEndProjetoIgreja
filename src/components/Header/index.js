@@ -52,8 +52,13 @@ export default function Header() {
   const ebd = [
     { desc: 'CADASTRO CLASSE', path: '/classe' },
     { desc: 'CADASTRO DE ALUNO', path: '/cadAluno' },
+    { desc: 'CAIXA', path: '/caixaEbd' },
     { desc: 'CHAMADA', path: '/chamada' },
     { desc: 'LISTA DE ALUNOS', path: '/listAluno' },
+    {
+      desc: 'RELATÓRIO DE CAIXA',
+      path: '/relatorioCaixaEbd',
+    },
     {
       desc: 'RELATÓRIO DE PRESENÇA DIARIA',
       path: '/relatorioPresencaDiaria',

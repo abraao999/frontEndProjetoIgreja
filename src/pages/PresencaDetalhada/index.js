@@ -199,7 +199,7 @@ export default function PresencaDetalhada({ match }) {
                   <td>
                     <Link
                       onClick={() => handleShow(dado.id, index)}
-                      to="/relatorioPresencaEbd"
+                      to="/PresencaDetalhada"
                     >
                       <FaWindowClose size={16} />
                     </Link>

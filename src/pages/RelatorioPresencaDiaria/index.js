@@ -23,6 +23,7 @@ export default function RelatorioPresencaDiaria({ match }) {
   const [hidden, setHidden] = useState(true);
   const dataStorage = useSelector((state) => state.auth);
   const [presenca, setPresenca] = useState([]);
+  const [visitantes, setVisitantes] = useState(0);
 
   useEffect(() => {
     async function getData() {
@@ -46,11 +47,15 @@ export default function RelatorioPresencaDiaria({ match }) {
       const data = new Date(dado.data_aula);
       const dataFormatada = `${data.getDate()}/
       ${data.getMonth() + 1}/${data.getFullYear()}`;
+      let tipo = '';
+      if (dado.visitante) tipo = 'Visitante';
+      else tipo = 'Aluno';
       novaLista.push({
         id: dado.id,
         nomeAluno: dado.desc_aluno,
         classeId: dado.id_classe,
         classeDesc: dado.desc_classes,
+        tipo,
         dataAula: dataFormatada,
       });
     });
@@ -62,20 +67,22 @@ export default function RelatorioPresencaDiaria({ match }) {
   const contadorPresenca = async (listaPresenca) => {
     // contador de presenca
     const novaLista = [];
+    let qtdeVisitante = 0;
     classes.map((classe) => {
       let alunosPresente = 0;
       let qtdeAlunos = 0;
 
       listAlunos.map((aluno) => {
-        if (aluno.classe_id === classe.id) {
+        if (aluno.classe_id === classe.id && !aluno.visitante) {
           qtdeAlunos += 1;
         }
       });
 
       listaPresenca.map((dado) => {
-        if (dado.classeId === classe.id) {
+        if (dado.classeId === classe.id && dado.tipo === 'Aluno') {
           alunosPresente += 1;
         }
+        if (dado.tipo === 'Visitante') qtdeVisitante += 1;
       });
 
       // renderiza a lista com os dados
@@ -89,6 +96,7 @@ export default function RelatorioPresencaDiaria({ match }) {
     });
     setPresenca(novaLista);
     setIsLoading(false);
+    setVisitantes(qtdeVisitante);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -177,6 +185,7 @@ export default function RelatorioPresencaDiaria({ match }) {
           </Table>
         </center>
         <h3>Presença Total: {presencaTotal}</h3>
+        <h3>Visitantes: {visitantes}</h3>
       </Listagem>
     </Container>
   );

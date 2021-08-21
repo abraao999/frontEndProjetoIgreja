@@ -35,6 +35,7 @@ export default function CadAluno({ match }) {
   const [classe, setClasse] = useState('');
   const [classeId, setClasseId] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [visitante, setVisitante] = useState(false);
   const dataStorage = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -50,6 +51,7 @@ export default function CadAluno({ match }) {
         setTelefone(response.data.telefone);
         setSetorId(response.data.setor_id);
         setClasseId(response.data.classe_id);
+        if (response.data.visitante) setVisitante(true);
         const dataform = new Date(response.data.data_aniversario);
         const dataform2 = `${dataform.getFullYear()}/${dataform.getMonth()}/${dataform.getDate()}`;
         setDataNascimento(dataform2);
@@ -91,6 +93,7 @@ export default function CadAluno({ match }) {
         const response = await axios.post(`aluno`, {
           nome: nomeMembro,
           cpf,
+          visitante,
           data_aniversario: dataNascimento || null,
           telefone,
           setor_id: setorId,
@@ -105,6 +108,7 @@ export default function CadAluno({ match }) {
         console.log({
           nome: nomeMembro,
           cpf,
+          visitante,
           data_aniversario: dataNascimento || null,
           telefone,
           setor_id: setorId,
@@ -114,6 +118,7 @@ export default function CadAluno({ match }) {
         const response = await axios.put(`/aluno/${id}`, {
           nome: nomeMembro,
           cpf,
+          visitante,
           data_aniversario: dataNascimento,
           telefone,
           setor_id: setorId,
@@ -186,7 +191,7 @@ export default function CadAluno({ match }) {
   };
   return (
     <Container>
-      <h1> Novo Aluno</h1>
+      <h1> {id ? 'Editar Aluno' : 'Novo Aluno'}</h1>
       <Loading isLoading={isLoading} />
 
       <Form onSubmit={handleSubmit}>
@@ -261,7 +266,19 @@ export default function CadAluno({ match }) {
         </Row>
 
         <Row className="align-items-center">
-          <Col sm={12} md={{ span: 3, offset: 3 }} className="my-1">
+          <Col sm={12} md={3} className="my-1">
+            <Form.Label htmlFor="visitante">Visitante</Form.Label>
+            <Form.Check
+              type="radio"
+              label="Sim"
+              checked={visitante}
+              onChange={() => {
+                if (!visitante) setVisitante(true);
+                else setVisitante(false);
+              }}
+            />
+          </Col>
+          <Col sm={12} md={3} className="my-1">
             <ComboBox
               title="Selecione a Congregação"
               list={setores}

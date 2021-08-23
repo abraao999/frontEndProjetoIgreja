@@ -41,6 +41,10 @@ export default createGlobalStyle`
     text-decoration: none;
     color: ${colors.primaryColor};
   }
+  a:hover{
+    text-decoration: none;
+    color: ${colors.primaryLigthColor};
+  }
 
   ul {
     list-style: none;
@@ -62,9 +66,9 @@ export const Container = styled.section`
   padding: 30px;
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  @media(max-width: 800px) {
+  @media (max-width: 800px) {
     max-width: 100%;
     padding: 10px;
-    margin:0
+    margin: 0;
   }
 `;

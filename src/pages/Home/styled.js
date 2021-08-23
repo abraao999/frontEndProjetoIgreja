@@ -24,3 +24,15 @@ export const NovoAluno = styled(Link)`
   display: block;
   padding: 20px 0 10px 0;
 `;
+export const ContainerBox = styled.section`
+  display: flex;
+  background: #fff;
+  padding: 30px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  justify-content: start;
+  align-items: center;
+  span {
+    margin-left: 10px;
+  }
+`;

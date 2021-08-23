@@ -2,52 +2,58 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card } from 'react-bootstrap';
-import * as colors from '../../config/colors';
-import { CancelarButton } from './styled';
+import { Card, ListGroup } from 'react-bootstrap';
+import { AiOutlineSetting } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
+import { Container, ContainerBox, List } from './styled';
 // eslint-disable-next-line react/prop-types
 export default function CardComponent({
-  title,
-  text,
-  handleClose,
-  show,
-  buttonCancel,
-  buttonConfirm,
-  handleFunctionConfirm,
+  corHeader,
+  corList,
+  handleRedirect,
+  list,
 }) {
+  // const valor = 'rgba(180,50,73)';
+  const styleHeader = {
+    backgroundColor: `${corHeader}`,
+    color: 'white',
+    fontSize: 11,
+  };
+  const styleList = {
+    backgroundColor: `${corList}`,
+    color: 'black',
+    fontSize: 11,
+  };
+
   return (
     <>
-      <Card style={{ width: '18rem' }}>
-        <Card.Body>
-          <Card.Title>Card Title</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">
-            Card Subtitle
-          </Card.Subtitle>
-          <Card.Text>
-            Some quick example text to build on the card title and make up the
-            bulk of the content.
-          </Card.Text>
-          <Card.Link href="#">Card Link</Card.Link>
-          <Card.Link href="#">Another Link</Card.Link>
-        </Card.Body>
-      </Card>
+      <ContainerBox>
+        <Link to="/cadMembro">
+          <AiOutlineSetting size={50} />
+          <span>Configuracao</span>
+        </Link>
+      </ContainerBox>
+      {/* <Card bg="primary">
+        <button style={{ background: valor }}>Featured</button>
+
+        <button style={{ background: valor, opacity: '0.1' }}>
+          Cras justo odio
+        </button>
+        <button>Dapibus ac facilisis in</button>
+        <button>Vestibulum at eros</button>
+      </Card> */}
     </>
   );
 }
 
 CardComponent.defaultProps = {
-  title: '',
-  text: '',
-  buttonCancel: '',
-  buttonConfirm: '',
-  show: false,
+  corHeader: '',
+  corList: '',
+  list: [],
 };
 CardComponent.protoTypes = {
-  nome: PropTypes.string,
-  text: PropTypes.string,
-  buttonConfirm: PropTypes.string,
-  buttonCancel: PropTypes.string,
-  show: PropTypes.bool,
-  handleClose: PropTypes.func,
-  handleFunctionConfirm: PropTypes.func,
+  corHeader: PropTypes.string,
+  corList: PropTypes.string,
+  handleRedirect: PropTypes.func,
+  list: PropTypes.array,
 };

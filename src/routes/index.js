@@ -36,6 +36,10 @@ import ListaAniversario from '../pages/ListaAniversario';
 import EditPass from '../pages/EditPass';
 import RelatorioDiario from '../pages/RelatorioDiario';
 import RelatorioCaixaEbd from '../pages/RelatorioCaixaEbd';
+import Configuracoes from '../pages/Configuracoes';
+import Ebd from '../pages/Ebd';
+import Secretaria from '../pages/Secretaria';
+import Tesoraria from '../pages/Tesoraria';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.user.function_id);
@@ -55,6 +59,41 @@ export default function Routes() {
       <MyRoute exact path="/" component={Home} isClosed={false} />
       <MyRoute path="/aluno/:id/edit" component={Aluno} isClosed />
       <MyRoute path="/aluno/" component={Aluno} isClosed />
+      <MyRoute
+        path="/configuracoes/"
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 4 }]}
+        component={Configuracoes}
+        isClosed
+      />
+      <MyRoute
+        path="/ebd/"
+        idFuncao={idFuncao}
+        usuarioPermitido={[
+          { id: 1 },
+          { id: 2 },
+          { id: 5 },
+          { id: 6 },
+          { id: 7 },
+          { id: 8 },
+        ]}
+        component={Ebd}
+        isClosed
+      />
+      <MyRoute
+        path="/secretaria/"
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 4 }]}
+        component={Secretaria}
+        isClosed
+      />
+      <MyRoute
+        path="/tesoraria/"
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        component={Tesoraria}
+        isClosed
+      />
       <MyRoute path="/fotos/:id" component={Fotos} isClosed />
       <MyRoute path="/login/" component={Login} isClosed={false} />
       <MyRoute path="/register/" component={Register} isClosed={false} />

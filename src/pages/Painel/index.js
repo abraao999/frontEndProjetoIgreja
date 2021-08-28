@@ -13,7 +13,7 @@ import Card from '../../components/Card';
 import history from '../../services/history';
 import { ContainerBox } from './styled';
 
-export default function Home() {
+export default function Painel() {
   const [isLoading, setIsLoading] = useState(false);
   const storage = useSelector((state) => state.auth);
   useEffect(() => {

@@ -8,7 +8,7 @@ import Fotos from '../pages/Fotos';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Page404 from '../pages/Page404';
-import Home from '../pages/Home';
+import Painel from '../pages/Painel';
 import Funcao from '../pages/Funcao';
 import Cargo from '../pages/Cargo';
 import Congregacao from '../pages/Congregacao';
@@ -56,7 +56,7 @@ export default function Routes() {
   */
   return (
     <Switch>
-      <MyRoute exact path="/" component={Home} isClosed={false} />
+      <MyRoute exact path="/" component={Painel} isClosed={false} />
       <MyRoute path="/aluno/:id/edit" component={Aluno} isClosed />
       <MyRoute path="/aluno/" component={Aluno} isClosed />
       <MyRoute

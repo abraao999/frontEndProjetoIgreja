@@ -94,6 +94,7 @@ export default function Routes() {
         component={Tesoraria}
         isClosed
       />
+
       <MyRoute path="/fotos/:id" component={Fotos} isClosed />
       <MyRoute path="/login/" component={Login} isClosed={false} />
       <MyRoute path="/register/" component={Register} isClosed={false} />
@@ -205,9 +206,7 @@ export default function Routes() {
       <MyRoute
         path="/detailMembro/:id"
         component={DetailMembro}
-        idFuncao={idFuncao}
-        usuarioPermitido={[{ id: 1 }, { id: 4 }]}
-        isClosed
+        isClosed={false}
       />
       <MyRoute
         path="/relatorioDiario"

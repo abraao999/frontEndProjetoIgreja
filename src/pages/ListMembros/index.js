@@ -225,6 +225,7 @@ export default function ListMembros({ match }) {
                       <FaRegListAlt size={16} />
                     </Link>
                   </td>
+
                   <td>
                     <Link
                       onClick={(e) => {

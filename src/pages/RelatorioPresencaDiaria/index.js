@@ -61,13 +61,13 @@ export default function RelatorioPresencaDiaria({ match }) {
     });
     setHidden(false);
     contadorPresenca(novaLista);
-    setPresencaTotal(list.length);
   };
 
   const contadorPresenca = async (listaPresenca) => {
     // contador de presenca
     const novaLista = [];
     let qtdeVisitante = 0;
+    let contadorPresencaTotal = 0;
     classes.map((classe) => {
       let alunosPresente = 0;
       let qtdeAlunos = 0;
@@ -81,8 +81,12 @@ export default function RelatorioPresencaDiaria({ match }) {
       listaPresenca.map((dado) => {
         if (dado.classeId === classe.id && dado.tipo === 'Aluno') {
           alunosPresente += 1;
+          contadorPresencaTotal += 1;
         }
-        if (dado.tipo === 'Visitante') qtdeVisitante += 1;
+        if (dado.tipo === 'Visitante') {
+          qtdeVisitante += 1;
+          contadorPresencaTotal += 1;
+        }
       });
 
       // renderiza a lista com os dados
@@ -97,6 +101,7 @@ export default function RelatorioPresencaDiaria({ match }) {
     setPresenca(novaLista);
     setIsLoading(false);
     setVisitantes(qtdeVisitante);
+    setPresencaTotal(contadorPresencaTotal);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();

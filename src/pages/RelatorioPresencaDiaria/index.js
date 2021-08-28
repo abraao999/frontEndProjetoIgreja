@@ -86,7 +86,6 @@ export default function RelatorioPresencaDiaria({ match }) {
         }
         if (dado.tipo === 'Visitante') {
           qtdeVisitante += 1;
-          contadorPresencaTotal += 1;
         }
       });
 

@@ -7,8 +7,9 @@ import PropTypes from 'prop-types';
 import { FaSearch } from 'react-icons/fa';
 
 import { useSelector } from 'react-redux';
+import { Col, Form, Row } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
-import { Form, Table, Listagem } from './styled';
+import { Label, Listagem, Table } from './styled';
 import axios from '../../services/axios';
 
 import Loading from '../../components/Loading';
@@ -159,30 +160,34 @@ export default function RelatorioPresencaGeral({ match }) {
       <Loading isLoading={isLoading} />
 
       <Form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="congregacao">
-            Selecione a classe
-            <select onChange={handleGetIdCongregacao} value={classeNome}>
-              <option value="nada">Selecione a classe</option>
-              {classes.map((dado) => (
-                <option key={dado.id} value={dado.descricao}>
-                  {dado.descricao}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label htmlFor="trimestre">
-            Filtrar por trimestre
-            <select onChange={handleIdTrimestre}>
-              <option value="nada">Selecione a trimestre</option>
-              {trimestres.map((dado) => (
-                <option key={dado.id} value={dado.id}>
-                  {dado.descricao}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
+        <Row>
+          <Col sm={12} md={6} className="my-1">
+            <Label htmlFor="congregacao">
+              Selecione a classe
+              <select onChange={handleGetIdCongregacao} value={classeNome}>
+                <option value="nada">Selecione a classe</option>
+                {classes.map((dado) => (
+                  <option key={dado.id} value={dado.descricao}>
+                    {dado.descricao}
+                  </option>
+                ))}
+              </select>
+            </Label>
+          </Col>
+          <Col sm={12} md={6} className="my-1">
+            <Label htmlFor="trimestre">
+              Filtrar por trimestre
+              <select onChange={handleIdTrimestre}>
+                <option value="nada">Selecione a trimestre</option>
+                {trimestres.map((dado) => (
+                  <option key={dado.id} value={dado.id}>
+                    {dado.descricao}
+                  </option>
+                ))}
+              </select>
+            </Label>
+          </Col>
+        </Row>
 
         <button type="submit">
           Filtrar <FaSearch />
@@ -191,7 +196,7 @@ export default function RelatorioPresencaGeral({ match }) {
       <Listagem hidden={hidden}>
         <h3>Relatório de Presença</h3>
         <center>
-          <Table className="table table-striped">
+          <Table responsive striped bordered hover>
             <thead>
               <tr>
                 <th scope="col">Nome da Classe</th>

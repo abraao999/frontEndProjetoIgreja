@@ -8,8 +8,9 @@ import { toast } from 'react-toastify';
 import { FaSearch } from 'react-icons/fa';
 
 import { useSelector } from 'react-redux';
+import { Col, Form, Row, Table } from 'react-bootstrap';
 import { Container } from '../../styles/GlobalStyles';
-import { Form, Table, Listagem } from './styled';
+import { Listagem } from './styled';
 import axios from '../../services/axios';
 import Loading from '../../components/Loading';
 
@@ -138,27 +139,33 @@ export default function RelatorioPresencaDiaria({ match }) {
       <Loading isLoading={isLoading} />
 
       <Form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="dataAula">
-            Data da aula
-            <input
+        <Row>
+          <Col sm={12} md={6} className="my-1">
+            <Form.Label htmlFor="dataAula">Data da aula</Form.Label>
+            <Form.Control
               type="date"
               value={dataAula}
               onChange={(e) => {
                 setDataAula(e.target.value);
               }}
             />
-          </label>
-        </div>
-
-        <button type="submit">
-          Filtrar <FaSearch />
-        </button>
+          </Col>
+          <Col
+            sm={12}
+            md={4}
+            className="my-1"
+            style={{ display: 'flex', alignItems: 'flex-end' }}
+          >
+            <button type="submit">
+              Filtrar <FaSearch />
+            </button>
+          </Col>
+        </Row>
       </Form>
       <Listagem hidden={hidden}>
         <h3>Relatório de Presença</h3>
         <center>
-          <Table className="table table-striped">
+          <Table responsive striped bordered hover>
             <thead>
               <tr>
                 <th scope="col">Nome da Classe</th>

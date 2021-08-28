@@ -35,7 +35,7 @@ export default function Home() {
             <Link to="/ebd">
               <ContainerBox>
                 <MdSchool size={50} />
-                <span>EBD</span>
+                <span>Escola Bíblica Dominical</span>
               </ContainerBox>
             </Link>
           </Col>

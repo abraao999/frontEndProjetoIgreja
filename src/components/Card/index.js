@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Card, ListGroup } from 'react-bootstrap';
 import { AiOutlineSetting } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import { Container, ContainerBox, List } from './styled';
+import { ContainerBox, List } from './styled';
 // eslint-disable-next-line react/prop-types
 export default function CardComponent({
   corHeader,

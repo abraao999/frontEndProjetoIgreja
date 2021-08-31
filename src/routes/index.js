@@ -40,6 +40,7 @@ import Configuracoes from '../pages/Configuracoes';
 import Ebd from '../pages/Ebd';
 import Secretaria from '../pages/Secretaria';
 import Tesoraria from '../pages/Tesoraria';
+import Home from '../pages/Home';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.user.function_id);
@@ -57,6 +58,7 @@ export default function Routes() {
   return (
     <Switch>
       <MyRoute exact path="/" component={Painel} isClosed={false} />
+      <MyRoute exact path="/home" component={Home} isClosed={false} />
       <MyRoute path="/aluno/:id/edit" component={Aluno} isClosed />
       <MyRoute path="/aluno/" component={Aluno} isClosed />
       <MyRoute

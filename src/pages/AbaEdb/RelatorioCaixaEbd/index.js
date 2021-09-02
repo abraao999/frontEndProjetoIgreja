@@ -10,7 +10,6 @@ import { Link } from 'react-router-dom';
 import { Col, Form, Row, Table } from 'react-bootstrap';
 import { AiFillPrinter } from 'react-icons/ai';
 import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Container } from '../../../styles/GlobalStyles';
 import { Header, Label, Listagem } from './styled';
 import axios from '../../../services/axios';
@@ -18,9 +17,7 @@ import Modal from '../../../components/Modal';
 import Loading from '../../../components/Loading';
 import history from '../../../services/history';
 import {
-  formataDataInput,
   getDataDB,
-  getToday,
   fimPrimeiroTrimestre,
   fimQuartoTrimestre,
   fimSegundoTrimestre,
@@ -30,10 +27,10 @@ import {
   inicioSegundoTrimestre,
   inicioTerceiroTrimestre,
   trimestres,
-} from '../../util';
+} from '../../../util';
 // import * as actions from '../../store/modules/auth/actions';
 
-import { Impressao } from '../../printers/impRelatorioDiario';
+import { Impressao } from '../../../printers/impRelatorioDiario';
 
 export default function RelatorioEbd() {
   const [show, setShow] = useState(false);
@@ -45,7 +42,6 @@ export default function RelatorioEbd() {
   const [valorTotal, setValorTotal] = useState(0);
   const [listMovimentacao, setListMovimentacao] = useState([]);
   const [setors, setSetors] = useState([]);
-  const [dataFiltro, setDataFiltro] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [hidden, setHidden] = useState(true);
   const [idTrimestre, setIdTrimestre] = useState(0);

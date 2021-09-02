@@ -105,15 +105,7 @@ export default function DetailMembro({ match }) {
           </Col>
         </Row>
         <Row className="align-items-center">
-          <Col sm={12} md={3} className="my-1">
-            <Form.Label htmlFor="rg">RG:</Form.Label>
-            <Form.Control id="rg" type="text" value={rg} disabled />
-          </Col>
-          <Col sm={12} md={3} className="my-1">
-            <Form.Label htmlFor="rg">CPF:</Form.Label>
-            <Form.Control id="rg" type="text" value={cpf} disabled />
-          </Col>
-          <Col sm={12} md={3} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="dataNascimento">
               Data de Nascimento:
             </Form.Label>
@@ -124,7 +116,7 @@ export default function DetailMembro({ match }) {
               disabled
             />
           </Col>
-          <Col sm={12} md={3} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="dataBatismo">Data de Batismo:</Form.Label>
             <Form.Control
               id="dataBatismo"
@@ -133,23 +125,13 @@ export default function DetailMembro({ match }) {
               disabled
             />
           </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col sm={12} md={3} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="dataBatismo">Celular:</Form.Label>
-
             <Form.Control id="telefone" type="text" value={telefone} disabled />
           </Col>
-          <Col sm={12} md={3} className="my-1">
-            <Form.Label htmlFor="dataBatismo">Celular 2:</Form.Label>
-            <Form.Control
-              id="telefone"
-              type="text"
-              value={telefone2}
-              disabled
-            />
-          </Col>
-          <Col sm={12} md={3} className="my-1">
+        </Row>
+        <Row className="align-items-center">
+          <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="dataBatismo">Estado Civíl:</Form.Label>
             <Form.Control
               id="estadoCivil"
@@ -158,7 +140,7 @@ export default function DetailMembro({ match }) {
               disabled
             />
           </Col>
-          <Col sm={12} md={3} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="cidade">Nome do Cônjuge:</Form.Label>
             <Form.Control
               id="nomeConjuge"
@@ -167,9 +149,7 @@ export default function DetailMembro({ match }) {
               disabled
             />
           </Col>
-        </Row>
-        <Row>
-          <Col sm={12} md={3} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="profissao">Profissão:</Form.Label>
             <Form.Control
               id="profissao"
@@ -178,15 +158,17 @@ export default function DetailMembro({ match }) {
               disabled
             />
           </Col>
-          <Col sm={12} md={3} className="my-1">
+        </Row>
+        <Row>
+          <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="dataBatismo">Congregação:</Form.Label>
             <Form.Control id="telefone" type="text" value={setor} disabled />
           </Col>
-          <Col sm={12} md={3} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="dataBatismo">Cargo:</Form.Label>
             <Form.Control id="cargo" type="text" value={cargo} disabled />
           </Col>
-          <Col sm={12} md={3} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="dataBatismo">Função:</Form.Label>
             <Form.Control
               id="funcao"

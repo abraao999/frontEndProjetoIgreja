@@ -9,7 +9,6 @@ import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Col, Form, Row, Table } from 'react-bootstrap';
 import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { AiFillPrinter } from 'react-icons/ai';
 import { Container } from '../../../styles/GlobalStyles';
 import { Header, Label, Listagem } from './styled';
@@ -29,8 +28,6 @@ export default function RelatorioCaixa() {
   const [investimentoBox, setInvestimentoBox] = useState('');
   const [congregacaoBox, setCongregacaoBox] = useState('');
   const [tipoBox, setTipoBox] = useState('');
-  const [investimento, setInvestimento] = useState('');
-  const [msg, setMsg] = useState(true);
   const [filtro, setFiltro] = useState(false);
   const [filtroDep, setFiltroDep] = useState(false);
   const [filtroInvestimento, setFiltroInvestimento] = useState(false);
@@ -39,7 +36,6 @@ export default function RelatorioCaixa() {
 
   const [valorTotal, setValorTotal] = useState(0);
   const [setores, setSetores] = useState([]);
-  const [setorSeletected, setSetorSeletected] = useState(0);
   const [departamentoSeletected, setDepatamentoSeletected] = useState(0);
   const [congregacaoId, setCongregacaoId] = useState(
     'Selecione uma congregação'
@@ -49,7 +45,6 @@ export default function RelatorioCaixa() {
   );
 
   const [departamentos, setDepartamentos] = useState([]);
-  const [membros, setMembros] = useState([]);
   const [listMovimentacao, setListMovimentacao] = useState([]);
   const [descricao, setDescricao] = useState('');
   const [isLoading, setIsLoading] = useState(false);

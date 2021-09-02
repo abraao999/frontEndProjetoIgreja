@@ -35,18 +35,22 @@ export const ContainerBox = styled.section`
     color: #4d4e53;
   }
 `;
-export const Card = styled.section`
+export const MyCard = styled.div`
   display: flex;
   flex-direction: column;
-
+  padding-top: 5px;
+  @media (min-width: 800px) {
+    img {
+      height: 200px;
+    }
+  }
   div {
     padding-bottom: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 250px;
-    background: red;
-    justify-content: flex-end;
+    justify-content: space-between;
     p {
       text-align: justify;
     }

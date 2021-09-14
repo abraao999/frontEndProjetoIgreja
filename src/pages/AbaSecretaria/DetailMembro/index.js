@@ -14,10 +14,7 @@ export default function DetailMembro({ match }) {
   const id = get(match, 'params.id', '');
 
   const [nomeMembro, setNomeMembro] = useState('');
-  const [rg, setRg] = useState('');
-  const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');
-  const [telefone2, setTelefone2] = useState('');
   const [dataBatismo, setDataBatismo] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [estacoCivil, setEstacoCivil] = useState('');
@@ -42,10 +39,7 @@ export default function DetailMembro({ match }) {
       setIsLoading(true);
       const response = await axios.get(`/membro/${id}`);
       setNomeMembro(response.data.nome);
-      setRg(response.data.rg);
-      setCpf(response.data.cpf);
       setTelefone(response.data.telefone);
-      setTelefone2(response.data.telefone2);
       setEstacoCivil(response.data.estado_civil);
       setProfissao(response.data.profissao);
       setObservacao(response.data.observacao);
@@ -59,12 +53,12 @@ export default function DetailMembro({ match }) {
       setNomeConjuge(response.data.nomeConjuge);
 
       const data = new Date(response.data.data_batismo);
-      const dataFormatada = `${data.getDate()}/${data.getMonth() + 1
+      const dataFormatada = `${data.getDate() + 1}/${data.getMonth() + 1
         }/${data.getFullYear()}`;
       setDataBatismo(dataFormatada);
 
       const data2 = new Date(response.data.data_nascimento);
-      const dataNasicmentoFormatada = `${data2.getDate()}/${data2.getMonth() + 1
+      const dataNasicmentoFormatada = `${data2.getDate() + 1}/${data2.getMonth() + 1
         }/${data2.getFullYear()}`;
       setDataNascimento(dataNasicmentoFormatada);
 

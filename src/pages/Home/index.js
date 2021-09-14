@@ -8,6 +8,7 @@ import Image from 'react-bootstrap/Image';
 import Carrosel from '../../components/Carrosel';
 
 import Loading from '../../components/Loading';
+import Footer from '../../components/Footer';
 import history from '../../services/history';
 import { ContainerBox, Container, MyCard } from './styled';
 
@@ -124,16 +125,8 @@ export default function Home() {
             />
           </Col>
         </Row>
-        {/* <iframe
-          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14926.069631303086!2d-48.9149794!3d-20.7298126!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xef31f10fd1cb582f!2sAssembleia%20de%20Deus%20Min.%20Bel%C3%A9m%20-%20Ol%C3%ADmpia!5e0!3m2!1spt-BR!2sbr!4v1630373912770!5m2!1spt-BR!2sbr"
-          width="600"
-          height="450"
-          title="Localização do templo sede"
-          style={{ border: 0 }}
-          allowFullScreen=""
-          loading="lazy"
-        /> */}
       </Container>
+      <Footer />
     </>
   );
 }

@@ -7,9 +7,9 @@ import PropTypes from 'prop-types';
 import { FaSearch } from 'react-icons/fa';
 
 import { useSelector } from 'react-redux';
-import { Col, Form, Row } from 'react-bootstrap';
+import { Col, Form, Row, Table } from 'react-bootstrap';
 import { Container } from '../../../styles/GlobalStyles';
-import { Label, Listagem, Table } from './styled';
+import { Label, Listagem } from './styled';
 import axios from '../../../services/axios';
 
 import Loading from '../../../components/Loading';

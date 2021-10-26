@@ -71,8 +71,9 @@ export default function RelatorioCaixa() {
     const novaLista = [];
     list.map((dado) => {
       const data = new Date(dado.data_operacao);
-      const dataFormatada = `${data.getDate()}/
-      ${data.getMonth() + 1}/${data.getFullYear()}`;
+      const dataFormatada = `${data.getDate()}/${
+        data.getMonth() + 1
+      }/${data.getFullYear()}`;
       novaLista.push({
         id: dado.id,
         descricao: dado.descricao,
@@ -315,7 +316,7 @@ export default function RelatorioCaixa() {
       novaLista.push({
         id: dado.id,
         descricao: dado.descricao,
-        dataOp: dado.descricao,
+        dataOp: dado.dataOp,
         valor: dado.valor,
         tipo: dado.tipo ? 'Entrada' : 'Saída',
         investimento: dado.investimento ? 'Investimento' : 'Despesa',

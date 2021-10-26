@@ -106,14 +106,14 @@ export class Impressao {
               [
                 [
                   {
-                    text: `Página ${currentPage.toString()} de ${pageCount} valor total${valor}`,
+                    text: `Página ${currentPage.toString()} de ${pageCount} `,
                     fontSize: 7,
                     alignment: 'right',
                     /* horizontal, vertical */
                     margin: [3, 0],
                   },
                   {
-                    text: '© Lojinha de TI',
+                    text: 'Assinatura dos conferentes',
                     fontSize: 7,
                     alignment: 'center',
                   },

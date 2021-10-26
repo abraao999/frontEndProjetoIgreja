@@ -41,6 +41,8 @@ import Ebd from '../pages/AbaEdb/Ebd';
 import Secretaria from '../pages/AbaSecretaria/Secretaria';
 import Tesoraria from '../pages/AbaCaixa/Tesoraria';
 import Home from '../pages/Home';
+import NovoVisitante from '../pages/AbaCulto/NovoVisitante';
+import ListaVisitantes from '../pages/AbaCulto/ListaVisitantes';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.user.function_id);
@@ -59,6 +61,18 @@ export default function Routes() {
     <Switch>
       <MyRoute exact path="/" component={Painel} isClosed={false} />
       <MyRoute exact path="/home" component={Home} isClosed={false} />
+      <MyRoute
+        exact
+        path="/novoVisitante"
+        component={NovoVisitante}
+        isClosed={false}
+      />
+      <MyRoute
+        exact
+        path="/listaVisitantes"
+        component={ListaVisitantes}
+        isClosed={false}
+      />
       <MyRoute path="/aluno/:id/edit" component={Aluno} isClosed />
       <MyRoute path="/aluno/" component={Aluno} isClosed />
       <MyRoute

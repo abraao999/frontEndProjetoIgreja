@@ -30,19 +30,31 @@ export const listMeses = [
 ];
 export const getToday = () => {
   let dataAtual = new Date();
-  dataAtual = `${dataAtual.getDate()}/${dataAtual.getMonth() + 1
-    }/${dataAtual.getFullYear()}`;
+  dataAtual = `${dataAtual.getDate()}/${
+    dataAtual.getMonth() + 1
+  }/${dataAtual.getFullYear()}`;
   return dataAtual;
 };
 export const getDataDB = (valor) => {
-  valor = `${valor.getDate() + 1}/${valor.getMonth() + 1
-    }/${valor.getFullYear()}`;
+  valor = `${valor.getDate() + 1}/${
+    valor.getMonth() + 1
+  }/${valor.getFullYear()}`;
+  return valor;
+};
+export const getDataBanco = (valor) => {
+  valor = `${valor.getDate()}/${valor.getMonth() + 1}/${valor.getFullYear()}`;
   return valor;
 };
 export const formataDataInput = (valor) => {
   valor = new Date(valor);
-  valor = `${valor.getDate() + 1}/${valor.getMonth() + 1
-    }/${valor.getFullYear()}`;
+  valor = `${valor.getDate() + 1}/${
+    valor.getMonth() + 1
+  }/${valor.getFullYear()}`;
+  return valor;
+};
+export const formataDataInputInverso = (valor) => {
+  valor = new Date(valor);
+  valor = `${valor.getFullYear()}-${valor.getMonth() + 1}-${valor.getDate()}`;
   return valor;
 };
 export const getMes = (valor) => {

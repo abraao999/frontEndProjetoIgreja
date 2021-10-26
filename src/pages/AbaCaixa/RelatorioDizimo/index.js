@@ -15,6 +15,12 @@ import Modal from '../../../components/Modal';
 import Loading from '../../../components/Loading';
 import history from '../../../services/history';
 import ModalMembro from '../../../components/ModalMembro';
+import {
+  formataDataInput,
+  formataDataInputInverso,
+  getDataBanco,
+  getDataDB,
+} from '../../../util';
 
 export default function RelatorioDizimo() {
   const [show, setShow] = useState(false);
@@ -37,8 +43,9 @@ export default function RelatorioDizimo() {
     const novaLista = [];
     list.map((dado) => {
       const data = new Date(dado.data_operacao);
-      const dataFormatada = `${data.getDate()}/${data.getMonth() + 1
-        }/${data.getFullYear()}`;
+      const dataFormatada = `${data.getDate() + 1}/${
+        data.getMonth() + 1
+      }/${data.getFullYear()}`;
       novaLista.push({
         id: dado.id,
         nomeMembro: nomeMembro || dado.nome,
@@ -53,12 +60,21 @@ export default function RelatorioDizimo() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    const list = [];
+    const di = formataDataInput(dataInicial);
+    const df = formataDataInput(dataFinal);
     if (idMembro && dataInicial && dataFinal) {
-      axios
-        .get(`/dizimo/${idMembro}/${dataInicial}/${dataFinal}`)
-        .then((dado) => {
-          renderizaLista(dado.data);
+      axios.get(`/dizimo/pesquisaData/${idMembro}`).then((dado) => {
+        dado.data.map((valor) => {
+          if (
+            getDataDB(new Date(valor.data_operacao)) >= di &&
+            getDataDB(new Date(valor.data_operacao)) <= df
+          ) {
+            list.push(valor);
+          }
         });
+        renderizaLista(list);
+      });
     } else {
       toast.error('Selecione todos os campos para filtrar');
       setIsLoading(false);

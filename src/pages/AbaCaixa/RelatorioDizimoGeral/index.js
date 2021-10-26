@@ -17,7 +17,7 @@ import Modal from '../../../components/Modal';
 import Loading from '../../../components/Loading';
 import history from '../../../services/history';
 import { Impressao } from '../../../printers/impRelatorioDizimoGeral';
-import { getMes } from '../../../util';
+import { formataDataInput, getDataDB, getMes } from '../../../util';
 
 export default function RelatorioDizimoGeral() {
   const [show, setShow] = useState(false);
@@ -62,8 +62,9 @@ export default function RelatorioDizimoGeral() {
     const novaLista = [];
     list.map((dado) => {
       const data = new Date(dado.data_operacao);
-      const dataFormatada = `${data.getDate()}/${data.getMonth() + 1
-        }/${data.getFullYear()}`;
+      const dataFormatada = `${data.getDate() + 1}/${
+        data.getMonth() + 1
+      }/${data.getFullYear()}`;
       if (data.getMonth() === mes) {
         novaLista.push({
           id: dado.id,
@@ -90,13 +91,15 @@ export default function RelatorioDizimoGeral() {
     e.preventDefault();
     setIsLoading(true);
     const novaList = [];
+    const di = formataDataInput(dataInicial);
+    const df = formataDataInput(dataFinal);
     if (dataInicial && dataFinal) {
       axios.get(`/dizimo`).then((dados) => {
         dados.data.map((dado) => {
           console.log(setorSeletected);
           if (
-            dado.data_operacao >= dataInicial &&
-            dado.data_operacao <= dataFinal &&
+            getDataDB(new Date(dado.data_operacao)) >= di &&
+            getDataDB(new Date(dado.data_operacao)) <= df &&
             dado.setorDesc === congregacaoId
           ) {
             novaList.push(dado);
@@ -168,7 +171,7 @@ export default function RelatorioDizimoGeral() {
           <AiFillPrinter size={35} />
         </button>
       </Header>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Row>
           <Col sm={12} md={4} className="my-1">
             <Label htmlFor="congregacao">

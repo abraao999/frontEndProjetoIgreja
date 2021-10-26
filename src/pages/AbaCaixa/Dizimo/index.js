@@ -12,6 +12,7 @@ import Loading from '../../../components/Loading';
 import history from '../../../services/history';
 import * as actions from '../../../store/modules/auth/actions';
 import ModalMembro from '../../../components/ModalMembro';
+import { formataDataInput, formataDataInputInverso } from '../../../util';
 
 // import * as actions from '../../store/modules/auth/actions';
 
@@ -64,6 +65,7 @@ export default function Dizimo({ match }) {
           valor,
           data_operacao: dataMovimentacao,
         });
+        console.log(response);
         setNomeMembro('');
         setValor('');
         setIdMembro('');

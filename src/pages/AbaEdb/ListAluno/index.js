@@ -56,7 +56,7 @@ export default function ListAluno({ match }) {
             listaAluno.push(valor);
           }
         });
-
+        console.log(listaAluno);
         setAluno(listaAluno);
       });
       setIsLoading(false);

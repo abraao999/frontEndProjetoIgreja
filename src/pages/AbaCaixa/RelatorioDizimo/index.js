@@ -14,20 +14,21 @@ import {
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Col, Form, Row, Table } from 'react-bootstrap';
+import { AiFillPrinter } from 'react-icons/ai';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Container } from '../../../styles/GlobalStyles';
-import { Label, Listagem } from './styled';
+import { Header, Label, Listagem } from './styled';
 import axios from '../../../services/axios';
 import Modal from '../../../components/Modal';
 import Loading from '../../../components/Loading';
 import history from '../../../services/history';
 import ModalMembro from '../../../components/ModalMembro';
-import {
-  formataDataInput,
-  formataDataInputInverso,
-  getDataBanco,
-  getDataDB,
-  listMeses,
-} from '../../../util';
+import { listMeses } from '../../../util';
+
+import { Impressao } from '../../../printers/impRelatorioDizimoIndividual';
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export default function RelatorioDizimo() {
   const [show, setShow] = useState(false);
@@ -163,9 +164,21 @@ export default function RelatorioDizimo() {
     const valor = String(e.target.value);
     console.log(valor);
   };
+  const visualizarImpressao = async () => {
+    const novaLista = [];
+    listMovimentacao.map((dado) => {
+      novaLista.push({
+        nome: dado.descricao,
+        mesEntrege: dado.mesEncontrado ? 'Entregue' : 'Não Entregue',
+        nada: dado.mesEncontrado ? 'Entregue' : 'Não Entregue',
+      });
+    });
+    const classeImpressao = new Impressao(novaLista);
+    const documento = await classeImpressao.PreparaDocumento();
+    pdfMake.createPdf(documento).open({}, window.open('', '_blank'));
+  };
   return (
     <Container>
-      <h1>Relatório de dízimo</h1>
       <Loading isLoading={isLoading} />
       <ModalMembro
         title="Selecione o membro"
@@ -184,7 +197,12 @@ export default function RelatorioDizimo() {
         buttonConfirm="Sim"
         handleFunctionConfirm={handleFunctionConfirm}
       />
-
+      <Header>
+        <h2>Relatório de dízimo</h2>
+        <button type="button" onClick={visualizarImpressao}>
+          <AiFillPrinter size={35} />
+        </button>
+      </Header>
       <Form onSubmit={handleSubmit}>
         <Row>
           <Col sm={12} md={2} className="my-1">

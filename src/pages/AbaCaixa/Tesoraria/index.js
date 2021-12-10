@@ -84,6 +84,14 @@ export default function Tesoraria() {
         </Row>
         <Row>
           <Col sm={6} md={4} className="my-1">
+            <Link to="/relatorioDizimo">
+              <ContainerBox>
+                <FaCalculator size={50} />
+                <span>Relatório de Dízimo por membro</span>
+              </ContainerBox>
+            </Link>
+          </Col>
+          <Col sm={6} md={4} className="my-1">
             <Link to="/relatorioDizimoGeral">
               <ContainerBox>
                 <FaCalculator size={50} />
@@ -97,7 +105,7 @@ export default function Tesoraria() {
             <Link to="/">
               <ContainerBox>
                 <MdArrowBack size={50} />
-                <span>Relatório de Dízimo</span>
+                <span>Voltar</span>
               </ContainerBox>
             </Link>
           </Col>

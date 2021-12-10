@@ -3,13 +3,19 @@
 import React, { useState } from 'react';
 
 import { toast } from 'react-toastify';
-import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
+import {
+  FaEdit,
+  FaWindowClose,
+  FaSearch,
+  FaCheck,
+  FaCcJcb,
+} from 'react-icons/fa';
 
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Col, Form, Row, Table } from 'react-bootstrap';
 import { Container } from '../../../styles/GlobalStyles';
-import { Listagem } from './styled';
+import { Label, Listagem } from './styled';
 import axios from '../../../services/axios';
 import Modal from '../../../components/Modal';
 import Loading from '../../../components/Loading';
@@ -20,6 +26,7 @@ import {
   formataDataInputInverso,
   getDataBanco,
   getDataDB,
+  listMeses,
 } from '../../../util';
 
 export default function RelatorioDizimo() {
@@ -32,25 +39,28 @@ export default function RelatorioDizimo() {
   const [idMembro, setIdMembro] = useState('');
   const [nomeMembro, setNomeMembro] = useState('');
 
-  const [dataInicial, setDataInicial] = useState('');
-  const [dataFinal, setDataFinal] = useState('');
-
   const [membros, setMembros] = useState([]);
   const [listMovimentacao, setListMovimentacao] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [hidden, setHidden] = useState(true);
+  const [ano, setAno] = useState('2021');
 
   const renderizaLista = (list) => {
     const novaLista = [];
-    list.map((dado) => {
-      const data = new Date(dado.data_operacao);
-      const dataFormatada = `${data.getDate() + 1}/${
-        data.getMonth() + 1
-      }/${data.getFullYear()}`;
+    listMeses.map((mes) => {
+      let mesEncontrado = false;
+
+      list.map((membro) => {
+        const data = new Date(membro.data_operacao);
+
+        if (data.getMonth() === mes.id) {
+          mesEncontrado = true;
+        }
+      });
       novaLista.push({
-        id: dado.id,
-        nomeMembro: nomeMembro || dado.nome,
-        dataOp: dataFormatada,
-        valor: dado.valor,
+        id: mes.id,
+        mesEncontrado,
+        descricao: mes.descricao,
       });
     });
     setIsLoading(false);
@@ -61,20 +71,18 @@ export default function RelatorioDizimo() {
     e.preventDefault();
     setIsLoading(true);
     const list = [];
-    const di = formataDataInput(dataInicial);
-    const df = formataDataInput(dataFinal);
-    if (idMembro && dataInicial && dataFinal) {
+    if (idMembro) {
       axios.get(`/dizimo/pesquisaData/${idMembro}`).then((dado) => {
         dado.data.map((valor) => {
-          if (
-            getDataDB(new Date(valor.data_operacao)) >= di &&
-            getDataDB(new Date(valor.data_operacao)) <= df
-          ) {
+          let getAno = new Date(valor.data_operacao);
+          getAno = `${getAno.getFullYear()}`;
+          if (getAno === ano) {
             list.push(valor);
           }
         });
         renderizaLista(list);
       });
+      setHidden(false);
     } else {
       toast.error('Selecione todos os campos para filtrar');
       setIsLoading(false);
@@ -151,6 +159,10 @@ export default function RelatorioDizimo() {
       console.log(e);
     }
   };
+  const handleAno = async (e) => {
+    const valor = String(e.target.value);
+    console.log(valor);
+  };
   return (
     <Container>
       <h1>Relatório de dízimo</h1>
@@ -189,7 +201,7 @@ export default function RelatorioDizimo() {
               value={idMembro}
             />
           </Col>
-          <Col sm={12} md={4} className="my-1">
+          <Col sm={12} md={8} className="my-1">
             <Form.Label htmlFor="descricao">Nome do Membro</Form.Label>
             <Form.Control
               id="input"
@@ -205,25 +217,15 @@ export default function RelatorioDizimo() {
               placeholder="Nome"
             />
           </Col>
-          <Col sm={12} md={3} className="my-1">
-            <Form.Label htmlFor="dataInicial">Data Inicial</Form.Label>
-            <Form.Control
-              type="date"
-              value={dataInicial}
-              onChange={(e) => {
-                setDataInicial(e.target.value);
-              }}
-            />
-          </Col>
-          <Col sm={12} md={3} className="my-1">
-            <Form.Label htmlFor="dataInicial">Data Final</Form.Label>
-            <Form.Control
-              type="date"
-              value={dataFinal}
-              onChange={(e) => {
-                setDataFinal(e.target.value);
-              }}
-            />
+          <Col sm={12} md={2} className="my-1">
+            <Label htmlFor="departamento">
+              Ano
+              <select onChange={handleAno}>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+              </select>
+            </Label>
           </Col>
         </Row>
 
@@ -233,46 +235,26 @@ export default function RelatorioDizimo() {
           </button>
         </Row>
       </Form>
-      <Listagem>
+      <Listagem hidden={hidden}>
         <h3>Relatório de dizimo</h3>
         <center>
           <Table responsive striped bordered hover>
             <thead>
               <tr>
-                <th scope="col">R.F</th>
-                <th scope="col">Data</th>
-                <th scope="col">Nome do Membro</th>
-                <th scope="col">Valor</th>
-                <th scope="col">Editar</th>
-                <th scope="col">Excluir</th>
+                <th scope="col">Nome do mês</th>
+                <th scope="col">Status</th>
               </tr>
             </thead>
             <tbody>
-              {listMovimentacao.map((dado, index) => (
+              {listMovimentacao.map((dado) => (
                 <tr key={String(dado.id)}>
-                  <td>{dado.id}</td>
-                  <td>{dado.dataOp}</td>
-                  <td>{dado.nomeMembro}</td>
-                  <td>{dado.valor}</td>
-
+                  <td>{dado.descricao}</td>
                   <td>
-                    <Link
-                      onClick={(e) => {
-                        e.preventDefault();
-                        history.push(`/dizimo/${dado.id}/edit`);
-                      }}
-                      to={`/dizimo/${dado.id}/edit`}
-                    >
-                      <FaEdit size={16} />
-                    </Link>
-                  </td>
-                  <td>
-                    <Link
-                      onClick={() => handleShow(dado.id, index)}
-                      to="/relatorioDizimo"
-                    >
-                      <FaWindowClose size={16} />
-                    </Link>
+                    {dado.mesEncontrado ? (
+                      <FaCheck size={12} />
+                    ) : (
+                      <FaWindowClose size={12} color="red" />
+                    )}
                   </td>
                 </tr>
               ))}

@@ -105,7 +105,7 @@ export default function Header() {
               <Dropdown nome="CONFIGURAÇÕES" opcoes={configuracoes} />
             )}
             {isLoggedIn && <Dropdown nome="SECRETARIA" opcoes={secretaria} />}
-            {isLoggedIn && <Dropdown nome="CAIXA" opcoes={caixa} />}
+            {isLoggedIn && <Dropdown nome="TESOURARIA" opcoes={caixa} />}
             {isLoggedIn && <Dropdown nome="EBD" opcoes={ebd} />}
             {!isLoggedIn && <Nav.Link href="/contato">FALE CONOSCO</Nav.Link>}
           </Nav>

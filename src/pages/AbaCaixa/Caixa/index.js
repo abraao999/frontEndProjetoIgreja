@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -5,7 +6,8 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { get } from 'lodash';
-import { Col, Form, Row } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
+import { FaCheck, FaPlus } from 'react-icons/fa';
 import { Container } from '../../../styles/GlobalStyles';
 import axios from '../../../services/axios';
 import ComboBox from '../../../components/ComboBox';
@@ -13,6 +15,7 @@ import Loading from '../../../components/Loading';
 import history from '../../../services/history';
 import * as actions from '../../../store/modules/auth/actions';
 import { Label } from './styled';
+import ModalAddDescLancamento from '../../../components/ModalAddDescLancamento';
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function Caixa({ match }) {
@@ -22,12 +25,15 @@ export default function Caixa({ match }) {
   const [maxId, setMaxId] = useState(0);
 
   const [setorId, setSetorId] = useState('');
+  const [descricaoId, setDescricaoId] = useState('');
   const [setor, setSetor] = useState('');
+  const [descricaoLan, setDescricaoLan] = useState('');
   const [setores, setSetores] = useState([]);
   const [setorSeletected, setSetorSeletected] = useState(0);
   const [comboBoxCongregacao, setComboBoxCongregacao] = useState(
     'Selecione uma congregação'
   );
+  const [show, setShow] = useState(false);
 
   const [tipoMovimentacaoBox, setTipoMovimentacaoBox] = useState('');
   const [tipoMovimentacao, setTipoMovimentacao] = useState();
@@ -39,12 +45,14 @@ export default function Caixa({ match }) {
   const [departmanetoId, setDepartamentoId] = useState('');
   const [departamento, setDepartamento] = useState('');
   const [departamentos, setDepartamentos] = useState([]);
+  const [listDescricaoLancamento, setListDescricaoLancamento] = useState([]);
   const [descricao, setDescricao] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
+      buscaDescricao();
       if (!id) {
         try {
           const dado = await axios.get('/caixa/maxId');
@@ -70,21 +78,20 @@ export default function Caixa({ match }) {
     }
     getData();
   }, []);
+  const buscaDescricao = async () => {
+    const dado = await axios.get(`/descCaixa/`);
+    setListDescricaoLancamento(dado.data);
+  };
   async function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
-    let formErrors = false;
+    const formErrors = false;
 
-    if (descricao.length < 3 || descricao.length > 255) {
-      formErrors = true;
-      setIsLoading(false);
-      toast.error('Preencha todos os campos');
-    }
     if (formErrors) return;
     try {
       if (!id) {
         const response = await axios.post('/caixa', {
-          descricao,
+          descricaoId,
           valor,
           tipo: tipoMovimentacao,
           investimento,
@@ -100,7 +107,7 @@ export default function Caixa({ match }) {
         setIsLoading(false);
       } else {
         const response = await axios.put(`/caixa/${id}`, {
-          descricao,
+          descricaoId,
           valor,
           tipo: tipoMovimentacao,
           investimento,
@@ -128,7 +135,6 @@ export default function Caixa({ match }) {
       setIsLoading(false);
     }
   }
-
   const handleTipoMovimentacao = (e) => {
     const nome = e.target.value;
     setTipoMovimentacaoBox(e.target.value);
@@ -148,6 +154,13 @@ export default function Caixa({ match }) {
     setSetor(e.target.value);
     setores.map((dado) => {
       if (nome === dado.descricao) setSetorId(dado.id);
+    });
+  };
+  const handleGetIdDescricaoLancamento = (e) => {
+    const nome = e.target.value;
+    setDescricaoLan(e.target.value);
+    listDescricaoLancamento.map((dado) => {
+      if (nome === dado.descricao) setDescricaoId(dado.id);
     });
   };
   const handleGetIdDepartamento = (e) => {
@@ -170,14 +183,50 @@ export default function Caixa({ match }) {
       next.removeAttribute('style');
     }
   };
+  const handleClose = () => {
+    setShow(false);
+  };
+  const handleShow = () => {
+    setShow(true);
+  };
+  const onChangeDesc = (e) => {
+    setDescricao(e.target.value);
+  };
+  const handleFunctionConfirm = async () => {
+    console.log(descricao);
+    try {
+      setIsLoading(true);
+      const response = await axios.post('/descCaixa', {
+        descricao,
+      });
+      toast.success('Descrição criada com sucesso');
+      setShow(false);
+      buscaDescricao();
+      setIsLoading(false);
+    } catch (error) {
+      const status = get(error, 'response.data.status', 0);
+      if (status === 401) {
+        toast.error('Voce precisa fazer loggin');
+      } else {
+        toast.error('Erro ao excluir a membro');
+      }
+      setIsLoading(false);
+    }
+  };
   return (
     <Container>
       <h1>Caixa</h1>
       <Loading isLoading={isLoading} />
-
+      <ModalAddDescLancamento
+        handleClose={handleClose}
+        show={show}
+        descricao={descricao}
+        onChangeDesc={onChangeDesc}
+        handleFunctionConfirm={handleFunctionConfirm}
+      />
       <Form onSubmit={handleSubmit}>
         <Row>
-          <Col sm={12} md={4} className="my-1">
+          <Col sm={12} md={2} className="my-1">
             <Form.Label htmlFor="id">R.F.:</Form.Label>
             {id ? (
               <Form.Control id="id" type="text" value={id} disabled />
@@ -185,21 +234,23 @@ export default function Caixa({ match }) {
               <Form.Control id="maxId" type="text" value={maxId} disabled />
             )}
           </Col>
-          <Col sm={12} md={4} className="my-1">
-            <Form.Label htmlFor="descricao">Descrição</Form.Label>
-            <Form.Control
-              id="input"
-              type="text"
-              value={descricao}
-              onChange={(e) => {
-                setDescricao(e.target.value.toLocaleUpperCase());
-              }}
-              placeholder="Descricao"
-              required
+          <Col sm={10} md={5} className="my-1">
+            <ComboBox
+              title="Escolha uma descrição"
+              list={listDescricaoLancamento}
+              value={descricaoLan}
+              onChange={handleGetIdDescricaoLancamento}
             />
-            <Form.Control.Feedback type="invalid">
-              Minimo de 3 caracteres
-            </Form.Control.Feedback>
+          </Col>
+          <Col
+            sm={2}
+            md={1}
+            className="my-1"
+            style={{ display: 'flex', alignItems: 'flex-end' }}
+          >
+            <button type="button" onClick={handleShow}>
+              <FaPlus size={12} />
+            </button>
           </Col>
           <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="valor">Valor</Form.Label>

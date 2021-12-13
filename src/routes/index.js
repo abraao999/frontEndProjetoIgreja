@@ -56,6 +56,7 @@ export default function Routes() {
     6 - Tesoureiro EBD
     7 -  Professor
     8 - Coordenador Congregacao
+    9 - Tesoureiro Congregacao
   */
   return (
     <Switch>
@@ -228,21 +229,21 @@ export default function Routes() {
         path="/relatorioDiario"
         component={RelatorioDiario}
         idFuncao={idFuncao}
-        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 9 }]}
         isClosed
       />
       <MyRoute
         path="/caixa/:id/edit"
         component={Caixa}
         idFuncao={idFuncao}
-        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 9 }]}
         isClosed
       />
       <MyRoute
         path="/caixa/"
         component={Caixa}
         idFuncao={idFuncao}
-        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 9 }]}
         isClosed
       />
       <MyRoute
@@ -302,28 +303,28 @@ export default function Routes() {
         path="/dizimo/:id/edit"
         component={Dizimo}
         idFuncao={idFuncao}
-        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 9 }]}
         isClosed
       />
       <MyRoute
         path="/dizimo/"
         component={Dizimo}
         idFuncao={idFuncao}
-        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 9 }]}
         isClosed
       />
       <MyRoute
         path="/relatorioCaixa/"
         component={RelatorioCaixa}
         idFuncao={idFuncao}
-        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 9 }]}
         isClosed
       />
       <MyRoute
         path="/relatorioDizimo/"
         component={RelatorioDizimo}
         idFuncao={idFuncao}
-        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 9 }]}
         isClosed
       />
       <MyRoute

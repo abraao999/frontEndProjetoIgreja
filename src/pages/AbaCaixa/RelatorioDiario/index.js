@@ -11,6 +11,7 @@ import { Col, Form, Row, Table } from 'react-bootstrap';
 import { AiFillPrinter } from 'react-icons/ai';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { useSelector } from 'react-redux';
 import { Container } from '../../../styles/GlobalStyles';
 import { Header, Label, Listagem } from './styled';
 import axios from '../../../services/axios';
@@ -28,28 +29,36 @@ import {
 import { Impressao } from '../../../printers/impRelatorioDiario';
 
 export default function RelatorioDiario() {
+  const dataUser = useSelector((state) => state.auth.user);
+
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
-
-  const [filtro, setFiltro] = useState(false);
 
   const [valorTotal, setValorTotal] = useState(0);
   const [listMovimentacao, setListMovimentacao] = useState([]);
   const [dataFiltro, setDataFiltro] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const [hidden, setHidden] = useState(true);
+
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
+      let auxAutorizado = false;
+      if (dataUser.function_id === 1 || dataUser === 3) {
+        setHidden(false);
+        auxAutorizado = true;
+      }
 
       const novaList = [];
       axios.get('/caixa').then(async (dado) => {
         dado.data.map((valor) => {
           const dataOperacao = new Date(valor.created_at);
-
           if (getDataBanco(dataOperacao) === getToday()) {
-            novaList.push(valor);
+            if (dataUser.setor_id === valor.setor_id || auxAutorizado) {
+              novaList.push(valor);
+            }
           }
         });
         setListMovimentacao(novaList);
@@ -88,17 +97,6 @@ export default function RelatorioDiario() {
       }
     });
     setListMovimentacao(novaLista);
-    setValorTotal(novoValor);
-  };
-  const calculaValor = (list) => {
-    let novoValor = 0;
-    list.map((dado) => {
-      if (dado.tipo) {
-        novoValor += dado.valor;
-      } else {
-        novoValor -= dado.valor;
-      }
-    });
     setValorTotal(novoValor);
   };
   async function handleSubmit(e) {
@@ -189,7 +187,7 @@ export default function RelatorioDiario() {
       </Header>
       <Form onSubmit={handleSubmit}>
         <Row>
-          {/* <Col sm={12} md={4} className="my-1">
+          <Col sm={12} md={4} className="my-1" hidden={hidden}>
             <Form.Label htmlFor="descricao">Data Movimentação:</Form.Label>
             <Form.Control
               id="input"
@@ -200,23 +198,17 @@ export default function RelatorioDiario() {
               }}
               placeholder="Nome para filtro"
             />
-          </Col> */}
+          </Col>
           <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="valor">Valor:</Form.Label>
             <Form.Control id="input" type="text" value={valorTotal} disabled />
           </Col>
         </Row>
-        {/* <Row>
-          {filtro ? (
-            <button type="submit">
-              Limpar Filtro <FaSearch />
-            </button>
-          ) : (
-            <button type="submit">
-              Filtrar <FaSearch />
-            </button>
-          )}
-        </Row> */}
+        <Row hidden={hidden}>
+          <button type="submit">
+            Buscar <FaSearch />
+          </button>
+        </Row>
       </Form>
       <Listagem>
         <h3>Relatório de Movimentação</h3>

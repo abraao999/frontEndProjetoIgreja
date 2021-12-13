@@ -11,6 +11,7 @@ import { Col, Form, Row, Table } from 'react-bootstrap';
 import pdfMake from 'pdfmake/build/pdfmake';
 import { AiFillPrinter } from 'react-icons/ai';
 
+import { useSelector } from 'react-redux';
 import { Container } from '../../../styles/GlobalStyles';
 import { Header, Label, Listagem } from './styled';
 import axios from '../../../services/axios';
@@ -21,6 +22,8 @@ import history from '../../../services/history';
 import { Impressao } from '../../../printers/impRelatorioDiario';
 
 export default function RelatorioCaixa() {
+  const dataUser = useSelector((state) => state.auth.user);
+
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
@@ -53,19 +56,31 @@ export default function RelatorioCaixa() {
   const [descricao, setDescricao] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const [hidden, setHidden] = useState(true);
+
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
+      let auxAutorizado = false;
+      if (dataUser.function_id === 1 || dataUser === 3) {
+        setHidden(false);
+        auxAutorizado = true;
+      }
       const response = await axios.get('/setor');
       setSetores(response.data);
       const response2 = await axios.get('/departamento');
       setDepartamentos(response2.data);
       const response3 = await axios.get('/descCaixa');
       setListDescricao(response3.data);
-
+      const listaFiltrada = [];
       axios.get('/caixa').then(async (dado) => {
-        setListMovimentacao(dado.data);
-        renderizaLista(dado.data);
+        dado.data.map((item) => {
+          if (dataUser.setor_id === item.setor_id || auxAutorizado) {
+            listaFiltrada.push(item);
+          }
+        });
+        setListMovimentacao(listaFiltrada);
+        renderizaLista(listaFiltrada);
       });
       setIsLoading(false);
     }
@@ -434,7 +449,11 @@ export default function RelatorioCaixa() {
           <Col sm={12} md={4} className="my-1">
             <Label htmlFor="congregacao">
               Filtrar por congregação
-              <select onChange={handleCongregacao} value={congregacaoBox}>
+              <select
+                onChange={handleCongregacao}
+                value={congregacaoBox}
+                disabled={hidden}
+              >
                 <option value="nada">Selecione a congregação</option>
                 {setores.map((dado) => (
                   <option key={dado.id} value={dado.descricao}>

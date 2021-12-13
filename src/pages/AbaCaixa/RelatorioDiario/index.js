@@ -124,7 +124,7 @@ export default function RelatorioDiario() {
         id: dado.id,
         descricao: dado.descricao,
         nNota: dado.nNota,
-        dataOp: dado.descricao,
+        dataOp: dado.dataOp,
         valor: dado.valor,
         tipo: dado.tipo ? 'Entrada' : 'Saída',
         investimento: dado.investimento ? 'Investimento' : 'Despesa',

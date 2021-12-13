@@ -17,7 +17,12 @@ import axios from '../../../services/axios';
 import Modal from '../../../components/Modal';
 import Loading from '../../../components/Loading';
 import history from '../../../services/history';
-import { formataDataInput, getDataDB, getToday } from '../../../util';
+import {
+  formataDataInput,
+  getDataBanco,
+  getDataDB,
+  getToday,
+} from '../../../util';
 // import * as actions from '../../store/modules/auth/actions';
 
 import { Impressao } from '../../../printers/impRelatorioDiario';
@@ -41,9 +46,9 @@ export default function RelatorioDiario() {
       const novaList = [];
       axios.get('/caixa').then(async (dado) => {
         dado.data.map((valor) => {
-          const dataOperacao = new Date(valor.data_operacao);
+          const dataOperacao = new Date(valor.created_at);
 
-          if (getDataDB(dataOperacao) === getToday()) {
+          if (getDataBanco(dataOperacao) === getToday()) {
             novaList.push(valor);
           }
         });
@@ -60,11 +65,13 @@ export default function RelatorioDiario() {
     const novaLista = [];
     list.map((dado) => {
       const data = new Date(dado.data_operacao);
-      const dataFormatada = `${data.getDate() + 1}/${data.getMonth() + 1
-        }/${data.getFullYear()}`;
+      const dataFormatada = `${data.getDate() + 1}/${
+        data.getMonth() + 1
+      }/${data.getFullYear()}`;
       novaLista.push({
         id: dado.id,
         descricao: dado.descricao,
+        nNota: dado.n_nota,
         dataOp: dataFormatada,
         valor: dado.valor,
         tipo: dado.tipo,
@@ -118,6 +125,7 @@ export default function RelatorioDiario() {
       novaLista.push({
         id: dado.id,
         descricao: dado.descricao,
+        nNota: dado.nNota,
         dataOp: dado.descricao,
         valor: dado.valor,
         tipo: dado.tipo ? 'Entrada' : 'Saída',
@@ -181,7 +189,7 @@ export default function RelatorioDiario() {
       </Header>
       <Form onSubmit={handleSubmit}>
         <Row>
-          <Col sm={12} md={4} className="my-1">
+          {/* <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="descricao">Data Movimentação:</Form.Label>
             <Form.Control
               id="input"
@@ -192,13 +200,13 @@ export default function RelatorioDiario() {
               }}
               placeholder="Nome para filtro"
             />
-          </Col>
+          </Col> */}
           <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="valor">Valor:</Form.Label>
             <Form.Control id="input" type="text" value={valorTotal} disabled />
           </Col>
         </Row>
-        <Row>
+        {/* <Row>
           {filtro ? (
             <button type="submit">
               Limpar Filtro <FaSearch />
@@ -208,7 +216,7 @@ export default function RelatorioDiario() {
               Filtrar <FaSearch />
             </button>
           )}
-        </Row>
+        </Row> */}
       </Form>
       <Listagem>
         <h3>Relatório de Movimentação</h3>
@@ -218,6 +226,7 @@ export default function RelatorioDiario() {
               <tr>
                 <th scope="col">R.F</th>
                 <th scope="col">Data</th>
+                <th scope="col">Nº N.F</th>
                 <th scope="col">Descrição</th>
                 <th scope="col">Valor</th>
                 <th scope="col">Movimentação</th>
@@ -233,6 +242,7 @@ export default function RelatorioDiario() {
                 <tr key={String(dado.id)}>
                   <td>{dado.id}</td>
                   <td>{dado.dataOp}</td>
+                  <td>{dado.nNota}</td>
                   <td>{dado.descricao}</td>
                   <td>{dado.valor}</td>
                   <td>{dado.tipo ? 'Entrada' : 'Saída'}</td>

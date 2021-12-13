@@ -12,11 +12,12 @@ export default function ComboBox({
   value,
   list,
   handleFunctionConfirm,
+  disabled,
 }) {
   return (
     <Label htmlFor="congregacao">
       {title}
-      <select onChange={onChange} value={value}>
+      <select onChange={onChange} value={value} disabled={disabled}>
         <option value="nada">{title}</option>
         {list.map((dado) => (
           <option key={dado.id} value={dado.descricao}>
@@ -34,12 +35,14 @@ ComboBox.defaultProps = {
   buttonConfirm: '',
   list: [],
   show: false,
+  disable: true,
 };
 ComboBox.protoTypes = {
   nome: PropTypes.string,
   list: PropTypes.array,
   value: PropTypes.string,
   show: PropTypes.bool,
+  disabled: PropTypes.bool,
   onChange: PropTypes.func,
   handleFunctionConfirm: PropTypes.func,
 };

@@ -324,7 +324,7 @@ export default function Routes() {
         path="/relatorioDizimo/"
         component={RelatorioDizimo}
         idFuncao={idFuncao}
-        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 9 }]}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
         isClosed
       />
       <MyRoute

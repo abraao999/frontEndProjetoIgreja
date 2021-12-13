@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { get } from 'lodash';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { FaCheck, FaPlus } from 'react-icons/fa';
@@ -21,6 +21,7 @@ import ModalAddDescLancamento from '../../../components/ModalAddDescLancamento';
 export default function Caixa({ match }) {
   const dispath = useDispatch();
   const id = get(match, 'params.id', '');
+  const dataUser = useSelector((state) => state.auth.user);
 
   const [maxId, setMaxId] = useState(0);
 
@@ -50,9 +51,16 @@ export default function Caixa({ match }) {
   const [descricao, setDescricao] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const [hidden, setHidden] = useState(true);
+
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
+      if (dataUser.function_id === 1 || dataUser === 3) {
+        setHidden(false);
+      } else {
+        setSetorId(dataUser.setor_id);
+      }
       buscaDescricao();
       if (!id) {
         try {
@@ -324,6 +332,7 @@ export default function Caixa({ match }) {
               list={setores}
               value={setor}
               onChange={handleGetIdCongregacao}
+              disabled={hidden}
             />
           </Col>
           <Col sm={12} md={4} className="my-1">

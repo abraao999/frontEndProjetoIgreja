@@ -83,6 +83,7 @@ export default function RelatorioCaixa() {
       novaLista.push({
         id: dado.id,
         descricao: dado.descricao,
+        nNota: dado.n_nota,
         dataOp: dataFormatada,
         valor: dado.valor,
         tipo: dado.tipo,
@@ -461,6 +462,7 @@ export default function RelatorioCaixa() {
               <tr>
                 <th scope="col">R.F</th>
                 <th scope="col">Data</th>
+                <th scope="col">Nº N.F</th>
                 <th scope="col">Descrição</th>
                 <th scope="col">Valor</th>
                 <th scope="col">Movimentação</th>
@@ -476,6 +478,7 @@ export default function RelatorioCaixa() {
                 <tr key={String(dado.id)}>
                   <td>{dado.id}</td>
                   <td>{dado.dataOp}</td>
+                  <td>{dado.nNota}</td>
                   <td>{dado.descricao}</td>
                   <td>{dado.valor}</td>
                   <td>{dado.tipo ? 'Entrada' : 'Saída'}</td>

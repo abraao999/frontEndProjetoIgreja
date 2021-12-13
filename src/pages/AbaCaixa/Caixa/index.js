@@ -35,6 +35,7 @@ export default function Caixa({ match }) {
   );
   const [show, setShow] = useState(false);
 
+  const [nNota, setNNota] = useState('');
   const [tipoMovimentacaoBox, setTipoMovimentacaoBox] = useState('');
   const [tipoMovimentacao, setTipoMovimentacao] = useState();
   const [investimentoBox, setInvestimentoBox] = useState('');
@@ -66,6 +67,7 @@ export default function Caixa({ match }) {
         setValor(dado.data.valor);
         setTipoMovimentacao(dado.data.tipo);
         setDataMovimentacao(dado.data.data_operacao);
+        setNNota(dado.data.n_nota);
         setSetorId(dado.data.setor_id);
         setDepartamentoId(dado.data.departamento_id);
         setInvestimento(dado.data.investimento);
@@ -91,10 +93,11 @@ export default function Caixa({ match }) {
     try {
       if (!id) {
         const response = await axios.post('/caixa', {
-          descricaoId,
+          desc_id: descricaoId,
           valor,
           tipo: tipoMovimentacao,
           investimento,
+          n_nota: nNota,
           data_operacao: dataMovimentacao,
           setor_id: setorId,
           departamento_id: departmanetoId,
@@ -107,8 +110,9 @@ export default function Caixa({ match }) {
         setIsLoading(false);
       } else {
         const response = await axios.put(`/caixa/${id}`, {
-          descricaoId,
+          desc_id: descricaoId,
           valor,
+          n_nota: nNota,
           tipo: tipoMovimentacao,
           investimento,
           data_operacao: dataMovimentacao,
@@ -305,7 +309,16 @@ export default function Caixa({ match }) {
           </Col>
         </Row>
         <Row>
-          <Col sm={12} md={{ span: 3, offset: 3 }} className="my-1">
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="id">Nº N.F:</Form.Label>
+            <Form.Control
+              id="id"
+              type="text"
+              value={nNota}
+              onChange={(e) => setNNota(e.target.value)}
+            />
+          </Col>
+          <Col sm={12} md={4} className="my-1">
             <ComboBox
               title="Selecione a Congregação"
               list={setores}
@@ -313,7 +326,7 @@ export default function Caixa({ match }) {
               onChange={handleGetIdCongregacao}
             />
           </Col>
-          <Col sm={12} md={3} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <ComboBox
               title="Selecione o departamento"
               list={departamentos}

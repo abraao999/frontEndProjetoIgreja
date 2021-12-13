@@ -3,13 +3,14 @@
 import React, { useEffect, useState } from 'react';
 
 import { toast } from 'react-toastify';
-import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
+import { FaEdit, FaWindowClose, FaSearch, FaFilter } from 'react-icons/fa';
 
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Col, Form, Row, Table } from 'react-bootstrap';
 import pdfMake from 'pdfmake/build/pdfmake';
 import { AiFillPrinter } from 'react-icons/ai';
+
 import { Container } from '../../../styles/GlobalStyles';
 import { Header, Label, Listagem } from './styled';
 import axios from '../../../services/axios';
@@ -24,12 +25,14 @@ export default function RelatorioCaixa() {
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
 
+  const [descricaoId, setDescricaoId] = useState('');
   const [idCongregacao, setIdCongregacao] = useState('');
   const [investimentoBox, setInvestimentoBox] = useState('');
   const [congregacaoBox, setCongregacaoBox] = useState('');
   const [tipoBox, setTipoBox] = useState('');
   const [filtro, setFiltro] = useState(false);
   const [filtroDep, setFiltroDep] = useState(false);
+  const [filtroDesc, setFiltroDesc] = useState(false);
   const [filtroInvestimento, setFiltroInvestimento] = useState(false);
   const [filtroTipo, setFiltroTipo] = useState(false);
   const [filtroCongregacao, setFiltroCongregacao] = useState(false);
@@ -46,6 +49,7 @@ export default function RelatorioCaixa() {
 
   const [departamentos, setDepartamentos] = useState([]);
   const [listMovimentacao, setListMovimentacao] = useState([]);
+  const [listDescricao, setListDescricao] = useState([]);
   const [descricao, setDescricao] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -56,6 +60,8 @@ export default function RelatorioCaixa() {
       setSetores(response.data);
       const response2 = await axios.get('/departamento');
       setDepartamentos(response2.data);
+      const response3 = await axios.get('/descCaixa');
+      setListDescricao(response3.data);
 
       axios.get('/caixa').then(async (dado) => {
         setListMovimentacao(dado.data);
@@ -82,6 +88,7 @@ export default function RelatorioCaixa() {
         tipo: dado.tipo,
         investimento: dado.investimento,
         idDepartamento: dado.departamento_id,
+        idDescricao: dado.desc_id,
         idSetor: dado.setor_id,
         descDepartamento: dado.desc_departamento,
         descSetor: dado.desc_setor,
@@ -109,30 +116,15 @@ export default function RelatorioCaixa() {
   async function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
-    const novaLista = [];
-    if (!filtro) {
-      setFiltro(true);
 
-      listMovimentacao.map((dados) => {
-        if (
-          String(dados.descricao)
-            .toUpperCase()
-            .includes(String(descricao.toUpperCase()))
-        ) {
-          novaLista.push(dados);
-        }
-      });
-    } else {
-      setFiltro(false);
-      setDescricao('');
-      axios.get('/caixa').then(async (dado) => {
-        setListMovimentacao(dado.data);
-        renderizaLista(dado.data);
-      });
-    }
+    setFiltro(false);
+    axios.get('/caixa').then(async (dado) => {
+      setListMovimentacao(dado.data);
+      renderizaLista(dado.data);
+      calculaValor(dado.data);
+    });
+
     setIsLoading(false);
-    calculaValor(novaLista);
-    setListMovimentacao(novaLista);
   }
   async function handleDepartamentoSubmit(idDep) {
     setIsLoading(true);
@@ -162,7 +154,34 @@ export default function RelatorioCaixa() {
     }
     setIsLoading(false);
   }
-
+  async function handleDescricaoSubmit(idDesc) {
+    setIsLoading(true);
+    const novaLista = [];
+    if (!filtroDesc) {
+      setFiltroDesc(true);
+      listMovimentacao.map((dados) => {
+        if (dados.idDescricao === idDesc) {
+          novaLista.push(dados);
+        }
+      });
+      setListMovimentacao(novaLista);
+      calculaValor(novaLista);
+      setDepartamentoId('Selecione o departamento');
+    } else {
+      setFiltro(false);
+      axios.get('/caixa').then(async (dado) => {
+        dado.data.map((dados) => {
+          if (dados.desc_id === idDesc) {
+            novaLista.push(dados);
+          }
+        });
+        renderizaLista(novaLista);
+        calculaValor(novaLista);
+      });
+      setDepartamentoId('Selecione o departamento');
+    }
+    setIsLoading(false);
+  }
   const handleClose = () => {
     setShow(false);
   };
@@ -310,6 +329,18 @@ export default function RelatorioCaixa() {
     });
     handleDepartamentoSubmit(idDep);
   };
+  const handleGetIdDescricao = (e) => {
+    const nome = e.target.value;
+    setDescricao(e.target.value);
+    let idDescricao;
+    listDescricao.map((dado) => {
+      if (nome === dado.descricao) {
+        idDescricao = dado.id;
+        setDescricaoId(dado.id);
+      }
+    });
+    handleDescricaoSubmit(idDescricao);
+  };
   const visualizarImpressao = async () => {
     const novaLista = [];
     listMovimentacao.map((dado) => {
@@ -386,18 +417,17 @@ export default function RelatorioCaixa() {
         </Row>
         <Row>
           <Col sm={12} md={4} className="my-1">
-            <Form.Label htmlFor="descricao">
-              Insira um nome para filtrar:
-            </Form.Label>
-            <Form.Control
-              id="input"
-              type="text"
-              value={descricao}
-              onChange={(e) => {
-                setDescricao(e.target.value.toLocaleUpperCase());
-              }}
-              placeholder="Nome para filtro"
-            />
+            <Label htmlFor="departamento">
+              Filtrar por descrição
+              <select onChange={handleGetIdDescricao} value={descricao}>
+                <option value="nada">Selecione a descrição</option>
+                {listDescricao.map((dado) => (
+                  <option key={dado.id} id={dado.id} value={dado.descricao}>
+                    {dado.descricao}
+                  </option>
+                ))}
+              </select>
+            </Label>
           </Col>
           <Col sm={12} md={4} className="my-1">
             <Label htmlFor="congregacao">
@@ -414,27 +444,13 @@ export default function RelatorioCaixa() {
           </Col>
           <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="valor">Valor:</Form.Label>
-            <Form.Control
-              id="input"
-              type="text"
-              value={valorTotal}
-              onChange={(e) => {
-                setDescricao(e.target.value);
-              }}
-              disabled
-            />
+            <Form.Control id="input" type="text" value={valorTotal} disabled />
           </Col>
         </Row>
         <Row>
-          {filtro ? (
-            <button type="submit">
-              Limpar Filtro <FaSearch />
-            </button>
-          ) : (
-            <button type="submit">
-              Filtrar <FaSearch />
-            </button>
-          )}
+          <button type="submit">
+            Limpar Filtro <FaFilter />
+          </button>
         </Row>
       </Form>
       <Listagem>

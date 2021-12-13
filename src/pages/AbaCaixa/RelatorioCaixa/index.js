@@ -348,6 +348,7 @@ export default function RelatorioCaixa() {
       novaLista.push({
         id: dado.id,
         descricao: dado.descricao,
+        nNota: dado.nNota,
         dataOp: dado.dataOp,
         valor: dado.valor,
         tipo: dado.tipo ? 'Entrada' : 'Saída',
@@ -469,8 +470,8 @@ export default function RelatorioCaixa() {
                 <th scope="col">Investimento</th>
                 <th scope="col">Departamento</th>
                 <th scope="col">Congregação</th>
-                <th scope="col">Editar</th>
-                <th scope="col">Excluir</th>
+                {/* <th scope="col">Editar</th>
+                <th scope="col">Excluir</th> */}
               </tr>
             </thead>
             <tbody>
@@ -486,7 +487,7 @@ export default function RelatorioCaixa() {
                   <td>{dado.descDepartamento}</td>
                   <td>{dado.descSetor}</td>
 
-                  <td>
+                  {/* <td>
                     <Link
                       onClick={(e) => {
                         e.preventDefault();
@@ -505,7 +506,7 @@ export default function RelatorioCaixa() {
                     >
                       <FaWindowClose size={16} />
                     </Link>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>

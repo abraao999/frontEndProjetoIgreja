@@ -16,6 +16,7 @@ export class Impressao {
     const header = [
       { text: 'Data', bold: true, fontSize: 9, margin: [0, 4, 0, 0] },
       { text: 'Descrição', bold: true, fontSize: 9, margin: [0, 4, 0, 0] },
+      { text: 'Nº N.F', bold: true, fontSize: 9, margin: [0, 4, 0, 0] },
       { text: 'Movimentação', bold: true, fontSize: 9, margin: [0, 4, 0, 0] },
       { text: 'Investimento', bold: true, fontSize: 9, margin: [0, 4, 0, 0] },
       {
@@ -29,6 +30,7 @@ export class Impressao {
       return [
         { text: dado.dataOp, fontSize: 8 },
         { text: dado.descricao, fontSize: 8 },
+        { text: dado.nNota, fontSize: 8 },
         { text: dado.tipo, fontSize: 8 },
         { text: dado.investimento, fontSize: 8 },
         { text: dado.valor, fontSize: 8 },
@@ -41,7 +43,7 @@ export class Impressao {
           '__________________________________________________________________________________________________________________________________________________________________________________________________________________________________',
         alignment: 'center',
         fontSize: 5,
-        colSpan: 5,
+        colSpan: 6,
       },
       {},
       {},
@@ -50,7 +52,7 @@ export class Impressao {
       {
         text: `Valor Total: ${this.valor}`,
         fontSize: 8,
-        colSpan: 5,
+        colSpan: 6,
         bold: true,
       },
       {},
@@ -82,7 +84,7 @@ export class Impressao {
           layout: 'noBorders',
           table: {
             headerRows: 1,
-            widths: ['*', '*', '*', '*', '*'],
+            widths: ['*', '*', '*', '*', '*', '*'],
 
             body: corpoDocumento,
           },

@@ -137,13 +137,27 @@ export default function ListaVisitantes({ match }) {
                 <strong>Convertido:</strong> {nada.crente ? 'Sim' : 'Não'}
               </p>
               <ul style={{ paddingLeft: 0 }}>
-                {nomesList.map((dado) => (
-                  <li key={dado.id}>{dado.nome}</li>
-                ))}
+                {nomesList.map(
+                  (dado) =>
+                    dado.familia_id === nada.id && (
+                      <li key={dado.id}>{dado.nome}</li>
+                    )
+                )}
               </ul>
             </Box>
           </Col>
         ))}
+      </Row>
+      <Row style={{ margin: 5 }}>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            history.push('/visitante');
+          }}
+          type="button"
+        >
+          Voltar
+        </button>
       </Row>
     </Container>
   );

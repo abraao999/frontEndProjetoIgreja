@@ -60,7 +60,6 @@ export default function NovoVisitante({ match }) {
     // setShow(true);
     try {
       setIsLoading(true);
-      setHidden(false);
       const response = await axios.post(`/familiaVisitante/`, {
         telefone,
         igreja: nomeIgreja,
@@ -96,6 +95,8 @@ export default function NovoVisitante({ match }) {
   const addNome = () => {
     nomesList.push({ id: Math.random(), nome });
     setNome('');
+    setHidden(false);
+
     const input = document.getElementById('nome');
     input.focus();
   };
@@ -182,9 +183,6 @@ export default function NovoVisitante({ match }) {
             />
           </Col>
         </Row>
-        <Row>
-          <button type="submit">Salvar</button>
-        </Row>
       </Form>
       <Listagem hidden={hidden}>
         <h3>Nomes</h3>
@@ -216,6 +214,20 @@ export default function NovoVisitante({ match }) {
           </Table>
         </center>
       </Listagem>
+      <Row style={{ margin: 5 }}>
+        <button type="submit">Salvar</button>
+      </Row>
+      <Row style={{ margin: 5 }}>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            history.push('/visitante');
+          }}
+          type="button"
+        >
+          Voltar
+        </button>
+      </Row>
     </Container>
   );
 }

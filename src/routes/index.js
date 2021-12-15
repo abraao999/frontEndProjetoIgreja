@@ -44,6 +44,8 @@ import Home from '../pages/Home';
 import NovoVisitante from '../pages/AbaCulto/NovoVisitante';
 import ListaVisitantes from '../pages/AbaCulto/ListaVisitantes';
 import MediaCaixa from '../pages/AbaCaixa/MediaCaixa';
+import Visitante from '../pages/AbaCulto/VIsitante';
+import PedidoOracao from '../pages/AbaCulto/PedidoOracao';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.user.function_id);
@@ -62,19 +64,19 @@ export default function Routes() {
   return (
     <Switch>
       <MyRoute exact path="/" component={Painel} isClosed={false} />
-      <MyRoute exact path="/home" component={Home} isClosed={false} />
+      <MyRoute path="/home" component={Home} isClosed={false} />
       <MyRoute
-        exact
         path="/novoVisitante"
         component={NovoVisitante}
         isClosed={false}
       />
       <MyRoute
-        exact
         path="/listaVisitantes"
         component={ListaVisitantes}
         isClosed={false}
       />
+      <MyRoute path="/visitante" component={Visitante} isClosed={false} />
+      <MyRoute path="/pedidoOracao" component={PedidoOracao} isClosed={false} />
       <MyRoute path="/aluno/:id/edit" component={Aluno} isClosed />
       <MyRoute path="/aluno/" component={Aluno} isClosed />
       <MyRoute

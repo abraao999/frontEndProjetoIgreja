@@ -23,17 +23,24 @@ export const Form = styled.form`
     }
   }
 `;
-export const Table = styled.table`
-  margin-top: 20px;
-  max-width: 80%;
-`;
-export const Listagem = styled.div`
+export const Box = styled.div`
+  background: #fff;
+  margin: 10px auto;
+  padding: 30px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   h3 {
-    margin: 30px;
-    display: flex;
-    justify-content: center;
+    font-weight: bold;
+  }
+  p {
+    font-size: 18px;
+    margin: 0;
+  }
+  li {
+    font-size: 17px;
   }
 `;
+
 export const Label = styled.label`
   flex: 1;
   display: flex;

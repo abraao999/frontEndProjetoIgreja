@@ -40,7 +40,6 @@ export default function Header() {
   const culto = [
     { desc: 'NOVO VISITANTE', path: '/novoVisitante' },
     { desc: 'LISTA DE VISITANTES', path: '/listaVisitantes' },
-    { desc: 'JOVENS', path: '/jovens' },
   ];
   const secretaria = [
     { desc: 'ALTARAR SENHA', path: '/editPass' },
@@ -98,7 +97,7 @@ export default function Header() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/">HOME</Nav.Link>
-            {/* <Dropdown nome="CULTO" opcoes={culto} /> */}
+            <Dropdown nome="CULTO" opcoes={culto} />
             {!isLoggedIn && (
               <Dropdown nome="DEPARTAMENTOS" opcoes={departamentos} />
             )}

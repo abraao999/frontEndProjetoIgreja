@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import InputMask from 'react-input-mask';
 
 import { toast } from 'react-toastify';
-import { FaEdit, FaWindowClose } from 'react-icons/fa';
+import { FaEdit, FaPlus, FaWindowClose } from 'react-icons/fa';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Col, Form, Row, Table } from 'react-bootstrap';
@@ -46,47 +46,7 @@ export default function NovoVisitante({ match }) {
     }
     getData();
   }, [id]);
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setIsLoading(true);
-    let formErrors = false;
 
-    if (descricao.length < 3 || descricao.length > 255) {
-      formErrors = true;
-      toast.error('Campo descricao deve ter entre 3 e 255 caracteres');
-    }
-    if (formErrors) return;
-    try {
-      if (!id) {
-        const response = await axios.post('/cargo', { descricao });
-        console.log(response);
-        const novaLista = await axios.get('/cargo');
-        setDescricaoList(novaLista.data);
-        setDescricao('');
-        toast.success('Cargo criada com sucesso');
-
-        setIsLoading(false);
-      } else {
-        const response = await axios.put(`/cargo/${id}`, { descricao });
-        console.log(response);
-        const novaLista = await axios.get('/cargo');
-        setDescricaoList(novaLista.data);
-        setDescricao('');
-        toast.success('Cargo editado com sucesso');
-
-        history.push('/cargo');
-        setIsLoading(false);
-      }
-    } catch (error) {
-      const status = get(error, 'response.data.status', 0);
-      if (status === 401) {
-        toast.error('Voce precisa fazer loggin');
-      } else {
-        toast.error('Erro ao excluir um aluno');
-      }
-      setIsLoading(false);
-    }
-  }
   const handleClose = () => {
     setShow(false);
   };
@@ -100,6 +60,7 @@ export default function NovoVisitante({ match }) {
     // setShow(true);
     try {
       setIsLoading(true);
+      setHidden(false);
       const response = await axios.post(`/familiaVisitante/`, {
         telefone,
         igreja: nomeIgreja,
@@ -134,7 +95,6 @@ export default function NovoVisitante({ match }) {
   };
   const addNome = () => {
     nomesList.push({ id: Math.random(), nome });
-    setHidden(false);
     setNome('');
     const input = document.getElementById('nome');
     input.focus();
@@ -154,8 +114,8 @@ export default function NovoVisitante({ match }) {
         handleFunctionConfirm={handleFunctionConfirm}
       />
       <Form onSubmit={handleFunctionConfirm}>
-        <Row className="align-items-center">
-          <Col sm={12} md={4} className="my-1">
+        <Row>
+          <Col sm={10} xs={10} md={5} className="my-1">
             <Form.Label htmlFor="descricao">Nome:</Form.Label>
             <Form.Control
               type="text"
@@ -164,11 +124,19 @@ export default function NovoVisitante({ match }) {
               onChange={(e) => setNome(e.target.value)}
               placeholder="Nome do Visitante"
             />
+          </Col>
+          <Col
+            sm={2}
+            xs={2}
+            md={1}
+            className="my-1"
+            style={{ display: 'flex', alignItems: 'flex-end' }}
+          >
             <button type="button" onClick={addNome}>
-              +
+              <FaPlus size={12} />
             </button>
           </Col>
-          <Col sm={12} md={4} className="my-1">
+          <Col sm={12} md={3} className="my-1">
             <Label htmlFor="congregacao">
               Crente
               <select onChange={handleCrente}>
@@ -177,7 +145,7 @@ export default function NovoVisitante({ match }) {
               </select>
             </Label>
           </Col>
-          <Col sm={12} md={4} className="my-1">
+          <Col sm={12} md={3} className="my-1">
             <Form.Label htmlFor="descricao">Observação:</Form.Label>
             <Form.Control
               type="text"
@@ -218,7 +186,7 @@ export default function NovoVisitante({ match }) {
           <button type="submit">Salvar</button>
         </Row>
       </Form>
-      <Listagem>
+      <Listagem hidden={hidden}>
         <h3>Nomes</h3>
         <center>
           <Table responsive striped bordered hover>

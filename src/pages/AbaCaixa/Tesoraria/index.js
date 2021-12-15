@@ -45,6 +45,16 @@ export default function Tesoraria() {
             </Link>
           </Col>
           <Col sm={6} md={4} className="my-1">
+            <Link to="/mediaCaixa">
+              <ContainerBox>
+                <FaCalculator size={50} />
+                <span>Média de Caixa</span>
+              </ContainerBox>
+            </Link>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={6} md={4} className="my-1">
             <Link to="/caixa">
               <ContainerBox>
                 <FaCalculator size={50} />
@@ -52,8 +62,6 @@ export default function Tesoraria() {
               </ContainerBox>
             </Link>
           </Col>
-        </Row>
-        <Row>
           <Col sm={6} md={4} className="my-1">
             <Link to="/relatorioCaixa">
               <ContainerBox>
@@ -70,6 +78,8 @@ export default function Tesoraria() {
               </ContainerBox>
             </Link>
           </Col>
+        </Row>
+        <Row>
           <Col sm={6} md={4} className="my-1">
             <Link to="/relatorioDiario">
               <ContainerBox>
@@ -78,8 +88,6 @@ export default function Tesoraria() {
               </ContainerBox>
             </Link>
           </Col>
-        </Row>
-        <Row>
           <Col sm={6} md={4} className="my-1">
             <Link to="/relatorioDizimo">
               <ContainerBox>

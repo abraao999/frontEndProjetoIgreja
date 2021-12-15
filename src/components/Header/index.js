@@ -26,6 +26,7 @@ export default function Header() {
     { desc: 'ABATIMENTO', path: '/abatimento' },
     { desc: 'DIZIMO', path: '/dizimo' },
     { desc: 'LANÇAMENTO', path: '/caixa' },
+    { desc: 'MÉDIA DE CAIXA', path: '/mediaCaixa' },
     { desc: 'RELATÓRIO', path: '/relatorioCaixa' },
     { desc: 'RELATÓRIO ABATIMENTO', path: '/relatorioAbatimento' },
     { desc: 'RELATÓRIO DIÁRIO', path: '/relatorioDiario' },

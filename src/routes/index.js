@@ -43,6 +43,7 @@ import Tesoraria from '../pages/AbaCaixa/Tesoraria';
 import Home from '../pages/Home';
 import NovoVisitante from '../pages/AbaCulto/NovoVisitante';
 import ListaVisitantes from '../pages/AbaCulto/ListaVisitantes';
+import MediaCaixa from '../pages/AbaCaixa/MediaCaixa';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.user.function_id);
@@ -323,6 +324,13 @@ export default function Routes() {
       <MyRoute
         path="/relatorioDizimo/"
         component={RelatorioDizimo}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/mediaCaixa/"
+        component={MediaCaixa}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 3 }]}
         isClosed

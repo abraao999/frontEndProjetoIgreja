@@ -114,7 +114,7 @@ export default function Caixa({ match }) {
         setDescricao('');
         setSetorSeletected(0);
         setComboBoxCongregacao('');
-        toast.success('Departamento criada com sucesso');
+        toast.success('Lançamento realizado com sucesso');
         setIsLoading(false);
       } else {
         const response = await axios.put(`/caixa/${id}`, {
@@ -131,7 +131,7 @@ export default function Caixa({ match }) {
         setDescricao('');
         setSetorSeletected(0);
         setComboBoxCongregacao('Selecione uma congregação');
-        toast.success('Departamento editada com sucesso');
+        toast.success('Lançamento realizado com sucesso');
 
         history.push('/relatorioCaixa');
         setIsLoading(false);
@@ -142,7 +142,7 @@ export default function Caixa({ match }) {
         toast.error('Voce precisa fazer loggin');
         dispath(actions.loginFailure());
       } else {
-        toast.error('Erro ao excluir uma Classe');
+        toast.error('Erro ao fazer um lançamento');
       }
       setIsLoading(false);
     }

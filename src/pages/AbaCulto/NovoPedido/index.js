@@ -68,7 +68,7 @@ export default function NovoPedido({ match }) {
 
       toast.success('Pedido criado com sucesso');
       setShow(false);
-      history.push('/painel');
+      history.push('/listaPedido');
       setIsLoading(false);
     } catch (error) {
       const status = get(error, 'response.data.status', 0);

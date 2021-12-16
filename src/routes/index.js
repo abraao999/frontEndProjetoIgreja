@@ -48,6 +48,7 @@ import Visitante from '../pages/AbaCulto/VIsitante';
 import PedidoOracao from '../pages/AbaCulto/PedidoOracao';
 import NovoPedido from '../pages/AbaCulto/NovoPedido';
 import ListaPedido from '../pages/AbaCulto/ListaPedido';
+import RelatorioDizimoDiario from '../pages/AbaCaixa/RelatorioDizimoDiario';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.user.function_id);
@@ -75,6 +76,11 @@ export default function Routes() {
       <MyRoute
         path="/listaVisitantes"
         component={ListaVisitantes}
+        isClosed={false}
+      />
+      <MyRoute
+        path="/dizimoDiario"
+        component={RelatorioDizimoDiario}
         isClosed={false}
       />
       <MyRoute path="/visitante" component={Visitante} isClosed={false} />

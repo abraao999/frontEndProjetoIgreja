@@ -31,6 +31,7 @@ export default function Header() {
     { desc: 'RELATÓRIO ABATIMENTO', path: '/relatorioAbatimento' },
     { desc: 'RELATÓRIO DIÁRIO', path: '/relatorioDiario' },
     { desc: 'RELATÓRIO DÍZIMO', path: '/relatorioDizimo' },
+    { desc: 'RELATÓRIO DÍZIMO DIARIO', path: '/dizimoDiario' },
     { desc: 'RELATÓRIO DÍZIMO GERAL', path: '/relatorioDizimoGeral' },
   ];
   const departamentos = [
@@ -38,6 +39,7 @@ export default function Header() {
     { desc: 'JOVENS', path: '/jovens' },
   ];
   const culto = [
+    { desc: 'DIZIMISTAS DO DIA', path: '/dizimoDiario' },
     { desc: 'NOVO VISITANTE', path: '/novoVisitante' },
     { desc: 'NOVO PEDIDO DE ORAÇÃO', path: '/novoPedido' },
     { desc: 'LISTA DE VISITANTES', path: '/listaVisitantes' },

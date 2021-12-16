@@ -215,7 +215,9 @@ export default function NovoVisitante({ match }) {
         </center>
       </Listagem>
       <Row style={{ margin: 5 }}>
-        <button type="submit">Salvar</button>
+        <button type="button" onClick={handleFunctionConfirm}>
+          Salvar
+        </button>
       </Row>
       <Row style={{ margin: 5 }}>
         <button

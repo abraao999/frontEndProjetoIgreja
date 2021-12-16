@@ -118,7 +118,7 @@ export default function ListaVisitantes({ match }) {
 
   return (
     <Container>
-      <h1>Lista Visitantes</h1>
+      <h1>Lista de Visitantes</h1>
       <Loading isLoading={isLoading} />
       <p>{descricao}</p>
 

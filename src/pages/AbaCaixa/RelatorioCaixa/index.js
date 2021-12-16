@@ -502,7 +502,7 @@ export default function RelatorioCaixa() {
                   <td>{dado.descricao}</td>
                   <td>{dado.valor}</td>
                   <td>{dado.tipo ? 'Entrada' : 'Saída'}</td>
-                  <td>{dado.investimento ? 'Investimento' : 'Despesa'}</td>
+                  <td>{dado.investimento}</td>
                   <td>{dado.descDepartamento}</td>
                   <td>{dado.descSetor}</td>
 

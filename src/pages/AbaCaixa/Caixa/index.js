@@ -38,9 +38,9 @@ export default function Caixa({ match }) {
 
   const [nNota, setNNota] = useState('');
   const [tipoMovimentacaoBox, setTipoMovimentacaoBox] = useState('');
-  const [tipoMovimentacao, setTipoMovimentacao] = useState();
+  const [tipoMovimentacao, setTipoMovimentacao] = useState('');
   const [investimentoBox, setInvestimentoBox] = useState('');
-  const [investimento, setInvestimento] = useState();
+  const [investimento, setInvestimento] = useState('');
   const [valor, setValor] = useState('');
   const [dataMovimentacao, setDataMovimentacao] = useState('');
 
@@ -104,7 +104,7 @@ export default function Caixa({ match }) {
           desc_id: descricaoId,
           valor,
           tipo: tipoMovimentacao,
-          investimento,
+          investimento: investimento || null,
           n_nota: nNota,
           data_operacao: dataMovimentacao,
           setor_id: setorId,
@@ -312,6 +312,7 @@ export default function Caixa({ match }) {
                 <option value="nada">Escolha um tipo</option>
                 <option value="Investimento">Investimento</option>
                 <option value="Dispesa">Dispesa</option>
+                <option value="Outro">Outro</option>
               </select>
             </Label>
           </Col>

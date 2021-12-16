@@ -29,10 +29,10 @@ export default function PedidoOracao() {
     <>
       <Loading isLoading={isLoading} />
       <Container>
-        <h1>Visitantes</h1>
+        <h1>Pedido de Oração</h1>
         <Row>
           <Col sm={6} md={{ span: 3, offset: 3 }} className="my-1">
-            <Link to="/novoVisitante">
+            <Link to="/novoPedido">
               <ContainerBox>
                 <FaPrayingHands size={50} />
                 <span>Novo Pedido</span>
@@ -40,7 +40,7 @@ export default function PedidoOracao() {
             </Link>
           </Col>
           <Col sm={6} md={3} className="my-1">
-            <Link to="/listaVisitantes">
+            <Link to="/listaPedido">
               <ContainerBox>
                 <FaPrayingHands size={50} />
                 <span>Lista de Pedidos</span>

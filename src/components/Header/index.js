@@ -40,6 +40,7 @@ export default function Header() {
   const culto = [
     { desc: 'NOVO VISITANTE', path: '/novoVisitante' },
     { desc: 'LISTA DE VISITANTES', path: '/listaVisitantes' },
+    { desc: 'NOVO PEDIDO DE ORAÇÃO', path: '/novoPedido' },
   ];
   const secretaria = [
     { desc: 'ALTARAR SENHA', path: '/editPass' },

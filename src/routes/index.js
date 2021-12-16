@@ -46,6 +46,8 @@ import ListaVisitantes from '../pages/AbaCulto/ListaVisitantes';
 import MediaCaixa from '../pages/AbaCaixa/MediaCaixa';
 import Visitante from '../pages/AbaCulto/VIsitante';
 import PedidoOracao from '../pages/AbaCulto/PedidoOracao';
+import NovoPedido from '../pages/AbaCulto/NovoPedido';
+import ListaPedido from '../pages/AbaCulto/ListaPedido';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.user.function_id);
@@ -77,6 +79,8 @@ export default function Routes() {
       />
       <MyRoute path="/visitante" component={Visitante} isClosed={false} />
       <MyRoute path="/pedidoOracao" component={PedidoOracao} isClosed={false} />
+      <MyRoute path="/novoPedido" component={NovoPedido} isClosed={false} />
+      <MyRoute path="/listaPedido" component={ListaPedido} isClosed={false} />
       <MyRoute path="/aluno/:id/edit" component={Aluno} isClosed />
       <MyRoute path="/aluno/" component={Aluno} isClosed />
       <MyRoute

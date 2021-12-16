@@ -26,10 +26,11 @@ export default function NovoPedido({ match }) {
 
   const [maxId, setMaxId] = useState(0);
   const [nome, setNome] = useState('');
+  const [solicitante, setSolicitante] = useState('');
+  const [favorecido, setFavorecido] = useState('');
+  const [pedido, setPedido] = useState('');
   const [nomeIgreja, setIngrejaNome] = useState('');
   const [observacao, setObservacao] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [descricaoList, setDescricaoList] = useState([]);
   const [nomesList, setNomesList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [crente, setCrente] = useState(true);
@@ -50,55 +51,34 @@ export default function NovoPedido({ match }) {
   const handleClose = () => {
     setShow(false);
   };
-  const handleShow = (index) => {
-    const novosNomes = [...nomesList];
-    novosNomes.splice(index, 1);
-    setNomesList(novosNomes);
+  const handleShow = () => {
+    setShow(true);
   };
   const handleFunctionConfirm = async (e) => {
     e.preventDefault();
     // setShow(true);
     try {
       setIsLoading(true);
-      const response = await axios.post(`/familiaVisitante/`, {
-        telefone,
-        igreja: nomeIgreja,
-        crente,
-        observacao,
+      const response = await axios.post(`/pedido/`, {
+        solicitante,
+        favorecido,
+        pedido,
         data_culto: new Date(),
       });
-      const idResposta = response.data.id;
-      nomesList.map(async (item) => {
-        await axios.post('/nomesVisitante', {
-          familia_id: idResposta,
-          nome: item.nome,
-        });
-      });
-      toast.success('Visitante adcionado com sucesso');
-      setShow(false);
 
+      toast.success('Pedido criado com sucesso');
+      setShow(false);
+      history.push('/painel');
       setIsLoading(false);
     } catch (error) {
       const status = get(error, 'response.data.status', 0);
       if (status === 401) {
         toast.error('Voce precisa fazer loggin');
       } else {
-        toast.error('Erro ao adicionar o visitantes');
+        toast.error('Erro ao adicionar o pedido');
       }
       setIsLoading(false);
     }
-  };
-  const handleCrente = (e) => {
-    if (String(e.target.value) === 'Sim') setCrente(true);
-    else setCrente(false);
-  };
-  const addNome = () => {
-    nomesList.push({ id: Math.random(), nome });
-    setNome('');
-    setHidden(false);
-
-    const input = document.getElementById('nome');
-    input.focus();
   };
 
   return (
@@ -109,113 +89,48 @@ export default function NovoPedido({ match }) {
         title="Atenção!!!"
         handleClose={handleClose}
         show={show}
-        text="Deseja exluir esse registro"
+        text="Deseja confirmar esse pedido"
         buttonCancel="Não"
         buttonConfirm="Sim"
         handleFunctionConfirm={handleFunctionConfirm}
       />
       <Form onSubmit={handleFunctionConfirm}>
         <Row>
-          <Col sm={10} xs={10} md={5} className="my-1">
-            <Form.Label htmlFor="descricao">Nome:</Form.Label>
+          <Col sm={12} xs={12} md={4} className="my-1">
+            <Form.Label htmlFor="descricao">Quem está pedido:</Form.Label>
             <Form.Control
               type="text"
-              value={nome}
+              value={solicitante}
               id="nome"
-              onChange={(e) => setNome(e.target.value)}
-              placeholder="Nome do Visitante"
+              onChange={(e) => setSolicitante(e.target.value)}
+              placeholder="Nome do Solicitante"
             />
           </Col>
-          <Col
-            sm={2}
-            xs={2}
-            md={1}
-            className="my-1"
-            style={{ display: 'flex', alignItems: 'flex-end' }}
-          >
-            <button type="button" onClick={addNome}>
-              <FaPlus size={12} />
-            </button>
-          </Col>
-          <Col sm={12} md={3} className="my-1">
-            <Label htmlFor="congregacao">
-              Crente
-              <select onChange={handleCrente}>
-                <option value="Sim">Sim</option>
-                <option value="Não">Não</option>
-              </select>
-            </Label>
-          </Col>
-          <Col sm={12} md={3} className="my-1">
-            <Form.Label htmlFor="descricao">Observação:</Form.Label>
+
+          <Col sm={12} md={4} className="my-1">
+            <Form.Label htmlFor="descricao">Para:</Form.Label>
             <Form.Control
               type="text"
-              value={observacao}
-              onChange={(e) => setObservacao(e.target.value)}
-              placeholder="Amigo de ..."
+              value={favorecido}
+              onChange={(e) => setFavorecido(e.target.value)}
+              placeholder="Para quem está pedindo"
             />
           </Col>
         </Row>
         <Row>
-          <Col sm={12} md={3} className="my-1">
-            <LabelInput htmlFor="telefone">
-              Celular:
-              <InputMask
-                mask="(99) 99999-9999"
-                id="telefone"
-                type="text"
-                value={telefone}
-                onChange={(e) => {
-                  setTelefone(e.target.value);
-                  // handleInput(e, 'telefone');
-                }}
-                placeholder="(00) 00000-0000"
-              />
-            </LabelInput>
-          </Col>
           <Col sm={12} md={4} className="my-1">
-            <Form.Label htmlFor="descricao">Igreja onde congrega:</Form.Label>
+            <Form.Label htmlFor="descricao">Motivo:</Form.Label>
             <Form.Control
               type="text"
-              value={nomeIgreja}
-              onChange={(e) => setIngrejaNome(e.target.value)}
-              placeholder="Nome da igreja"
+              value={pedido}
+              onChange={(e) => setPedido(e.target.value)}
+              placeholder="Pedido de oração"
             />
           </Col>
         </Row>
       </Form>
-      <Listagem hidden={hidden}>
-        <h3>Nomes</h3>
-        <center>
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th style={{ textAlign: 'center' }} scope="col">
-                  Nome
-                </th>
-                <th style={{ textAlign: 'center' }} scope="col">
-                  Remover
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {nomesList.map((dado, index) => (
-                <tr key={String(dado.id)}>
-                  <td style={{ textAlign: 'center' }}>{dado.nome}</td>
-
-                  <td style={{ textAlign: 'center' }}>
-                    <Link to="/novoVisitante" onClick={() => handleShow(index)}>
-                      <FaWindowClose size={30} />
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </center>
-      </Listagem>
       <Row style={{ margin: 5 }}>
-        <button type="button" onClick={handleFunctionConfirm}>
+        <button type="button" onClick={handleShow}>
           Salvar
         </button>
       </Row>
@@ -223,7 +138,7 @@ export default function NovoPedido({ match }) {
         <button
           onClick={(e) => {
             e.preventDefault();
-            history.push('/visitante');
+            history.push('/pedidoOracao');
           }}
           type="button"
         >

@@ -50,10 +50,8 @@ export default function NovoVisitante({ match }) {
   const handleClose = () => {
     setShow(false);
   };
-  const handleShow = (index) => {
-    const novosNomes = [...nomesList];
-    novosNomes.splice(index, 1);
-    setNomesList(novosNomes);
+  const handleShow = () => {
+    setShow(true);
   };
   const handleFunctionConfirm = async (e) => {
     e.preventDefault();
@@ -76,8 +74,8 @@ export default function NovoVisitante({ match }) {
       });
       toast.success('Visitante adcionado com sucesso');
       setShow(false);
-
       setIsLoading(false);
+      history.push('/listaVisitantes');
     } catch (error) {
       const status = get(error, 'response.data.status', 0);
       if (status === 401) {
@@ -93,7 +91,7 @@ export default function NovoVisitante({ match }) {
     else setCrente(false);
   };
   const addNome = () => {
-    nomesList.push({ id: Math.random(), nome });
+    nomesList.push({ id: Math.random(), nome: nome.toLocaleUpperCase() });
     setNome('');
     setHidden(false);
 
@@ -109,7 +107,7 @@ export default function NovoVisitante({ match }) {
         title="Atenção!!!"
         handleClose={handleClose}
         show={show}
-        text="Deseja exluir esse registro"
+        text="Deseja salvar?"
         buttonCancel="Não"
         buttonConfirm="Sim"
         handleFunctionConfirm={handleFunctionConfirm}
@@ -215,7 +213,7 @@ export default function NovoVisitante({ match }) {
         </center>
       </Listagem>
       <Row style={{ margin: 5 }}>
-        <button type="button" onClick={handleFunctionConfirm}>
+        <button type="button" onClick={handleShow}>
           Salvar
         </button>
       </Row>

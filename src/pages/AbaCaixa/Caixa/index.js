@@ -112,8 +112,22 @@ export default function Caixa({ match }) {
   async function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
-    const formErrors = false;
-
+    let formErrors = false;
+    if (
+      !descricaoId ||
+      !valor ||
+      !tipoMovimentacao ||
+      !investimento ||
+      !nNota ||
+      !dataMovimentacao ||
+      !setorId ||
+      !departmanetoId
+    ) {
+      toast.error('Preencha todos os campos');
+      console.log('banana');
+      formErrors = true;
+      setIsLoading(false);
+    }
     if (formErrors) return;
     try {
       if (!id) {
@@ -147,7 +161,7 @@ export default function Caixa({ match }) {
         limpaDados();
         toast.success('Lançamento realizado com sucesso');
 
-        history.push('/relatorioCaixa');
+        history.push('/relatorioDiario');
         setIsLoading(false);
       }
     } catch (error) {

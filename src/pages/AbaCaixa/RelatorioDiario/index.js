@@ -74,15 +74,15 @@ export default function RelatorioDiario() {
     const novaLista = [];
     list.map((dado) => {
       const data = new Date(dado.data_operacao);
-      const dataFormatada = `${data.getDate() + 1}/${
-        data.getMonth() + 1
-      }/${data.getFullYear()}`;
+      const dataFormatada = getDataDB(data);
+      const valorConvertido = parseFloat(dado.valor).toFixed(2);
+
       novaLista.push({
         id: dado.id,
         descricao: dado.descricao,
         nNota: dado.n_nota,
         dataOp: dataFormatada,
-        valor: dado.valor,
+        valor: valorConvertido,
         tipo: dado.tipo,
         investimento: dado.investimento,
         idDepartamento: dado.departamento_id,
@@ -96,6 +96,7 @@ export default function RelatorioDiario() {
         novoValor -= dado.valor;
       }
     });
+    novoValor = parseFloat(novoValor).toFixed(2);
     setListMovimentacao(novaLista);
     setValorTotal(novoValor);
   };

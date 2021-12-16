@@ -94,12 +94,13 @@ export default function RelatorioCaixa() {
     list.map((dado) => {
       const data = new Date(dado.data_operacao);
       const dataFormatada = getDataDB(data);
+      const valorConvertido = parseFloat(dado.valor).toFixed(2);
       novaLista.push({
         id: dado.id,
         descricao: dado.descricao,
         nNota: dado.n_nota,
         dataOp: dataFormatada,
-        valor: dado.valor,
+        valor: valorConvertido,
         tipo: dado.tipo,
         investimento: dado.investimento,
         idDepartamento: dado.departamento_id,
@@ -114,6 +115,7 @@ export default function RelatorioCaixa() {
         novoValor -= dado.valor;
       }
     });
+    novoValor = parseFloat(novoValor).toFixed(2);
     setListMovimentacao(novaLista);
     setValorTotal(novoValor);
   };
@@ -126,6 +128,7 @@ export default function RelatorioCaixa() {
         novoValor -= dado.valor;
       }
     });
+    novoValor = parseFloat(novoValor).toFixed(2);
     setValorTotal(novoValor);
   };
   async function handleSubmit(e) {

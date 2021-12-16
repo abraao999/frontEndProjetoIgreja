@@ -20,6 +20,7 @@ import Loading from '../../../components/Loading';
 import history from '../../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 import { Impressao } from '../../../printers/impRelatorioDiario';
+import { getDataDB } from '../../../util';
 
 export default function RelatorioCaixa() {
   const dataUser = useSelector((state) => state.auth.user);
@@ -92,9 +93,7 @@ export default function RelatorioCaixa() {
     const novaLista = [];
     list.map((dado) => {
       const data = new Date(dado.data_operacao);
-      const dataFormatada = `${data.getDate()}/${
-        data.getMonth() + 1
-      }/${data.getFullYear()}`;
+      const dataFormatada = getDataDB(data);
       novaLista.push({
         id: dado.id,
         descricao: dado.descricao,
@@ -229,17 +228,12 @@ export default function RelatorioCaixa() {
   };
   const handleInvestimento = (e) => {
     const nome = e.target.value;
-    let op;
-    setInvestimentoBox(e.target.value);
-    setIsLoading(true);
-    if (nome === 'Investimento') op = 1;
-    else op = 0;
-
+    setInvestimentoBox(nome);
     const novaLista = [];
     if (!filtroInvestimento) {
       setFiltroInvestimento(true);
       listMovimentacao.map((dados) => {
-        if (dados.investimento === op) {
+        if (dados.investimento === nome) {
           novaLista.push(dados);
         }
       });
@@ -250,7 +244,7 @@ export default function RelatorioCaixa() {
       setFiltroInvestimento(false);
       axios.get('/caixa').then(async (dado) => {
         dado.data.map((dados) => {
-          if (dados.investimento === op) {
+          if (dados.investimento === nome) {
             novaLista.push(dados);
           }
         });
@@ -367,7 +361,7 @@ export default function RelatorioCaixa() {
         dataOp: dado.dataOp,
         valor: dado.valor,
         tipo: dado.tipo ? 'Entrada' : 'Saída',
-        investimento: dado.investimento ? 'Investimento' : 'Despesa',
+        investimento: dado.investimento,
         idDepartamento: dado.departamento_id,
         idSetor: dado.setor_id,
         descDepartamento: dado.desc_departamento,
@@ -418,6 +412,7 @@ export default function RelatorioCaixa() {
                 <option value="nada">Selecione a opção</option>
                 <option value="Investimento">Investimento</option>
                 <option value="Despesa">Despesa</option>
+                <option value="Outro">Outro</option>
               </select>
             </Label>
           </Col>

@@ -71,7 +71,7 @@ export default function Caixa({ match }) {
         }
       } else {
         const dado = await axios.get(`/caixa/${id}`);
-        setDescricao(dado.data.descricao);
+        setDescricaoId(dado.data.desc_id);
         setValor(dado.data.valor);
         setTipoMovimentacao(dado.data.tipo);
         setDataMovimentacao(dado.data.data_operacao);
@@ -79,6 +79,14 @@ export default function Caixa({ match }) {
         setSetorId(dado.data.setor_id);
         setDepartamentoId(dado.data.departamento_id);
         setInvestimento(dado.data.investimento);
+        console.log(dado.data);
+        if (dado.data.tipo === 1) setTipoMovimentacaoBox('Entrada');
+        else setTipoMovimentacaoBox('Saída');
+
+        setDescricaoLan(dado.data.descricao);
+        setSetor(dado.data.desc_setor);
+        setDepartamento(dado.data.desc_departamento);
+        setInvestimentoBox(dado.data.investimento);
       }
       const response = await axios.get('/setor');
       setSetores(response.data);
@@ -92,6 +100,15 @@ export default function Caixa({ match }) {
     const dado = await axios.get(`/descCaixa/`);
     setListDescricaoLancamento(dado.data);
   };
+  const limpaDados = () => {
+    setDescricaoLan('Escolha uma descrição');
+    setValor('');
+    setTipoMovimentacaoBox('Escolha um tipo de movimentação');
+    setInvestimentoBox('Escolha um tipo');
+    setSetor('Selecione a Congregação');
+    setDepartamento('Selecione o departamento');
+    setNNota('');
+  };
   async function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
@@ -104,16 +121,15 @@ export default function Caixa({ match }) {
           desc_id: descricaoId,
           valor,
           tipo: tipoMovimentacao,
-          investimento: investimento || null,
+          investimento,
           n_nota: nNota,
           data_operacao: dataMovimentacao,
           setor_id: setorId,
           departamento_id: departmanetoId,
         });
-        console.log(response);
-        setDescricao('');
-        setSetorSeletected(0);
-        setComboBoxCongregacao('');
+
+        limpaDados();
+
         toast.success('Lançamento realizado com sucesso');
         setIsLoading(false);
       } else {
@@ -127,10 +143,8 @@ export default function Caixa({ match }) {
           setor_id: setorId,
           departamento_id: departmanetoId,
         });
-        console.log(response);
-        setDescricao('');
-        setSetorSeletected(0);
-        setComboBoxCongregacao('Selecione uma congregação');
+
+        limpaDados();
         toast.success('Lançamento realizado com sucesso');
 
         history.push('/relatorioCaixa');
@@ -156,10 +170,7 @@ export default function Caixa({ match }) {
   const handleInvestimento = (e) => {
     const nome = e.target.value;
     setInvestimentoBox(e.target.value);
-    if (nome === 'Investimento') {
-      console.log(e.target.value);
-      setInvestimento(true);
-    } else setInvestimento(false);
+    setInvestimento(nome);
   };
   const handleGetIdCongregacao = (e) => {
     const nome = e.target.value;

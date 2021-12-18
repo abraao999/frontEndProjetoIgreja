@@ -158,7 +158,7 @@ export default function NovoVisitante({ match }) {
               type="text"
               value={observacao}
               onChange={(e) => setObservacao(e.target.value)}
-              placeholder="Amigo de ..."
+              placeholder=""
             />
           </Col>
         </Row>

@@ -63,7 +63,7 @@ export default function RelatorioCaixa() {
     async function getData() {
       setIsLoading(true);
       let auxAutorizado = false;
-      if (dataUser.function_id === 1 || dataUser === 3) {
+      if (dataUser.function_id === 1 || dataUser.function_id === 3) {
         setHidden(false);
         auxAutorizado = true;
       }

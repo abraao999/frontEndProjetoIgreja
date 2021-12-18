@@ -76,6 +76,8 @@ export default function CadMembro({ match }) {
         setRg(response.data.rg);
         setCpf(response.data.cpf);
         setTelefone(response.data.telefone);
+        setDataNascimento(response.data.data_nascimento);
+        setDataBatismo(response.data.data_batismo);
         setTelefone2(response.data.telefone2);
         setEstacoCivil(response.data.estado_civil);
         setProfissao(response.data.profissao);

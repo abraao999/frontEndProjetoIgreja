@@ -56,7 +56,7 @@ export default function Caixa({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      if (dataUser.function_id === 1 || dataUser === 3) {
+      if (dataUser.function_id === 1 || dataUser.function_id === 3) {
         setHidden(false);
       } else {
         setSetorId(dataUser.setor_id);

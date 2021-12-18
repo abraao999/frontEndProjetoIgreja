@@ -51,6 +51,14 @@ export default function NovoVisitante({ match }) {
     setShow(false);
   };
   const handleShow = () => {
+    if (!nomeIgreja || !observacao || !telefone) {
+      toast.error('Preencha todos os campos');
+      return;
+    }
+    if (nome !== '') {
+      toast.error('Exite nome de visitante para ser adcionado');
+      return;
+    }
     setShow(true);
   };
   const handleFunctionConfirm = async (e) => {
@@ -75,7 +83,7 @@ export default function NovoVisitante({ match }) {
       toast.success('Visitante adcionado com sucesso');
       setShow(false);
       setIsLoading(false);
-      history.push('/listaVisitantes');
+      history.push('/visitante');
     } catch (error) {
       const status = get(error, 'response.data.status', 0);
       if (status === 401) {

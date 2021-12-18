@@ -251,7 +251,6 @@ export default function CadMembro({ match }) {
       setIsLoading(false);
     }
   }
-
   const handleGetIdCongregacao = (e) => {
     const nome = e.target.value;
     setSetor(e.target.value);
@@ -545,6 +544,7 @@ export default function CadMembro({ match }) {
                 // handleInput(e, 'password');
               }}
               placeholder="Senha"
+              disabled
             />
             <Form.Control.Feedback type="invalid">
               Minimo de 3 caracteres

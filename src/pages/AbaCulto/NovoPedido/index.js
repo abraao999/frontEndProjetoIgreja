@@ -52,11 +52,16 @@ export default function NovoPedido({ match }) {
     setShow(false);
   };
   const handleShow = () => {
+    if (!solicitante || !favorecido || !pedido) {
+      toast.error('Preencha todos os campos');
+      return;
+    }
     setShow(true);
   };
   const handleFunctionConfirm = async (e) => {
     e.preventDefault();
     // setShow(true);
+
     try {
       setIsLoading(true);
       const response = await axios.post(`/pedido/`, {
@@ -68,7 +73,7 @@ export default function NovoPedido({ match }) {
 
       toast.success('Pedido criado com sucesso');
       setShow(false);
-      history.push('/listaPedido');
+      history.push('/pedidoOracao');
       setIsLoading(false);
     } catch (error) {
       const status = get(error, 'response.data.status', 0);

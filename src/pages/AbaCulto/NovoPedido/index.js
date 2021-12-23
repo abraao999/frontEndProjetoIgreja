@@ -1,40 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import InputMask from 'react-input-mask';
 
 import { toast } from 'react-toastify';
-import { FaEdit, FaPlus, FaWindowClose } from 'react-icons/fa';
-import { get } from 'lodash';
-import { Link } from 'react-router-dom';
+import { get, methodOf } from 'lodash';
 import { Col, Form, Row, Table } from 'react-bootstrap';
 import { Container } from '../../../styles/GlobalStyles';
 import Modal from '../../../components/Modal';
 
-import { Listagem, Label, LabelInput } from './styled';
 import axios from '../../../services/axios';
 
 import Loading from '../../../components/Loading';
+import ComboBox from '../../../components/ComboBox';
 import history from '../../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function NovoPedido({ match }) {
   const id = get(match, 'params.id', '');
   const [show, setShow] = useState(false);
-  const [idParaDelecao, setIdParaDelecao] = useState('');
-  const [indiceDelecao, setIndiceDelecao] = useState('');
-  const [telefone, setTelefone] = useState('');
 
-  const [maxId, setMaxId] = useState(0);
-  const [nome, setNome] = useState('');
   const [solicitante, setSolicitante] = useState('');
   const [favorecido, setFavorecido] = useState('');
   const [pedido, setPedido] = useState('');
-  const [nomeIgreja, setIngrejaNome] = useState('');
-  const [observacao, setObservacao] = useState('');
-  const [nomesList, setNomesList] = useState([]);
+  const [comboBoxPedido, setComboBoxPedido] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
-  const [crente, setCrente] = useState(true);
   const [hidden, setHidden] = useState(true);
+  const listPedidos = [
+    { id: 0, descricao: 'Família' },
+    { id: 1, descricao: 'Doença' },
+    { id: 2, descricao: 'Viagem' },
+    { id: 3, descricao: 'Outro' },
+  ];
 
   useEffect(() => {
     async function getData() {
@@ -45,6 +41,7 @@ export default function NovoPedido({ match }) {
 
       setIsLoading(false);
     }
+
     getData();
   }, [id]);
 
@@ -85,7 +82,14 @@ export default function NovoPedido({ match }) {
       setIsLoading(false);
     }
   };
-
+  const handlePedido = (e) => {
+    setComboBoxPedido(e.target.value);
+    if (e.target.value === 'Outro') {
+      setComboBoxPedido(e.target.value);
+      setHidden(false);
+      setPedido('');
+    } else setPedido(e.target.value);
+  };
   return (
     <Container>
       <h1>Novo Visitante</h1>
@@ -124,12 +128,23 @@ export default function NovoPedido({ match }) {
         </Row>
         <Row>
           <Col sm={12} md={4} className="my-1">
+            <ComboBox
+              title="Motivo do pedido"
+              value={comboBoxPedido}
+              list={listPedidos}
+              onChange={(e) => {
+                handlePedido(e);
+              }}
+            />
+          </Col>
+          <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="descricao">Motivo:</Form.Label>
             <Form.Control
               type="text"
               value={pedido}
               onChange={(e) => setPedido(e.target.value)}
               placeholder="Pedido de oração"
+              disabled={hidden}
             />
           </Col>
         </Row>

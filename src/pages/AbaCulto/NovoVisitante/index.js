@@ -20,8 +20,7 @@ import history from '../../../services/history';
 export default function NovoVisitante({ match }) {
   const id = get(match, 'params.id', '');
   const [show, setShow] = useState(false);
-  const [idParaDelecao, setIdParaDelecao] = useState('');
-  const [indiceDelecao, setIndiceDelecao] = useState('');
+
   const [telefone, setTelefone] = useState('');
 
   const [maxId, setMaxId] = useState(0);
@@ -105,6 +104,11 @@ export default function NovoVisitante({ match }) {
 
     const input = document.getElementById('nome');
     input.focus();
+  };
+  const handleRemoveNome = (indiceDelecao) => {
+    const novaList = [...nomesList];
+    novaList.splice(indiceDelecao, 1);
+    setNomesList(novaList);
   };
 
   return (
@@ -210,7 +214,10 @@ export default function NovoVisitante({ match }) {
                   <td style={{ textAlign: 'center' }}>{dado.nome}</td>
 
                   <td style={{ textAlign: 'center' }}>
-                    <Link to="/novoVisitante" onClick={() => handleShow(index)}>
+                    <Link
+                      to="/novoVisitante"
+                      onClick={() => handleRemoveNome(index)}
+                    >
                       <FaWindowClose size={30} />
                     </Link>
                   </td>

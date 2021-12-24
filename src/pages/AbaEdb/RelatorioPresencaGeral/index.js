@@ -12,6 +12,7 @@ import { Container } from '../../../styles/GlobalStyles';
 import { Label, Listagem } from './styled';
 import axios from '../../../services/axios';
 
+import ComboBox from '../../../components/ComboBox';
 import Loading from '../../../components/Loading';
 import {
   fimPrimeiroTrimestre,
@@ -28,10 +29,17 @@ import {
 export default function RelatorioPresencaGeral({ match }) {
   const [classes, setClasses] = useState([]);
   const [listAlunos, setListAlunos] = useState([]);
+  const [listSetores, setListSetores] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   const [hidden, setHidden] = useState(true);
+  const [autorizado, setAutorizado] = useState(true);
+  const [disebledClasse, setDisebledClasse] = useState(false);
+
   const [classeSeletected, setClasseSeletected] = useState(0);
+  const [congregacaoSeletected, setCongregacaoSeletected] = useState(0);
   const [classeNome, setClasseNome] = useState('');
+  const [congregacaoNome, setCongregacaoNome] = useState('');
   const [presenca, setPresenca] = useState([]);
 
   const dataStorage = useSelector((state) => state.auth);
@@ -39,6 +47,18 @@ export default function RelatorioPresencaGeral({ match }) {
   const [idTrimestre, setIdTrimestre] = useState('');
   useEffect(() => {
     async function getData() {
+      if (
+        dataStorage.user.function_id === 1 ||
+        dataStorage.user.function_id === 5
+      ) {
+        setAutorizado(false);
+        setDisebledClasse(true);
+      }
+
+      console.log(dataStorage.user);
+      const response1 = await axios.get('/setor');
+      setListSetores(response1.data);
+
       const response = await axios.get('/classe');
       const listaClasse = [];
       response.data.map((dado) => {
@@ -146,13 +166,35 @@ export default function RelatorioPresencaGeral({ match }) {
 
     setIdTrimestre(valor);
   };
-  const handleGetIdCongregacao = (e) => {
+  const handleGetIdClasse = (e) => {
     const nome = e.target.value;
     setClasseNome(e.target.value);
 
     classes.map((dado) => {
       if (nome === dado.descricao) setClasseSeletected(dado.id);
     });
+  };
+  const handleGetIdCongregacao = async (e) => {
+    const nome = e.target.value;
+    setCongregacaoNome(e.target.value);
+    setDisebledClasse(false);
+    let idSetor = 0;
+    const response = await axios.get('/classe');
+
+    listSetores.map((dado) => {
+      if (nome === dado.descricao) {
+        setClasseSeletected(dado.id);
+        idSetor = dado.id;
+      }
+    });
+
+    const listaClasse = [];
+    response.data.map((dado) => {
+      if (dado.setor_id === idSetor) {
+        listaClasse.push(dado);
+      }
+    });
+    setClasses(listaClasse);
   };
   return (
     <Container>
@@ -161,10 +203,23 @@ export default function RelatorioPresencaGeral({ match }) {
 
       <Form onSubmit={handleSubmit}>
         <Row>
-          <Col sm={12} md={6} className="my-1">
+          <Col sm={12} md={4} className="my-1">
+            <ComboBox
+              title="Selecione a congregação"
+              onChange={handleGetIdCongregacao}
+              value={congregacaoNome}
+              list={listSetores}
+              hidden={autorizado}
+            />
+          </Col>
+          <Col sm={12} md={4} className="my-1">
             <Label htmlFor="congregacao">
               Selecione a classe
-              <select onChange={handleGetIdCongregacao} value={classeNome}>
+              <select
+                onChange={handleGetIdClasse}
+                value={classeNome}
+                disabled={disebledClasse}
+              >
                 <option value="nada">Selecione a classe</option>
                 {classes.map((dado) => (
                   <option key={dado.id} value={dado.descricao}>
@@ -174,7 +229,7 @@ export default function RelatorioPresencaGeral({ match }) {
               </select>
             </Label>
           </Col>
-          <Col sm={12} md={6} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <Label htmlFor="trimestre">
               Filtrar por trimestre
               <select onChange={handleIdTrimestre}>

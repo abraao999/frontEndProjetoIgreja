@@ -49,10 +49,11 @@ import PedidoOracao from '../pages/AbaCulto/PedidoOracao';
 import NovoPedido from '../pages/AbaCulto/NovoPedido';
 import ListaPedido from '../pages/AbaCulto/ListaPedido';
 import RelatorioDizimoDiario from '../pages/AbaCaixa/RelatorioDizimoDiario';
+import ControleAcesso from '../pages/AbaSecretaria/ControleAcesso';
 
 export default function Routes() {
-  const idFuncao = useSelector((state) => state.auth.user.function_id);
-
+  const idFuncao = useSelector((state) => state.auth.function_id);
+  console.log(idFuncao);
   /*
     1 - Admistrador
     2 - Dirigente
@@ -61,8 +62,9 @@ export default function Routes() {
     5 - Coordenador
     6 - Tesoureiro EBD
     7 -  Professor
-    8 - Coordenador Congregacao
+    8 - outros
     9 - Tesoureiro Congregacao
+    10 - secretario ebd
   */
   return (
     <Switch>
@@ -105,7 +107,7 @@ export default function Routes() {
           { id: 5 },
           { id: 6 },
           { id: 7 },
-          { id: 8 },
+          { id: 10 },
         ]}
         component={Ebd}
         isClosed
@@ -234,6 +236,13 @@ export default function Routes() {
         isClosed
       />
       <MyRoute
+        path="/controleAcesso/"
+        component={ControleAcesso}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 4 }]}
+        isClosed
+      />
+      <MyRoute
         path="/detailMembro/:id"
         component={DetailMembro}
         isClosed={false}
@@ -268,7 +277,7 @@ export default function Routes() {
           { id: 2 },
           { id: 5 },
           { id: 6 },
-          { id: 8 },
+          { id: 10 },
         ]}
         isClosed
       />
@@ -281,7 +290,7 @@ export default function Routes() {
           { id: 2 },
           { id: 5 },
           { id: 6 },
-          { id: 8 },
+          { id: 10 },
         ]}
         isClosed
       />
@@ -294,7 +303,7 @@ export default function Routes() {
           { id: 2 },
           { id: 5 },
           { id: 6 },
-          { id: 8 },
+          { id: 10 },
         ]}
         isClosed
       />

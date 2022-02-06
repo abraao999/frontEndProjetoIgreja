@@ -50,6 +50,7 @@ export default function Header() {
     { desc: 'LISTA DE ANIVERSÁRIOS', path: '/listAniversario' },
     { desc: 'CADASTRO DE MEMBROS', path: '/cadMembro' },
     { desc: 'LISTA DE MEMBROS', path: '/listMembros' },
+    { desc: 'PERMISSÃO DE USUARIO', path: '/controleAcesso' },
   ];
   const configuracoes = [
     { desc: 'CARGOS', path: '/cargo' },

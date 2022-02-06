@@ -3,13 +3,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { toast } from 'react-toastify';
-import {
-  FaEdit,
-  FaWindowClose,
-  FaSearch,
-  FaCheck,
-  FaCcJcb,
-} from 'react-icons/fa';
 
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
@@ -31,16 +24,6 @@ import { Impressao } from '../../../printers/impRelatorioDizimoIndividual';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export default function RelatorioDizimoDiario() {
-  const [show, setShow] = useState(false);
-  const [showMembro, setShowMembro] = useState(false);
-
-  const [idParaDelecao, setIdParaDelecao] = useState('');
-  const [indiceDelecao, setIndiceDelecao] = useState('');
-
-  const [idMembro, setIdMembro] = useState('');
-  const [nomeMembro, setNomeMembro] = useState('');
-
-  const [membros, setMembros] = useState([]);
   const [listMovimentacao, setListMovimentacao] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hidden, setHidden] = useState(true);

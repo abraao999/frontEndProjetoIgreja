@@ -21,7 +21,7 @@ import ModalAddDescLancamento from '../../../components/ModalAddDescLancamento';
 export default function Caixa({ match }) {
   const dispath = useDispatch();
   const id = get(match, 'params.id', '');
-  const dataUser = useSelector((state) => state.auth.user);
+  const dataUser = useSelector((state) => state.auth.function_id);
 
   const [maxId, setMaxId] = useState(0);
 
@@ -56,11 +56,13 @@ export default function Caixa({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      if (dataUser.function_id === 1 || dataUser.function_id === 3) {
-        setHidden(false);
-      } else {
-        setSetorId(dataUser.setor_id);
-      }
+      dataUser.map((data) => {
+        if (data.function_id === 1 || data.function_id === 3) {
+          setHidden(false);
+        } else {
+          setSetorId(dataUser.setor_id);
+        }
+      });
       buscaDescricao();
       if (!id) {
         try {

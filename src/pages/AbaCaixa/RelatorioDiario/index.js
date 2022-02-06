@@ -29,7 +29,7 @@ import {
 import { Impressao } from '../../../printers/impRelatorioDiario';
 
 export default function RelatorioDiario() {
-  const dataUser = useSelector((state) => state.auth.user);
+  const dataUser = useSelector((state) => state.auth.function_id);
 
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
@@ -46,10 +46,12 @@ export default function RelatorioDiario() {
     async function getData() {
       setIsLoading(true);
       let auxAutorizado = false;
-      if (dataUser.function_id === 1 || dataUser === 3) {
-        setHidden(false);
-        auxAutorizado = true;
-      }
+      dataUser.map((dado) => {
+        if (dado.function_id === 1 || dado === 3) {
+          setHidden(false);
+          auxAutorizado = true;
+        }
+      });
 
       const novaList = [];
       axios.get('/caixa').then(async (dado) => {

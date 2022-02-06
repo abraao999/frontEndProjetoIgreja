@@ -23,7 +23,7 @@ import { Impressao } from '../../../printers/impRelatorioDiario';
 import { getDataDB } from '../../../util';
 
 export default function RelatorioCaixa() {
-  const dataUser = useSelector((state) => state.auth.user);
+  const dataUser = useSelector((state) => state.auth.function_id);
 
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
@@ -63,10 +63,12 @@ export default function RelatorioCaixa() {
     async function getData() {
       setIsLoading(true);
       let auxAutorizado = false;
-      if (dataUser.function_id === 1 || dataUser.function_id === 3) {
-        setHidden(false);
-        auxAutorizado = true;
-      }
+      dataUser.map((dado) => {
+        if (dado.function_id === 1 || dado.function_id === 3) {
+          setHidden(false);
+          auxAutorizado = true;
+        }
+      });
       const response = await axios.get('/setor');
       setSetores(response.data);
       const response2 = await axios.get('/departamento');

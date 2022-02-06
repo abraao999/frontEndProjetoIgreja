@@ -1,30 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import { useSelector } from 'react-redux';
 import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaCalculator, FaUserTie } from 'react-icons/fa';
 import { MdArrowBack, MdSchool } from 'react-icons/md';
 import { Container } from '../../../styles/GlobalStyles';
 
-import Loading from '../../../components/Loading';
 import { ContainerBox } from './styled';
 
 export default function Tesoraria() {
-  const [isLoading, setIsLoading] = useState(false);
-  const storage = useSelector((state) => state.auth);
-  useEffect(() => {
-    async function getData() {
-      setIsLoading(true);
-      console.log(storage.user);
-      setIsLoading(false);
-    }
-    getData();
-  }, []);
-
   return (
     <>
-      <Loading isLoading={isLoading} />
       <Container>
         <h1>Tesoraria</h1>
         <Row>

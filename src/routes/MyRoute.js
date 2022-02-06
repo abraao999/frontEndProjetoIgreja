@@ -25,11 +25,13 @@ export default function MyRoute({
     );
   }
   if (isClosed) {
-    usuarioPermitido.map((dado) => {
-      if (dado.id === idFuncao) {
-        permitido = true;
-      }
-      return permitido;
+    idFuncao.map((itemId) => {
+      usuarioPermitido.map((dado) => {
+        if (dado.id === itemId.function_id) {
+          permitido = true;
+        }
+        return permitido;
+      });
     });
     if (!permitido) {
       toast.error(
@@ -52,7 +54,7 @@ export default function MyRoute({
 
 MyRoute.defaultProps = {
   isClosed: false,
-  idFuncao: 0,
+  idFuncao: [],
   usuarioPermitido: [],
 };
 
@@ -60,6 +62,6 @@ MyRoute.propTypes = {
   component: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
     .isRequired,
   isClosed: PropTypes.bool,
-  idFuncao: PropTypes.number,
+  idFuncao: PropTypes.array,
   usuarioPermitido: PropTypes.array,
 };

@@ -152,64 +152,39 @@ export default function CadMembro({ match }) {
     if (formErrors) return;
     try {
       if (!id) {
-        const response = await axios.post(`membro`, {
-          nome: nomeMembro,
-          rg,
-          cpf,
-          data_batismo: dataBatismo || null,
-          data_nascimento: dataNascimento || null,
-          profissao,
-          estado_civil: estacoCivil,
-          telefone,
-          telefone2,
-          email,
-          observacao,
-          password: password || '123456',
-          rua,
-          numero,
-          complemento,
-          bairro,
-          cidade,
-          cep,
-          nomeConjuge,
-          cargo_id: cargoId,
-          function_id: functionId,
-          setor_id: setorId,
-        });
-        console.log(response);
+        axios
+          .post(`membro`, {
+            nome: nomeMembro,
+            rg,
+            cpf,
+            data_batismo: dataBatismo || null,
+            data_nascimento: dataNascimento || null,
+            profissao,
+            estado_civil: estacoCivil,
+            telefone,
+            telefone2,
+            email,
+            observacao,
+            password: password || '123456',
+            rua,
+            numero,
+            complemento,
+            bairro,
+            cidade,
+            cep,
+            nomeConjuge,
+            cargo_id: cargoId,
+            setor_id: setorId,
+          })
+          .then(async (resposta) => {
+            const response = await axios.post('/controleAcesso', {
+              membro_id: resposta.data.id,
+              function_id: functionId,
+            });
+          });
+
         limpaCampos();
         toast.success('Membro criado com sucesso');
-        history.push('/listMembros');
-        setIsLoading(false);
-      } else if (password.length > 2) {
-        const response = await axios.put(`/membro/${id}`, {
-          nome: nomeMembro,
-          rg,
-          cpf,
-          data_batismo: dataBatismo || null,
-          data_nascimento: dataNascimento || null,
-          profissao,
-          observacao,
-          estado_civil: estacoCivil,
-          telefone,
-          telefone2,
-          rua,
-          numero,
-          email,
-          complemento,
-          bairro,
-          cidade,
-          cep,
-          password,
-          nomeConjuge,
-          cargo_id: cargoId,
-          function_id: functionId,
-          setor_id: setorId,
-        });
-        console.log(response);
-        limpaCampos();
-        toast.success('Membro editado com sucesso');
-
         history.push('/listMembros');
         setIsLoading(false);
       } else {
@@ -233,7 +208,6 @@ export default function CadMembro({ match }) {
           cep,
           nomeConjuge,
           cargo_id: cargoId,
-          function_id: functionId,
           setor_id: setorId,
         });
         console.log(response);

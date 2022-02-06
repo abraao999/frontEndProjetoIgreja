@@ -396,35 +396,35 @@ export default function Routes() {
         component={Chamada}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 5 }, { id: 7 }]}
-        isClosed
+        isClosed={false}
       />
       <MyRoute
         path="/detailAluno/:id"
         component={DetailAluno}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 5 }]}
-        isClosed
+        isClosed={false}
       />
       <MyRoute
         path="/PresencaDetalhada/"
         component={PresencaDetalhada}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 5 }]}
-        isClosed
+        isClosed={false}
       />
       <MyRoute
         path="/relatorioPresencaDiaria/"
         component={RelatorioPresencaDiaria}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 5 }, { id: 7 }]}
-        isClosed
+        isClosed={false}
       />
       <MyRoute
         path="/relatorioPresencaGeral/"
         component={RelatorioPresencaGeral}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 5 }]}
-        isClosed
+        isClosed={false}
       />
       <MyRoute path="*" component={Page404} />
     </Switch>

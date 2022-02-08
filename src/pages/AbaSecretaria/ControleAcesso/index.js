@@ -1,12 +1,21 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
-import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
+import {
+  FaEdit,
+  FaWindowClose,
+  FaSearch,
+  FaCheck,
+  FaSave,
+} from 'react-icons/fa';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
-import { Col, Form, Row, Table } from 'react-bootstrap';
+import { Col, Form, Row, Table, Button } from 'react-bootstrap';
+
+import { useSelector } from 'react-redux';
 import { Container } from '../../../styles/GlobalStyles';
 import { Listagem } from './styled';
 import axios from '../../../services/axios';
@@ -17,90 +26,54 @@ import history from '../../../services/history';
 import ModalMembro from '../../../components/ModalMembro';
 // import * as actions from '../../store/modules/auth/actions';
 
-export default function ControleAcesso({ match }) {
-  const id = get(match, 'params.id', '');
+export default function ControleAcesso() {
+  const dataStorage = useSelector((state) => state.auth.user);
   const [show, setShow] = useState(false);
-  const [idParaDelecao, setIdParaDelecao] = useState('');
-  const [indiceDelecao, setIndiceDelecao] = useState('');
-
-  const [descricao, setDescricao] = useState('');
-  const [descricaoList, setDescricaoList] = useState([]);
+  const [hidden, setHidden] = useState(true);
+  const [showSalvar, setShowSalvar] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [nomeMembro, setNomeMembro] = useState('');
   const [idMembro, setIdMembro] = useState('');
   const [membros, setMembros] = useState([]);
+  const [listFuncoes, setListFuncoes] = useState([]);
+
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
       const response = await axios.get('/funcao');
-      console.log(response.data);
-      console.log('idfuncao', id);
-      setDescricaoList(response.data);
-      // if(idFuncao){
-
-      // }
+      setListFuncoes(response.data);
       setIsLoading(false);
     }
     getData();
-  }, [id]);
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setIsLoading(true);
-    let formErrors = false;
-
-    if (descricao.length < 3 || descricao.length > 255) {
-      formErrors = true;
-      toast.error('Campo descricao deve ter entre 3 e 255 caracteres');
-    }
-    if (formErrors) return;
-    try {
-      if (!id) {
-        const response = await axios.post('/funcao', { descricao });
-        console.log(response);
-        const novaLista = await axios.get('/funcao');
-        setDescricaoList(novaLista.data);
-        setDescricao('');
-        toast.success('Função criada com sucesso');
-        setIsLoading(false);
-      } else {
-        const response = await axios.put(`/funcao/${id}`, { descricao });
-        console.log(response);
-        const novaLista = await axios.get('/funcao');
-        setDescricaoList(novaLista.data);
-        setDescricao('');
-        toast.success('Função editada com sucesso');
-
-        history.push('/funcao');
-        setIsLoading(false);
-      }
-    } catch (error) {
-      const status = get(error, 'response.data.status', 0);
-      if (status === 401) {
-        toast.error('Voce precisa fazer loggin');
-      } else {
-        toast.error('Erro ao excluir um aluno');
-      }
-      setIsLoading(false);
-    }
-  }
+  }, []);
   const handleClose = () => {
     setShow(false);
   };
-  const handleShow = (idFuncao, index) => {
-    setIdParaDelecao(idFuncao);
-    setIndiceDelecao(index);
+  const handleShow = () => {
     setShow(true);
   };
   const handleFunctionConfirm = async () => {
     try {
       setIsLoading(true);
-      await axios.delete(`/funcao/${idParaDelecao}`);
-      const novosFuncoes = [...descricaoList];
-      novosFuncoes.splice(indiceDelecao, 1);
-      setDescricaoList(novosFuncoes);
-      toast.success('Classe excluida com sucesso');
-      setShow(false);
-
+      const response = await axios.get(
+        `/controleAcesso/getPermicoes/${idMembro}`
+      );
+      listFuncoes.map(async (dado) => {
+        if (dado.checked) {
+          await axios.post('/controleAcesso', {
+            membro_id: idMembro,
+            function_id: dado.id,
+          });
+        } else {
+          response.data.map(async (item) => {
+            if (item.function_id === dado.id) {
+              await axios.delete(`/controleAcesso/${item.id}`);
+            }
+          });
+        }
+      });
+      setShowSalvar(false);
+      toast.success('Alterações realizadas com sucesso');
       setIsLoading(false);
     } catch (error) {
       const status = get(error, 'response.data.status', 0);
@@ -110,17 +83,6 @@ export default function ControleAcesso({ match }) {
         toast.error('Erro ao excluir a classe');
       }
       setIsLoading(false);
-    }
-  };
-  const handleIdMembro = async (idm) => {
-    try {
-      const response = await axios.get(`/membro/${idm}`);
-      setNomeMembro(response.data.nome);
-      setIdMembro(response.data.id);
-      handleClose();
-    } catch (e) {
-      toast.error('Condigo não existe');
-      console.log(e);
     }
   };
   const handlePesquisaNome = async () => {
@@ -143,6 +105,53 @@ export default function ControleAcesso({ match }) {
       console.log(e);
     }
   };
+  const handleCheck = (dado) => {
+    const novaLista = [];
+    listFuncoes.map((item) => {
+      if (item.id === dado) novaLista.push({ ...item, checked: !item.checked });
+      else novaLista.push(item);
+    });
+    setListFuncoes(novaLista);
+  };
+  const handleRenderizaLista = (list) => {
+    const novaLista = [];
+
+    listFuncoes.map((funcao) => {
+      if (list.length === 0) novaLista.push(funcao);
+      else
+        list.map((dado) => {
+          if (funcao.id === dado.function_id) {
+            novaLista.push({ ...funcao, checked: true });
+          } else novaLista.push({ ...funcao, checked: false });
+        });
+    });
+    setListFuncoes(novaLista);
+  };
+  const handleIdMembro = async (idm) => {
+    if (idm === dataStorage.id) {
+      toast.error('Você não pode alterar as suas próprias permissões');
+      setShow(false);
+    } else {
+      try {
+        setHidden(false);
+
+        const response = await axios.get(`/membro/${idm}`);
+        setNomeMembro(response.data.nome);
+        setIdMembro(response.data.id);
+        const response2 = await axios.get(
+          `/controleAcesso/getPermicoes/${idm}`
+        );
+        response2.data.length > 0
+          ? handleRenderizaLista(response2.data)
+          : handleRenderizaLista([]);
+        handleClose();
+      } catch (e) {
+        toast.error('Condigo não existe');
+        console.log(e);
+      }
+    }
+  };
+
   return (
     <Container>
       <h1> Controle de Acesso</h1>
@@ -155,7 +164,16 @@ export default function ControleAcesso({ match }) {
         buttonCancel="Fechar"
         handleIdMembro={handleIdMembro}
       />
-      <Form onSubmit={handleSubmit}>
+      <Modal
+        title="Atenção!!!"
+        handleClose={() => setShowSalvar(false)}
+        show={showSalvar}
+        text="Deseja salvar as alterações"
+        buttonCancel="Não"
+        buttonConfirm="Sim"
+        handleFunctionConfirm={handleFunctionConfirm}
+      />
+      <Form onSubmit={handlePesquisaNome}>
         <Row>
           <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="descricao">Nome do Membro</Form.Label>
@@ -185,50 +203,54 @@ export default function ControleAcesso({ match }) {
           </Col>
         </Row>
       </Form>
-      <Listagem>
+      <Listagem hidden={hidden}>
         <h3>Lista de Funções</h3>
         <center>
-          <Table className="table table-striped">
+          <Table
+            className="table table-striped"
+            style={{ textAlign: 'center' }}
+          >
             <thead>
               <tr>
-                <th scope="col">Descição</th>
-                <th scope="col">Alterar</th>
-                <th scope="col">Excluir</th>
+                <th scope="col">Descrião</th>
+                <th scope="col">Permissão</th>
               </tr>
             </thead>
             <tbody>
-              {descricaoList.map((dado, index) => (
+              {listFuncoes.map((dado, index) => (
                 <tr key={String(dado.id)}>
                   <td>{dado.descricao}</td>
+
                   <td>
-                    <Link
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setDescricao(dado.descricao);
-                        history.push(`/funcao/${dado.id}/edit`);
-                      }}
-                      to={`/funcao/${dado.id}/edit`}
-                    >
-                      <FaEdit size={16} />
-                    </Link>
-                  </td>
-                  <td>
-                    <Link
-                      onClick={() => handleShow(dado.id, index)}
-                      to={`/funcao/${dado.id}/delete`}
-                    >
-                      <FaWindowClose size={16} />
-                    </Link>
+                    {dado.checked ? (
+                      <Button
+                        onClick={() => {
+                          handleCheck(dado.id);
+                        }}
+                        variant="success"
+                      >
+                        <FaCheck />
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => {
+                          handleCheck(dado.id);
+                        }}
+                        variant="danger"
+                      >
+                        <FaWindowClose />
+                      </Button>
+                    )}
                   </td>
                 </tr>
               ))}
             </tbody>
           </Table>
+          <button type="button" onClick={() => setShowSalvar(true)}>
+            Salvar <FaSave />
+          </button>
         </center>
       </Listagem>
     </Container>
   );
 }
-ControleAcesso.protoTypes = {
-  match: PropTypes.shape({}).isRequired,
-};

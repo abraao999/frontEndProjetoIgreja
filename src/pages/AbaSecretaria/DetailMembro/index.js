@@ -53,23 +53,21 @@ export default function DetailMembro({ match }) {
       setNomeConjuge(response.data.nomeConjuge);
 
       const data = new Date(response.data.data_batismo);
-      const dataFormatada = `${data.getDate() + 1}/${data.getMonth() + 1
-        }/${data.getFullYear()}`;
+      const dataFormatada = `${data.getDate() + 1}/${
+        data.getMonth() + 1
+      }/${data.getFullYear()}`;
       setDataBatismo(dataFormatada);
 
       const data2 = new Date(response.data.data_nascimento);
-      const dataNasicmentoFormatada = `${data2.getDate() + 1}/${data2.getMonth() + 1
-        }/${data2.getFullYear()}`;
+      const dataNasicmentoFormatada = `${data2.getDate() + 1}/${
+        data2.getMonth() + 1
+      }/${data2.getFullYear()}`;
       setDataNascimento(dataNasicmentoFormatada);
 
       const response2 = await axios.get(`/setor/${response.data.setor_id}`);
       setSetor(response2.data.descricao);
       const response4 = await axios.get(`/cargo/${response.data.cargo_id}`);
       setCargo(response4.data.descricao);
-
-      const response3 = await axios.get(`/funcao/${response.data.function_id}`);
-      console.log(response3.data);
-      setFunctionNome(response3.data.descricao);
 
       setIsLoading(false);
     }
@@ -154,30 +152,20 @@ export default function DetailMembro({ match }) {
           </Col>
         </Row>
         <Row>
-          <Col sm={12} md={4} className="my-1">
+          <Col sm={12} md={3} className="my-1">
             <Form.Label htmlFor="dataBatismo">Congregação:</Form.Label>
             <Form.Control id="telefone" type="text" value={setor} disabled />
           </Col>
-          <Col sm={12} md={4} className="my-1">
+          <Col sm={12} md={3} className="my-1">
             <Form.Label htmlFor="dataBatismo">Cargo:</Form.Label>
             <Form.Control id="cargo" type="text" value={cargo} disabled />
           </Col>
-          <Col sm={12} md={4} className="my-1">
-            <Form.Label htmlFor="dataBatismo">Função:</Form.Label>
-            <Form.Control
-              id="funcao"
-              type="text"
-              value={functionNome}
-              disabled
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12} md={12} className="my-1">
+          <Col sm={12} md={6} className="my-1">
             <Form.Label htmlFor="email">E-mail:</Form.Label>
             <Form.Control id="email" type="email" value={email} disabled />
           </Col>
         </Row>
+
         <Row>
           <Col sm={12} md={6} className="my-1">
             <Form.Label htmlFor="email">Rua:</Form.Label>
@@ -212,14 +200,16 @@ export default function DetailMembro({ match }) {
           </Col>
         </Row>
         <Row>
-          <Form.Label htmlFor="observacao">Observação:</Form.Label>
-          <Form.Control
-            as="textarea"
-            id="observacao"
-            type="observacao"
-            value={observacao}
-            disabled
-          />
+          <Col sm={12} md={12} className="my-1">
+            <Form.Label htmlFor="observacao">Observação:</Form.Label>
+            <Form.Control
+              as="textarea"
+              id="observacao"
+              type="observacao"
+              value={observacao}
+              disabled
+            />
+          </Col>
         </Row>
         <center>
           <Row>

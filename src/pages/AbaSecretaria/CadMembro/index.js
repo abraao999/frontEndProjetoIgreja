@@ -91,12 +91,10 @@ export default function CadMembro({ match }) {
         setCep(response.data.cep);
         setNomeConjuge(response.data.nomeConjuge);
         setCargoId(response.data.cargo_id);
-        setFunctionId(response.data.function_id);
         setSetorId(response.data.setor_id);
         if (response.data.estado_civil === 'Casado(a)') setCasado(false);
       }
-      const response4 = await axios.get('/funcao');
-      setFuncoes(response4.data);
+
       const response2 = await axios.get('/setor');
       setSetores(response2.data);
       const response3 = await axios.get('/cargo');
@@ -116,9 +114,7 @@ export default function CadMembro({ match }) {
     setProfissao('');
     setObservacao('');
     setSetor('Selecione a Congregação');
-    setFunctionNome('Selecione a função');
     setCargo('Selecione o cargo');
-    setFunctionId(0);
     setSetorId(0);
     setCargoId(0);
   };
@@ -152,36 +148,29 @@ export default function CadMembro({ match }) {
     if (formErrors) return;
     try {
       if (!id) {
-        axios
-          .post(`membro`, {
-            nome: nomeMembro,
-            rg,
-            cpf,
-            data_batismo: dataBatismo || null,
-            data_nascimento: dataNascimento || null,
-            profissao,
-            estado_civil: estacoCivil,
-            telefone,
-            telefone2,
-            email,
-            observacao,
-            password: password || '123456',
-            rua,
-            numero,
-            complemento,
-            bairro,
-            cidade,
-            cep,
-            nomeConjuge,
-            cargo_id: cargoId,
-            setor_id: setorId,
-          })
-          .then(async (resposta) => {
-            const response = await axios.post('/controleAcesso', {
-              membro_id: resposta.data.id,
-              function_id: functionId,
-            });
-          });
+        await axios.post(`membro`, {
+          nome: nomeMembro,
+          rg,
+          cpf,
+          data_batismo: dataBatismo || null,
+          data_nascimento: dataNascimento || null,
+          profissao,
+          estado_civil: estacoCivil,
+          telefone,
+          telefone2,
+          email,
+          observacao,
+          password: password || '123456',
+          rua,
+          numero,
+          complemento,
+          bairro,
+          cidade,
+          cep,
+          nomeConjuge,
+          cargo_id: cargoId,
+          setor_id: setorId,
+        });
 
         limpaCampos();
         toast.success('Membro criado com sucesso');
@@ -466,32 +455,6 @@ export default function CadMembro({ match }) {
           </Col>
         </Row>
         <Row>
-          <Col sm={12} md={4} className="my-1">
-            <ComboBox
-              title="Selecione a Congregação"
-              list={setores}
-              value={setor}
-              onChange={handleGetIdCongregacao}
-            />
-          </Col>
-          <Col sm={12} md={4} className="my-1">
-            <ComboBox
-              title="Selecione o cargo"
-              list={cargos}
-              value={cargo}
-              onChange={handleGetIdCargo}
-            />
-          </Col>
-          <Col sm={12} md={4} className="my-1">
-            <ComboBox
-              title="Selecione a função"
-              list={funcoes}
-              value={functionNome}
-              onChange={handleGetIdFuncao}
-            />
-          </Col>
-        </Row>
-        <Row>
           <Col sm={12} md={6} className="my-1">
             <Form.Label htmlFor="email">E-mail:</Form.Label>
             <Form.Control
@@ -509,24 +472,24 @@ export default function CadMembro({ match }) {
               Insira um e-mail válido
             </Form.Control.Feedback>
           </Col>
-          <Col sm={12} md={6} className="my-1">
-            <Form.Label htmlFor="password">Senha:</Form.Label>
-            <Form.Control
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                // handleInput(e, 'password');
-              }}
-              placeholder="Senha"
-              disabled
+          <Col sm={12} md={3} className="my-1">
+            <ComboBox
+              title="Selecione a Congregação"
+              list={setores}
+              value={setor}
+              onChange={handleGetIdCongregacao}
             />
-            <Form.Control.Feedback type="invalid">
-              Minimo de 3 caracteres
-            </Form.Control.Feedback>
+          </Col>
+          <Col sm={12} md={3} className="my-1">
+            <ComboBox
+              title="Selecione o cargo"
+              list={cargos}
+              value={cargo}
+              onChange={handleGetIdCargo}
+            />
           </Col>
         </Row>
+
         <Row>
           <Col sm={12} md={6} className="my-1">
             <Form.Label htmlFor="email">Rua:</Form.Label>

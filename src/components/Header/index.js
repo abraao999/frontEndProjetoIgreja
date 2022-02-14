@@ -47,8 +47,9 @@ export default function Header() {
   ];
   const secretaria = [
     { desc: 'ALTARAR SENHA', path: '/editPass' },
-    { desc: 'LISTA DE ANIVERSÁRIOS', path: '/listAniversario' },
     { desc: 'CADASTRO DE MEMBROS', path: '/cadMembro' },
+    { desc: 'CONTROLE DE CARTERINHA', path: '/controleCarterinha' },
+    { desc: 'LISTA DE ANIVERSÁRIOS', path: '/listAniversario' },
     { desc: 'LISTA DE MEMBROS', path: '/listMembros' },
     { desc: 'PERMISSÃO DE USUARIO', path: '/controleAcesso' },
   ];

@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
@@ -26,7 +27,7 @@ import history from '../../../services/history';
 import ModalMembro from '../../../components/ModalMembro';
 // import * as actions from '../../store/modules/auth/actions';
 
-export default function ControleAcesso() {
+export default function ControleCarterinha() {
   const dataStorage = useSelector((state) => state.auth.user);
   const [show, setShow] = useState(false);
   const [hidden, setHidden] = useState(true);
@@ -36,12 +37,16 @@ export default function ControleAcesso() {
   const [idMembro, setIdMembro] = useState('');
   const [membros, setMembros] = useState([]);
   const [listFuncoes, setListFuncoes] = useState([]);
+  const [listMembros, setListMembros] = useState([]);
 
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get('/funcao');
-      setListFuncoes(response.data);
+      axios.get('/membro').then((dados) => {
+        //  setListMembros(response.data);
+        handleRenderizaLista(dados.data);
+      });
+
       setIsLoading(false);
     }
     getData();
@@ -55,22 +60,20 @@ export default function ControleAcesso() {
   const handleFunctionConfirm = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(
-        `/controleAcesso/getPermicoes/${idMembro}`
-      );
-      listFuncoes.map(async (dado) => {
-        if (dado.checked) {
-          await axios.post('/controleAcesso', {
-            membro_id: idMembro,
-            function_id: dado.id,
-          });
-        } else {
-          response.data.map(async (item) => {
-            if (item.function_id === dado.id) {
-              await axios.delete(`/controleAcesso/${item.id}`);
-            }
-          });
-        }
+      const response = await axios.get(`/controleCarterinha`);
+      listMembros.map(async (dado) => {
+        let existe = false;
+        const idm = 0;
+        response.data.map(async (resposta) => {
+          if (dado.checked && resposta.membro_id !== dado.id) {
+            existe = true;
+          } else console.log(dado);
+        });
+        // if (!existe)
+        //   await axios.post('/controleCarterinha', {
+        //     membro_id: idm,
+        //     status: true,
+        //   });
       });
       setShowSalvar(false);
       toast.success('Alterações realizadas com sucesso');
@@ -107,48 +110,49 @@ export default function ControleAcesso() {
   };
   const handleCheck = (dado) => {
     const novaLista = [];
-    listFuncoes.map((item) => {
+    listMembros.map((item) => {
       if (item.id === dado) novaLista.push({ ...item, checked: !item.checked });
       else novaLista.push(item);
     });
-    setListFuncoes(novaLista);
+    console.log(novaLista);
+    setListMembros(novaLista);
   };
-  const handleRenderizaLista = (list) => {
+  const handleRenderizaLista = async (list) => {
     const novaLista = [];
-
-    listFuncoes.map((funcao) => {
-      if (list.length === 0) novaLista.push(funcao);
-      else
-        list.map((dado) => {
-          if (funcao.id === dado.function_id) {
-            novaLista.push({ ...funcao, checked: true });
-          } else novaLista.push({ ...funcao, checked: false });
-        });
+    const response = await axios.get('/controleCarterinha');
+    list.map((membro) => {
+      let pula = true;
+      response.data.map((dado) => {
+        // if (response.data.length === 0)
+        //   novaLista.push({ ...membro, checked: false });
+        // else
+        if (membro.id === dado.membro_id) {
+          novaLista.push({ ...membro, checked: true });
+          pula = false;
+        }
+      });
+      pula && novaLista.push({ ...membro, checked: false });
     });
-    setListFuncoes(novaLista);
+    console.log(novaLista);
+    setListMembros(novaLista);
   };
   const handleIdMembro = async (idm) => {
-    if (idm === dataStorage.id) {
-      toast.error('Você não pode alterar as suas próprias permissões');
-      setShow(false);
-    } else {
-      try {
-        handleClose();
-        setHidden(false);
+    try {
+      setHidden(false);
 
-        const response = await axios.get(`/membro/${idm}`);
-        setNomeMembro(response.data.nome);
-        setIdMembro(response.data.id);
-        const response2 = await axios.get(
-          `/controleAcesso/getPermicoes/${idm}`
-        );
-        response2.data.length > 0
-          ? handleRenderizaLista(response2.data)
-          : handleRenderizaLista([]);
-      } catch (e) {
-        toast.error('Condigo não existe');
-        console.log(e);
-      }
+      const response = await axios.get(`/membro/${idm}`);
+      setNomeMembro(response.data.nome);
+      setIdMembro(response.data.id);
+      const response2 = await axios.get(
+        `/controleCarterinha/getEntregues/${idm}`
+      );
+      response2.data.length > 0
+        ? setListMembros([{ ...response.data, checked: true }])
+        : setListMembros([{ ...response.data, checked: false }]);
+      handleClose();
+    } catch (e) {
+      toast.error('Condigo não existe');
+      console.log(e);
     }
   };
 
@@ -203,7 +207,7 @@ export default function ControleAcesso() {
           </Col>
         </Row>
       </Form>
-      <Listagem hidden={hidden}>
+      <Listagem>
         <h3>Lista de Funções</h3>
         <center>
           <Table
@@ -212,14 +216,16 @@ export default function ControleAcesso() {
           >
             <thead>
               <tr>
-                <th scope="col">Descrião</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Congregação</th>
                 <th scope="col">Permissão</th>
               </tr>
             </thead>
             <tbody>
-              {listFuncoes.map((dado, index) => (
+              {listMembros.map((dado) => (
                 <tr key={String(dado.id)}>
-                  <td>{dado.descricao}</td>
+                  <td>{dado.nome}</td>
+                  <td>{dado.desc_setor}</td>
 
                   <td>
                     {dado.checked ? (

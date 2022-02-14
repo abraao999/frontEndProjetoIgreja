@@ -50,6 +50,7 @@ import NovoPedido from '../pages/AbaCulto/NovoPedido';
 import ListaPedido from '../pages/AbaCulto/ListaPedido';
 import RelatorioDizimoDiario from '../pages/AbaCaixa/RelatorioDizimoDiario';
 import ControleAcesso from '../pages/AbaSecretaria/ControleAcesso';
+import ControleCarterinha from '../pages/AbaSecretaria/ControleCarterinha';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.function_id);
@@ -243,6 +244,13 @@ export default function Routes() {
         isClosed
       />
       <MyRoute
+        path="/controleCarterinha/"
+        component={ControleCarterinha}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 4 }]}
+        isClosed
+      />
+      <MyRoute
         path="/detailMembro/:id"
         component={DetailMembro}
         isClosed={false}
@@ -396,35 +404,35 @@ export default function Routes() {
         component={Chamada}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 5 }, { id: 7 }]}
-        isClosed={false}
+        isClosed
       />
       <MyRoute
         path="/detailAluno/:id"
         component={DetailAluno}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 5 }]}
-        isClosed={false}
+        isClosed
       />
       <MyRoute
         path="/PresencaDetalhada/"
         component={PresencaDetalhada}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 5 }]}
-        isClosed={false}
+        isClosed
       />
       <MyRoute
         path="/relatorioPresencaDiaria/"
         component={RelatorioPresencaDiaria}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 5 }, { id: 7 }]}
-        isClosed={false}
+        isClosed
       />
       <MyRoute
         path="/relatorioPresencaGeral/"
         component={RelatorioPresencaGeral}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 5 }]}
-        isClosed={false}
+        isClosed
       />
       <MyRoute path="*" component={Page404} />
     </Switch>

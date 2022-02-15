@@ -51,6 +51,11 @@ import ListaPedido from '../pages/AbaCulto/ListaPedido';
 import RelatorioDizimoDiario from '../pages/AbaCaixa/RelatorioDizimoDiario';
 import ControleAcesso from '../pages/AbaSecretaria/ControleAcesso';
 import ControleCarterinha from '../pages/AbaSecretaria/ControleCarterinha';
+import CadAlunoTeologia from '../pages/AbaEscolaTeologica/CadAlunoTeologia';
+import ListAlunosTeologia from '../pages/AbaEscolaTeologica/ListAlunosTeologia';
+import EscolaTeologica from '../pages/AbaEscolaTeologica/EscolaTeologica';
+import CadClasseTeologia from '../pages/AbaEscolaTeologica/CadClasseTeologia';
+import DetailAlunoTeologia from '../pages/AbaEscolaTeologica/DetailAluno';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.function_id);
@@ -66,6 +71,8 @@ export default function Routes() {
     8 - outros
     9 - Tesoureiro Congregacao
     10 - secretario ebd
+    11 - diretor escola teológica
+    12 - secretario escola teológica
   */
   return (
     <Switch>
@@ -127,7 +134,6 @@ export default function Routes() {
         component={Tesoraria}
         isClosed
       />
-
       <MyRoute path="/fotos/:id" component={Fotos} isClosed />
       <MyRoute path="/login/" component={Login} isClosed={false} />
       <MyRoute path="/register/" component={Register} isClosed={false} />
@@ -187,6 +193,7 @@ export default function Routes() {
         usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 4 }]}
         isClosed
       />
+      <MyRoute path="/editPass/:id/" component={EditPass} isClosed={false} />
       <MyRoute
         path="/editPass/"
         component={EditPass}
@@ -432,6 +439,55 @@ export default function Routes() {
         component={RelatorioPresencaGeral}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 5 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/escolaTeologica/"
+        component={EscolaTeologica}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 11 }, { id: 12 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/detailAlunoTeologia/:id/"
+        component={DetailAlunoTeologia}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 11 }, { id: 12 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/cadAlunoTeologia/:id/edit/"
+        component={CadAlunoTeologia}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 11 }, { id: 12 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/cadAlunoTeologia/"
+        component={CadAlunoTeologia}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 11 }, { id: 12 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/listAlunosTeologia/"
+        component={ListAlunosTeologia}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 11 }, { id: 12 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/CadClasseTeologia/:id/edit/"
+        component={CadClasseTeologia}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 11 }, { id: 12 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/CadClasseTeologia/"
+        component={CadClasseTeologia}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 11 }, { id: 12 }]}
         isClosed
       />
       <MyRoute path="*" component={Page404} />

@@ -60,6 +60,11 @@ export default function Header() {
     { desc: 'DEPARTAMENTOS', path: '/departamento' },
     { desc: 'FUNÇÕES', path: '/funcao' },
   ];
+  const teologia = [
+    { desc: 'CADASTRO DE ALUNO', path: '/cadAlunoTeologia' },
+    { desc: 'CADASTRO DE CLASSE', path: '/cadClasseTeologia' },
+    { desc: 'LISTA DE ALUNOS', path: '/listAlunosTeologia' },
+  ];
   const ebd = [
     { desc: 'CADASTRO CLASSE', path: '/classe' },
     { desc: 'CADASTRO DE ALUNO', path: '/cadAluno' },
@@ -113,6 +118,9 @@ export default function Header() {
             {isLoggedIn && <Dropdown nome="SECRETARIA" opcoes={secretaria} />}
             {isLoggedIn && <Dropdown nome="TESOURARIA" opcoes={caixa} />}
             {isLoggedIn && <Dropdown nome="EBD" opcoes={ebd} />}
+            {isLoggedIn && (
+              <Dropdown nome="ESCOLA TEOLÓGICA" opcoes={teologia} />
+            )}
             {!isLoggedIn && <Nav.Link href="/contato">FALE CONOSCO</Nav.Link>}
           </Nav>
           <Nav>

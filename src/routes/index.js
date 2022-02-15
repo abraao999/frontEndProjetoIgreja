@@ -56,6 +56,7 @@ import ListAlunosTeologia from '../pages/AbaEscolaTeologica/ListAlunosTeologia';
 import EscolaTeologica from '../pages/AbaEscolaTeologica/EscolaTeologica';
 import CadClasseTeologia from '../pages/AbaEscolaTeologica/CadClasseTeologia';
 import DetailAlunoTeologia from '../pages/AbaEscolaTeologica/DetailAluno';
+import TeologiaChamada from '../pages/AbaEscolaTeologica/TeologiaChamada';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.function_id);
@@ -486,6 +487,13 @@ export default function Routes() {
       <MyRoute
         path="/CadClasseTeologia/"
         component={CadClasseTeologia}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 11 }, { id: 12 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/teologiaChamada/"
+        component={TeologiaChamada}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 11 }, { id: 12 }]}
         isClosed

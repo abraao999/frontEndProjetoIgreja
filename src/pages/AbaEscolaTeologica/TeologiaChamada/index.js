@@ -1,7 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
 import { FaSearch, FaSave } from 'react-icons/fa';
@@ -15,7 +14,7 @@ import Loading from '../../../components/Loading';
 import history from '../../../services/history';
 // import * as actions from '../../store/modules/auth/actions';
 
-export default function Chamada({ match }) {
+export default function TeologiaChamada() {
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
@@ -36,15 +35,10 @@ export default function Chamada({ match }) {
     async function getData() {
       setIsLoading(true);
       const lista = [];
-      axios.get('/classe').then((response) => {
-        response.data.map((valor) => {
-          if (dataStorage.user.setor_id === valor.setor_id) {
-            lista.push(valor);
-          }
-        });
-        setClasses(lista);
+      axios.get('/teologiaClasse').then((response) => {
+        setClasses(response.data);
       });
-      const response2 = await axios.get('/aluno');
+      const response2 = await axios.get('/teologiaAluno');
       setAluno(response2.data);
       setIsLoading(false);
     }
@@ -63,7 +57,7 @@ export default function Chamada({ match }) {
       });
       setFiltro(true);
     } else {
-      const response = await axios.get('/aluno');
+      const response = await axios.get('/teologiaAluno');
       response.data.map((dados) => {
         if (dados.classe_id === setorSeletected) {
           novaLista.push(dados);
@@ -108,6 +102,7 @@ export default function Chamada({ match }) {
     });
   };
   const listaChamada = [];
+
   const handleCheck = (dado) => {
     let pula = false;
     if (listaChamada.length > 0) {
@@ -129,13 +124,13 @@ export default function Chamada({ match }) {
       return toast.error('A lista de chamada está vazia');
     try {
       listaChamada.map(async (item) => {
-        const response = await axios.post('/chamada', {
+        const response = await axios.post('/teologiaChamada', {
           data_aula: new Date(),
           aluno_id: item,
         });
       });
       toast.success('Chamada feita com sucesso');
-      history.push('/PresencaDetalhada');
+      history.push('/escolaTeologica');
     } catch (error) {
       toast.error('Erro ao atribuir as presenças');
     }
@@ -154,7 +149,7 @@ export default function Chamada({ match }) {
         buttonConfirm="Sim"
         handleFunctionConfirm={handleFunctionConfirm}
       />
-
+      {/*
       <Form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="congregacao">
@@ -172,8 +167,8 @@ export default function Chamada({ match }) {
         <button type="submit">
           Filtrar <FaSearch />
         </button>
-      </Form>
-      <Listagem hidden={aparecer}>
+      </Form> */}
+      <Listagem>
         <h3>Lista de Alunos</h3>
         <center>
           <Table className="table table-striped">
@@ -188,7 +183,7 @@ export default function Chamada({ match }) {
               {aluno.map((dado, index) => (
                 <tr key={String(dado.id)}>
                   <td>{dado.nome}</td>
-                  <td>{dado.desc_classes}</td>
+                  <td>{dado.desc_classe}</td>
                   <td>
                     <input
                       onChange={() => handleCheck(dado.id)}
@@ -209,6 +204,3 @@ export default function Chamada({ match }) {
     </Container>
   );
 }
-Chamada.protoTypes = {
-  match: PropTypes.shape({}).isRequired,
-};

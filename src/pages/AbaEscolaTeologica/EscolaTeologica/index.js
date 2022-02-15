@@ -39,74 +39,33 @@ export default function Ebd() {
             </Link>
           </Col>
           <Col sm={6} md={4} className="my-1">
-            <Link to="/cadAluno">
+            <Link to="/cadClasseTeologia">
               <ContainerBox>
                 <FaChalkboardTeacher size={50} />
-                <span>Cadastro de Aluno</span>
+                <span>Cadastro de Classe</span>
               </ContainerBox>
             </Link>
           </Col>
           <Col sm={6} md={4} className="my-1">
-            <Link to="/caixaEbd">
-              <ContainerBox>
-                <FaChalkboardTeacher size={50} />
-                <span>Caixa</span>
-              </ContainerBox>
-            </Link>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={6} md={4} className="my-1">
-            <Link to="/chamada">
+            <Link to="/teologiaChamada">
               <ContainerBox>
                 <FaChalkboardTeacher size={50} />
                 <span>Chamada</span>
               </ContainerBox>
             </Link>
           </Col>
+        </Row>
+        <Row>
           <Col sm={6} md={4} className="my-1">
-            <Link to="/listAluno">
+            <Link to="/listAlunosTeologia">
               <ContainerBox>
                 <FaChalkboardTeacher size={50} />
                 <span>Lista de Alunos</span>
               </ContainerBox>
             </Link>
           </Col>
-          <Col sm={6} md={4} className="my-1">
-            <Link to="/relatorioCaixaEbd">
-              <ContainerBox>
-                <FaChalkboardTeacher size={50} />
-                <span>Relatorio de Caixa</span>
-              </ContainerBox>
-            </Link>
-          </Col>
         </Row>
-        <Row>
-          <Col sm={6} md={4} className="my-1">
-            <Link to="/relatorioPresencaDiaria">
-              <ContainerBox>
-                <FaChalkboardTeacher size={50} />
-                <span>Presença Diária</span>
-              </ContainerBox>
-            </Link>
-          </Col>
-          <Col sm={6} md={4} className="my-1">
-            <Link to="/relatorioPresencaGeral">
-              <ContainerBox>
-                <FaChalkboardTeacher size={50} />
-                <span>Presença Geral</span>
-              </ContainerBox>
-            </Link>
-          </Col>
-          <Col sm={6} md={4} className="my-1">
-            <Link to="/presencaDetalhada">
-              <ContainerBox>
-                <FaChalkboardTeacher size={50} />
-                <span>Presença detalhada</span>
-              </ContainerBox>
-            </Link>
-          </Col>
-        </Row>
+
         <Row>
           <Col sm={6} md={4} className="my-1">
             <Link to="/">

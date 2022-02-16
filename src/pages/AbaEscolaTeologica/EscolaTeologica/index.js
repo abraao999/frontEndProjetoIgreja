@@ -64,6 +64,14 @@ export default function Ebd() {
               </ContainerBox>
             </Link>
           </Col>
+          <Col sm={6} md={4} className="my-1">
+            <Link to="/teologiaLivro">
+              <ContainerBox>
+                <FaChalkboardTeacher size={50} />
+                <span>Controle de Livros</span>
+              </ContainerBox>
+            </Link>
+          </Col>
         </Row>
 
         <Row>

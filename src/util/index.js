@@ -1,3 +1,5 @@
+import axios from "../services/axios";
+
 /* eslint-disable no-param-reassign */
 export const inicioPrimeiroTrimestre = '2021-01-01';
 export const fimPrimeiroTrimestre = '2021-03-31';
@@ -62,4 +64,9 @@ export const getMes = (valor) => {
   valor = new Date(valor);
   valor = valor.getMonth() + 1;
   return valor;
+};
+export const buscaCep = async (cep) => {
+  cep = cep.replace('-', '');
+  const response = await axios.post('/correio', { cep });
+  return response.data;
 };

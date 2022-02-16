@@ -10,6 +10,7 @@ import {
   FaCheck,
   FaCcJcb,
   FaInfo,
+  FaSave,
 } from 'react-icons/fa';
 import InputMask from 'react-input-mask';
 
@@ -37,6 +38,7 @@ import ModalMembro from '../../../components/ModalMembro';
 import { listMeses } from '../../../util';
 
 import { Impressao } from '../../../printers/impRelatorioDizimoIndividual';
+import ComboBox from '../../../components/ComboBox';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -50,35 +52,38 @@ export default function TeologiaLivro() {
   const [idMembro, setIdMembro] = useState('');
   const [nomeMembro, setNomeMembro] = useState('');
   const [cpf, setCpf] = useState('');
+  const [dataOp, setDataOp] = useState('');
 
   const [membros, setMembros] = useState([]);
   const [listMovimentacao, setListMovimentacao] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hidden, setHidden] = useState(true);
   const [ano, setAno] = useState('2021');
+  const [mes, setMes] = useState('');
   const [status, setStatus] = useState('vazio');
 
   const renderizaLista = (list) => {
     const novaLista = [];
-    listMeses.map((mes) => {
-      let mesEncontrado = 'entregue';
+    listMeses.map((mess) => {
+      let mesEncontrado = 'vazio';
 
       list.map((membro) => {
         const data = new Date(membro.data_operacao);
 
-        if (data.getMonth() === mes.id) {
-          if (membro.status === 'entrege') mesEncontrado = 'entrege';
+        if (data.getMonth() === mess.id) {
+          if (membro.status === 'entregue') mesEncontrado = 'entregue';
           else if (membro.status === 'pago') mesEncontrado = 'pago';
         }
       });
       novaLista.push({
-        id: mes.id,
+        id: mess.id,
         mesEncontrado,
-        descricao: mes.descricao,
+        descricao: mess.descricao,
       });
     });
     setIsLoading(false);
     setListMovimentacao(novaLista);
+    console.log(novaLista);
   };
 
   const handleSubmit = async (e) => {
@@ -212,12 +217,17 @@ export default function TeologiaLivro() {
       console.log(er);
     }
   };
-  const radios = [
-    { name: 'Active', value: '1' },
-    { name: 'Radio', value: '2' },
-    { name: 'Radio', value: '3' },
-  ];
-  const [radioValue, setRadioValue] = useState('1');
+  const handleMes = (e) => {
+    setMes(e.target.value);
+  };
+  const handleSalvar = async () => {
+    const data = new Date(ano, mes, 2);
+    axios.post('/teologiaLivro', {
+      data_operacao: data,
+      aluno_id: idMembro,
+      status,
+    });
+  };
 
   return (
     <Container>
@@ -293,29 +303,22 @@ export default function TeologiaLivro() {
             </Label>
           </Col>
         </Row>
-
-        <Row>
-          <Col sm={12} md={3} className="my-1">
-            <Label htmlFor="departamento">
-              Status
-              <select onChange={handleStatus}>
-                <option value="vazio">Não entrege</option>
-                <option value="entregue">Entregue</option>
-                <option value="pago">Entregue e Pago</option>
-              </select>
-            </Label>
-          </Col>
-        </Row>
         <Row>
           <button type="submit">
             Filtrar <FaSearch />
           </button>
         </Row>
       </Form>
-      <Listagem hidden={hidden}>
-        <h3>Relatório de dizimo</h3>
+      <Listagem hidden={false}>
+        <h3>Status</h3>
         <center>
-          <Table responsive striped bordered hover>
+          <Table
+            responsive
+            striped
+            bordered
+            hover
+            style={{ textAlign: 'center' }}
+          >
             <thead>
               <tr>
                 <th scope="col">Nome do mês</th>
@@ -334,19 +337,19 @@ export default function TeologiaLivro() {
 
                     <Button
                       variant="success"
-                      disabled={dado.mesEncontrado !== 'pago'}
+                      hidden={dado.mesEncontrado !== 'pago'}
                     >
                       <FaCheck />
                     </Button>
                     <Button
                       variant="danger"
-                      disabled={dado.mesEncontrado !== 'vazio'}
+                      hidden={dado.mesEncontrado !== 'vazio'}
                     >
                       <FaWindowClose />
                     </Button>
                     <Button
                       variant="warning"
-                      disabled={dado.mesEncontrado !== 'entregue'}
+                      hidden={dado.mesEncontrado !== 'entregue'}
                     >
                       <FaInfo />
                     </Button>
@@ -356,6 +359,46 @@ export default function TeologiaLivro() {
             </tbody>
           </Table>
         </center>
+        <Row>
+          <Col sm={12} md={4} className="my-1">
+            <Label htmlFor="departamento">
+              Status
+              <select onChange={handleMes}>
+                <option value="">Selecione a opção</option>
+                {listMeses.map((dado) => (
+                  <option key={dado.id} value={dado.id}>
+                    {dado.descricao}
+                  </option>
+                ))}
+              </select>
+            </Label>
+          </Col>
+          <Col sm={12} md={4} className="my-1">
+            <Label htmlFor="departamento">
+              Status
+              <select onChange={handleStatus}>
+                <option value="">Selecione a opção</option>
+                <option value="entregue">Entregue</option>
+                <option value="pago">Entregue e Pago</option>
+              </select>
+            </Label>
+          </Col>
+          <Col
+            sm={12}
+            md={4}
+            className="my-1"
+            style={{ display: 'flex', alignItems: 'flex-end' }}
+          >
+            <button
+              type="button"
+              onClick={(e) => {
+                handleSalvar();
+              }}
+            >
+              Salvar <FaSave />
+            </button>
+          </Col>
+        </Row>
       </Listagem>
     </Container>
   );

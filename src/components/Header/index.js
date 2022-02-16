@@ -64,6 +64,7 @@ export default function Header() {
     { desc: 'CADASTRO DE ALUNO', path: '/cadAlunoTeologia' },
     { desc: 'CADASTRO DE CLASSE', path: '/cadClasseTeologia' },
     { desc: 'CHAMADA', path: '/teologiaChamada' },
+    { desc: 'LIVROS', path: '/teologiaLivro' },
     { desc: 'LISTA DE ALUNOS', path: '/listAlunosTeologia' },
   ];
   const ebd = [

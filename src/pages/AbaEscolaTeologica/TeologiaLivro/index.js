@@ -222,11 +222,45 @@ export default function TeologiaLivro() {
   };
   const handleSalvar = async () => {
     const data = new Date(ano, mes, 2);
-    axios.post('/teologiaLivro', {
-      data_operacao: data,
-      aluno_id: idMembro,
-      status,
-    });
+    let pula = false;
+    try {
+      if (idMembro && status !== 'vazio' && mes) {
+        axios
+          .get(`/teologiaLivro/pesquisaData/${idMembro}`)
+          .then((lista) => {
+            lista.data.map(async (dados) => {
+              const valor = new Date(dados.data_operacao);
+              if (String(valor.getMonth()) === mes) {
+                pula = true;
+                console.log('aqui', pula);
+                await axios.put(`/teologiaLivro/${dados.id}`, {
+                  data_operacao: data,
+                  aluno_id: idMembro,
+                  status,
+                });
+              }
+              console.log('depois', pula);
+            });
+          })
+          .then(async () => {
+            if (pula === false) {
+              console.log('banana', pula);
+              await axios.post('/teologiaLivro', {
+                data_operacao: data,
+                aluno_id: idMembro,
+                status,
+              });
+            }
+          });
+
+        toast.success('Alterações feitas com sucesso');
+        history.push('/escolaTeologica');
+      } else {
+        toast.error('Escolha o mês e o novo status ');
+      }
+    } catch (e) {
+      toast.error('Erro ao salvar as alterações');
+    }
   };
 
   return (
@@ -309,7 +343,7 @@ export default function TeologiaLivro() {
           </button>
         </Row>
       </Form>
-      <Listagem hidden={false}>
+      <Listagem hidden={hidden}>
         <h3>Status</h3>
         <center>
           <Table
@@ -362,9 +396,9 @@ export default function TeologiaLivro() {
         <Row>
           <Col sm={12} md={4} className="my-1">
             <Label htmlFor="departamento">
-              Status
+              Mês
               <select onChange={handleMes}>
-                <option value="">Selecione a opção</option>
+                <option value="">Selecione o mês</option>
                 {listMeses.map((dado) => (
                   <option key={dado.id} value={dado.id}>
                     {dado.descricao}

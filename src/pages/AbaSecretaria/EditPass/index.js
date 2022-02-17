@@ -56,7 +56,7 @@ export default function EditPass({ match }) {
           });
         }
         toast.success('Alterada com sucesso');
-        history.push('/home');
+        history.push('/');
       } catch (er) {
         toast.error('Erro ao alterar a senha');
       }

@@ -45,6 +45,14 @@ export default function Painel() {
             </Link>
           </Col>
           <Col sm={6} md={4} className="my-1">
+            <Link to="/escolaTeologica">
+              <ContainerBox>
+                <FaChalkboardTeacher size={50} />
+                <span>Escola Teológica</span>
+              </ContainerBox>
+            </Link>
+          </Col>
+          <Col sm={6} md={4} className="my-1">
             <Link to="/configuracoes">
               <ContainerBox>
                 <AiOutlineSetting size={50} />
@@ -52,7 +60,8 @@ export default function Painel() {
               </ContainerBox>
             </Link>
           </Col>
-
+        </Row>
+        <Row>
           <Col sm={6} md={4} className="my-1">
             <Link to="/pedidoOracao">
               <ContainerBox>
@@ -61,8 +70,6 @@ export default function Painel() {
               </ContainerBox>
             </Link>
           </Col>
-        </Row>
-        <Row>
           <Col sm={6} md={4} className="my-1">
             <Link to="/secretaria">
               <ContainerBox>
@@ -79,21 +86,13 @@ export default function Painel() {
               </ContainerBox>
             </Link>
           </Col>
+        </Row>
+        <Row>
           <Col sm={6} md={4} className="my-1">
             <Link to="/visitante">
               <ContainerBox>
                 <MdSupervisorAccount size={50} />
                 <span>Visitantes</span>
-              </ContainerBox>
-            </Link>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={6} md={4} className="my-1">
-            <Link to="/escolaTeologica">
-              <ContainerBox>
-                <FaChalkboardTeacher size={50} />
-                <span>Escola Teológica</span>
               </ContainerBox>
             </Link>
           </Col>

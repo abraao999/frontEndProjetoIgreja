@@ -8,6 +8,8 @@ import { useDispatch } from 'react-redux';
 import InputMask from 'react-input-mask';
 import { isDate } from 'validator';
 import { get } from 'lodash';
+import { buscaCep } from '../../../util';
+
 import Form from 'react-bootstrap/Form';
 import { Col, Row } from 'react-bootstrap';
 import { Container } from '../../../styles/GlobalStyles';
@@ -253,6 +255,19 @@ export default function CadMembro({ match }) {
       element.removeAttribute('style');
       next.removeAttribute('style');
     }
+  };
+  const handleBuscaCep = async (e) => {
+    setIsLoading(true);
+    const textoForm = e.target.value;
+
+    buscaCep(textoForm).then((response) => {
+      console.log(response);
+      setRua(response.logradouro || '');
+      setBairro(response.bairro || '');
+      setCidade(response.localidade || '');
+    });
+
+    setIsLoading(false);
   };
   return (
     <Container>
@@ -588,6 +603,8 @@ export default function CadMembro({ match }) {
                   setCep(e.target.value);
                   // handleInput(e, 'telefone');
                 }}
+                onBlur={(e) => handleBuscaCep(e)}
+
                 placeholder="15400-000"
               />
               {/* <small>Insira um número válido</small> */}

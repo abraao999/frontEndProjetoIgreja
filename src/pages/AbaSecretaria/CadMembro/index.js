@@ -138,7 +138,6 @@ export default function CadMembro({ match }) {
       estacoCivil.length < 3 ||
       profissao.length < 3 ||
       setorId === 0 ||
-      functionId === 0 ||
       cargoId === 0
     ) {
       formErrors = true;

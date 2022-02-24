@@ -1,6 +1,6 @@
 {
-  "name": "projetoIgreja",
-  "version": "0.1.0",
+  "name": "my-webpack-project",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.0",
@@ -14,9 +14,7 @@
     "lodash": "^4.17.15",
     "pdfmake": "^0.1.70",
     "prop-types": "^15.7.2",
-    "react": "^16.13.1",
     "react-bootstrap": "^1.5.2",
-    "react-dom": "^16.13.1",
     "react-icons": "^3.10.0",
     "react-input-mask": "^2.0.4",
     "react-redux": "^7.2.0",
@@ -30,10 +28,14 @@
     "validator": "^13.5.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "webpack serve --open",
+    "build": "webpack --mode=production --node-env=production",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "watch": "webpack --watch",
+    "serve": "webpack serve"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -51,7 +53,14 @@
     ]
   },
   "devDependencies": {
-    "babel-eslint": "^10.1.0",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/plugin-transform-react-jsx": "^7.17.3",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@webpack-cli/generators": "^2.4.2",
+    "babel-loader": "^8.1.0",
+    "clean-webpack-plugin": "^4.0.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.11.0",
@@ -60,7 +69,17 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "^4.0.4",
+    "html-loader": "^3.1.0",
+    "html-webpack-plugin": "^4.0.0-beta.11",
+    "image-webpack-loader": "^8.1.0",
     "prettier": "^2.0.5",
-    "webpack": "^4.42.0"
-  }
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "stylus": "^0.56.0",
+    "stylus-loader": "^6.2.0",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "description": "My webpack project"
 }

@@ -149,7 +149,7 @@ export default function CadMembro({ match }) {
     if (formErrors) return;
     try {
       if (!id) {
-        await axios.post(`membro`, {
+        const response = await axios.post(`membro`, {
           nome: nomeMembro,
           rg,
           cpf,
@@ -168,10 +168,11 @@ export default function CadMembro({ match }) {
           bairro,
           cidade,
           cep,
-          nomeConjuge,
+          nome_conjuge: nomeConjuge,
           cargo_id: cargoId,
           setor_id: setorId,
         });
+        console.log(response);
 
         limpaCampos();
         toast.success('Membro criado com sucesso');
@@ -196,7 +197,7 @@ export default function CadMembro({ match }) {
           bairro,
           cidade,
           cep,
-          nomeConjuge,
+          nome_conjuge: nomeConjuge,
           cargo_id: cargoId,
           setor_id: setorId,
         });
@@ -224,18 +225,14 @@ export default function CadMembro({ match }) {
       if (nome === dado.descricao) setSetorId(dado.id);
     });
   };
-  const handleGetIdFuncao = (e) => {
-    const nome = e.target.value;
-    setFunctionNome(e.target.value);
-    funcoes.map((dado) => {
-      if (nome === dado.descricao) setFunctionId(dado.id);
-    });
-  };
   const handleGetIdCargo = (e) => {
     const nome = e.target.value;
     setCargo(e.target.value);
     cargos.map((dado) => {
-      if (nome === dado.descricao) setCargoId(dado.id);
+      if (nome === dado.descricao) {
+        setCargoId(dado.id);
+        console.log(dado.id);
+      }
     });
   };
   const handleInput = (e, idTag) => {
@@ -604,7 +601,6 @@ export default function CadMembro({ match }) {
                   // handleInput(e, 'telefone');
                 }}
                 onBlur={(e) => handleBuscaCep(e)}
-
                 placeholder="15400-000"
               />
               {/* <small>Insira um número válido</small> */}

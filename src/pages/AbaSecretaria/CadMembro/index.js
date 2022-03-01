@@ -502,6 +502,24 @@ export default function CadMembro({ match }) {
         </Row>
 
         <Row>
+          <Col sm={12} md={4} className="my-1">
+            <Label htmlFor="cep">
+              CEP:
+              <InputMask
+                mask="99999-999"
+                id="telefone"
+                type="text"
+                value={cep}
+                onChange={(e) => {
+                  setCep(e.target.value);
+                  // handleInput(e, 'telefone');
+                }}
+                onBlur={(e) => handleBuscaCep(e)}
+                placeholder="15400-000"
+              />
+              {/* <small>Insira um número válido</small> */}
+            </Label>
+          </Col>
           <Col sm={12} md={6} className="my-1">
             <Form.Label htmlFor="email">Rua:</Form.Label>
             <Form.Control
@@ -536,6 +554,8 @@ export default function CadMembro({ match }) {
               Minimo de 3 caracteres
             </Form.Control.Feedback>
           </Col>
+        </Row>
+        <Row>
           <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="complemento">Complemento:</Form.Label>
             <Form.Control
@@ -552,8 +572,6 @@ export default function CadMembro({ match }) {
               Minimo de 3 caracteres
             </Form.Control.Feedback>
           </Col>
-        </Row>
-        <Row>
           <Col sm={12} md={4} className="my-1">
             <Form.Label htmlFor="bairro">Bairro:</Form.Label>
             <Form.Control
@@ -587,24 +605,6 @@ export default function CadMembro({ match }) {
             <Form.Control.Feedback type="invalid">
               Minimo de 3 caracteres
             </Form.Control.Feedback>
-          </Col>
-          <Col sm={12} md={4} className="my-1">
-            <Label htmlFor="cep">
-              CEP:
-              <InputMask
-                mask="99999-999"
-                id="telefone"
-                type="text"
-                value={cep}
-                onChange={(e) => {
-                  setCep(e.target.value);
-                  // handleInput(e, 'telefone');
-                }}
-                onBlur={(e) => handleBuscaCep(e)}
-                placeholder="15400-000"
-              />
-              {/* <small>Insira um número válido</small> */}
-            </Label>
           </Col>
         </Row>
         <Row>

@@ -116,41 +116,41 @@ export default function ControleAcesso() {
   const handleRenderizaLista = (list) => {
     const novaLista = [];
 
-    listFuncoes.map((funcao) => {
+    listFuncoes.map((funcao, index) => {
       if (list.length === 0) novaLista.push(funcao);
-      else
+      else {
+        novaLista.push({ ...funcao, checked: false });
         list.map((dado) => {
           if (funcao.id === dado.function_id) {
-            novaLista.push({ ...funcao, checked: true });
-          } else novaLista.push({ ...funcao, checked: false });
+            novaLista[index] = { ...funcao, checked: true };
+          }
         });
+      }
     });
     setListFuncoes(novaLista);
   };
   const handleIdMembro = async (idm) => {
-    if (idm === dataStorage.id) {
-      toast.error('Você não pode alterar as suas próprias permissões');
-      setShow(false);
-    } else {
-      try {
-        handleClose();
-        setHidden(false);
+    // if (idm === dataStorage.id) {
+    //   toast.error('Você não pode alterar as suas próprias permissões');
+    //   setShow(false);
+    // } else {
+    try {
+      handleClose();
+      setHidden(false);
 
-        const response = await axios.get(`/membro/${idm}`);
-        setNomeMembro(response.data.nome);
-        setIdMembro(response.data.id);
-        const response2 = await axios.get(
-          `/controleAcesso/getPermicoes/${idm}`
-        );
-        response2.data.length > 0
-          ? handleRenderizaLista(response2.data)
-          : handleRenderizaLista([]);
-      } catch (e) {
-        toast.error('Condigo não existe');
-        console.log(e);
-      }
+      const response = await axios.get(`/membro/${idm}`);
+      setNomeMembro(response.data.nome);
+      setIdMembro(response.data.id);
+      const response2 = await axios.get(`/controleAcesso/getPermicoes/${idm}`);
+      response2.data.length > 0
+        ? handleRenderizaLista(response2.data)
+        : handleRenderizaLista([]);
+    } catch (e) {
+      toast.error('Condigo não existe');
+      console.log(e);
     }
   };
+  // };
 
   return (
     <Container>

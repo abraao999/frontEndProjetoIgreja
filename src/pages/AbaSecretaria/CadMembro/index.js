@@ -128,12 +128,10 @@ export default function CadMembro({ match }) {
       if (email === dados.email) {
         toast.error('Esse email já existe');
         existe = true;
-        setIsLoading(false);
       }
       if (cpf === dados.cpf) {
         toast.error('Esse membro já existe');
         existe = true;
-        setIsLoading(false);
       }
     });
     return existe;
@@ -146,27 +144,27 @@ export default function CadMembro({ match }) {
       // e.preventDefault();
       e.stopPropagation();
     }
+    setIsLoading(true);
     setValidated(true);
 
-    setIsLoading(true);
     let formErrors = false;
-
-    if (
-      nomeMembro.length < 3 ||
-      rg.length < 3 ||
-      cpf.length < 11 ||
-      telefone.length < 11 ||
-      profissao.length < 3 ||
-      setorId === 0 ||
-      cargoId === 0
-    ) {
-      formErrors = true;
-      setIsLoading(false);
-      toast.error('Preencha todos os campos');
-    }
+    const res = await teste();
+    if (!res)
+      if (
+        nomeMembro.length < 3 ||
+        rg.length < 3 ||
+        cpf.length < 11 ||
+        telefone.length < 11 ||
+        profissao.length < 3 ||
+        setorId === 0 ||
+        cargoId === 0
+      ) {
+        formErrors = true;
+        setIsLoading(false);
+        toast.error('Preencha todos os campos');
+      }
 
     if (formErrors) return;
-    if (teste()) return;
     try {
       if (!id) {
         const response = await axios.post(`membro`, {

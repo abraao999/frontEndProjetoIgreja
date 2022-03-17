@@ -18,6 +18,7 @@ import axios from '../../../services/axios';
 import Loading from '../../../components/Loading';
 import history from '../../../services/history';
 import ComboBox from '../../../components/ComboBox';
+import { findAllByTestId } from '@testing-library/react';
 // import * as actions from '../../store/modules/auth/actions';
 export default function CadMembro({ match }) {
   const id = get(match, 'params.id', '');
@@ -120,6 +121,24 @@ export default function CadMembro({ match }) {
     setSetorId(0);
     setCargoId(0);
   };
+  const teste = async () => {
+    const response = await axios.get('/membro');
+    let existe = false;
+    response.data.map((dados) => {
+      if (email === dados.email) {
+        toast.error('Esse email já existe');
+        existe = true;
+        setIsLoading(false);
+      }
+      if (cpf === dados.cpf) {
+        toast.error('Esse membro já existe');
+        existe = true;
+        setIsLoading(false);
+      }
+    });
+    return existe;
+  };
+
   async function handleSubmit(e) {
     e.preventDefault();
     const form = e.currentTarget;
@@ -145,7 +164,9 @@ export default function CadMembro({ match }) {
       setIsLoading(false);
       toast.error('Preencha todos os campos');
     }
+
     if (formErrors) return;
+    if (teste()) return;
     try {
       if (!id) {
         const response = await axios.post(`membro`, {
@@ -167,7 +188,7 @@ export default function CadMembro({ match }) {
           bairro,
           cidade,
           cep,
-          nome_conjuge: nomeConjuge,
+          nome_conjuge: nomeConjuge || null,
           cargo_id: cargoId,
           setor_id: setorId,
         });
@@ -196,7 +217,7 @@ export default function CadMembro({ match }) {
           bairro,
           cidade,
           cep,
-          nome_conjuge: nomeConjuge,
+          nome_conjuge: nomeConjuge || null,
           cargo_id: cargoId,
           setor_id: setorId,
         });
@@ -269,7 +290,6 @@ export default function CadMembro({ match }) {
     <Container>
       <h1> Novo Membro</h1>
       <Loading isLoading={isLoading} />
-
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Row className="align-items-center">
           <Col sm={12} md={3} className="my-1">

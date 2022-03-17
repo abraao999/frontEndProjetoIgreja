@@ -11,10 +11,13 @@ module.exports = {
   parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: {
+      experimentalObjectRestSpread: true,
+      legacyDecorators: true,
       jsx: true,
     },
     ecmaVersion: 2018,
     sourceType: 'module',
+    allowImportExportEverywhere: false,
   },
   plugins: ['react', 'prettier', 'react-hooks'],
   rules: {

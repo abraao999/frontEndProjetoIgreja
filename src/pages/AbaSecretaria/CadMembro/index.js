@@ -92,7 +92,7 @@ export default function CadMembro({ match }) {
         setCidade(response.data.cidade);
         setEmail(response.data.email);
         setCep(response.data.cep);
-        setNomeConjuge(response.data.nomeConjuge);
+        setNomeConjuge(response.data.nome_conjuge);
         setCargoId(response.data.cargo_id);
         setSetorId(response.data.setor_id);
         if (response.data.estado_civil === 'Casado(a)') setCasado(false);

@@ -212,7 +212,7 @@ export default function CadMembro({ match }) {
       if (status === 401) {
         toast.error('Voce precisa fazer loggin');
       } else {
-        toast.error('Erro ao excluir uma Classe');
+        toast.error('Erro ao cadastrar um membro');
       }
       setIsLoading(false);
     }

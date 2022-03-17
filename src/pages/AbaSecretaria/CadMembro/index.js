@@ -137,7 +137,6 @@ export default function CadMembro({ match }) {
       rg.length < 3 ||
       cpf.length < 11 ||
       telefone.length < 11 ||
-      estacoCivil.length < 3 ||
       profissao.length < 3 ||
       setorId === 0 ||
       cargoId === 0

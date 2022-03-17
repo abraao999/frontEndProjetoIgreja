@@ -50,7 +50,7 @@ export default function DetailMembro({ match }) {
       setCidade(response.data.cidade);
       setEmail(response.data.email);
       setCep(response.data.cep);
-      setNomeConjuge(response.data.nomeConjuge);
+      setNomeConjuge(response.data.nome_conjuge);
 
       const data = new Date(response.data.data_batismo);
       const dataFormatada = `${data.getDate() + 1}/${

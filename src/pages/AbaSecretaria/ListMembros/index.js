@@ -34,6 +34,7 @@ export default function ListMembros({ match }) {
 
   const [membros, setMembros] = useState([]);
   const [descricao, setDescricao] = useState('');
+  const [NCadastro, setNCadastro] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -52,11 +53,21 @@ export default function ListMembros({ match }) {
     setIsLoading(true);
     const novaLista = [];
     if (descricao.length > 1) {
-      membros.map((dados) => {
-        if (String(dados.nome).toLowerCase().includes(String(descricao))) {
+      const response = await axios.get('/membro');
+      response.data.map((dados) => {
+        if (
+          String(dados.nome)
+            .toLowerCase()
+            .includes(String(descricao.toLowerCase()))
+        ) {
           novaLista.push(dados);
         }
       });
+      setDescricao('');
+    } else if (NCadastro.length >= 1) {
+      const response = await axios.get(`/membro/${NCadastro}`);
+      novaLista.push(response.data);
+      setNCadastro('');
     } else {
       console.log();
       if (!filtro) {
@@ -78,7 +89,6 @@ export default function ListMembros({ match }) {
     setMembros(novaLista);
     setIsLoading(false);
   }
-
   const handleClose = () => {
     setShow(false);
   };
@@ -120,8 +130,9 @@ export default function ListMembros({ match }) {
     const novaLista = [];
     membros.map((dado) => {
       const data = new Date(dado.data_nascimento);
-      const dataFormatada = `${data.getDate()}/${data.getMonth() + 1
-        }/${data.getFullYear()}`;
+      const dataFormatada = `${data.getDate()}/${
+        data.getMonth() + 1
+      }/${data.getFullYear()}`;
       novaLista.push({
         nome: dado.nome,
         telefone: dado.telefone,
@@ -137,7 +148,7 @@ export default function ListMembros({ match }) {
   return (
     <Container>
       <Header>
-        <h2>Lista de membros</h2>
+        <h2>Lista de Membros</h2>
         <button type="button" onClick={visualizarImpressao}>
           <AiFillPrinter size={35} />
         </button>
@@ -155,6 +166,18 @@ export default function ListMembros({ match }) {
 
       <Form onSubmit={handleSubmit}>
         <Row>
+          <Col sm={12} md={2} className="my-1">
+            <Form.Label htmlFor="descricao">Nº do cadastro:</Form.Label>
+            <Form.Control
+              id="input"
+              type="text"
+              value={NCadastro}
+              onChange={(e) => {
+                setNCadastro(e.target.value);
+              }}
+              placeholder="Número do cadastro"
+            />
+          </Col>
           <Col sm={12} md={6} className="my-1">
             <Form.Label htmlFor="descricao">
               Insira um nome para filtrar:
@@ -166,10 +189,9 @@ export default function ListMembros({ match }) {
               onChange={(e) => {
                 setDescricao(e.target.value);
               }}
-              placeholder="Nome para filtro"
             />
           </Col>
-          <Col sm={12} md={6} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <Label htmlFor="congregacao">
               Filtrar por congregação
               <select onChange={handleGetIdCongregacao} value={congregacaoId}>

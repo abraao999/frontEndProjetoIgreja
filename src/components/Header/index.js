@@ -4,7 +4,7 @@ import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../store/modules/auth/actions';
 import history from '../../services/history';
-import logo from '../../assets/images/logo.png';
+import logo from '../../assets/images/logoAtualizada.png';
 // import { Nav, Conteiner } from './styled';
 import Dropdown from '../Dropdowm';
 import { Navbar, Nav, Container } from 'react-bootstrap';
@@ -120,9 +120,9 @@ export default function Header() {
             {isLoggedIn && <Dropdown nome="SECRETARIA" opcoes={secretaria} />}
             {isLoggedIn && <Dropdown nome="TESOURARIA" opcoes={caixa} />}
             {isLoggedIn && <Dropdown nome="EBD" opcoes={ebd} />}
-            {isLoggedIn && (
+            {/* {isLoggedIn && (
               <Dropdown nome="ESCOLA TEOLÓGICA" opcoes={teologia} />
-            )}
+            )} */}
             {!isLoggedIn && <Nav.Link href="/contato">FALE CONOSCO</Nav.Link>}
           </Nav>
           <Nav>

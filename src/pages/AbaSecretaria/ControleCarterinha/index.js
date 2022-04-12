@@ -63,17 +63,24 @@ export default function ControleCarterinha() {
       const response = await axios.get(`/controleCarterinha`);
       listMembros.map(async (dado) => {
         let existe = false;
-        const idm = 0;
+        let idm = 0;
         response.data.map(async (resposta) => {
-          if (dado.checked && resposta.membro_id !== dado.id) {
+          if (dado.checked && resposta.membro_id === dado.id) {
             existe = true;
-          } else console.log(dado);
+          } else if (!dado.checked && resposta.membro_id === dado.id) {
+            existe = true;
+            idm = resposta.id;
+          }
         });
-        // if (!existe)
-        //   await axios.post('/controleCarterinha', {
-        //     membro_id: idm,
-        //     status: true,
-        //   });
+        if (!existe && dado.checked) {
+          await axios.post('/controleCarterinha', {
+            membro_id: dado.id,
+            status: true,
+          });
+        } else if (existe && !dado.checked) {
+          console.log('log');
+          await axios.delete(`/controleCarterinha/${idm}`);
+        }
       });
       setShowSalvar(false);
       toast.success('Alterações realizadas com sucesso');
@@ -123,9 +130,6 @@ export default function ControleCarterinha() {
     list.map((membro) => {
       let pula = true;
       response.data.map((dado) => {
-        // if (response.data.length === 0)
-        //   novaLista.push({ ...membro, checked: false });
-        // else
         if (membro.id === dado.membro_id) {
           novaLista.push({ ...membro, checked: true });
           pula = false;
@@ -158,7 +162,7 @@ export default function ControleCarterinha() {
 
   return (
     <Container>
-      <h1> Controle de Acesso</h1>
+      <h1> Controle de Carterinhas</h1>
       <Loading isLoading={isLoading} />
       <ModalMembro
         title="Selecione o membro"
@@ -208,7 +212,7 @@ export default function ControleCarterinha() {
         </Row>
       </Form>
       <Listagem>
-        <h3>Lista de Funções</h3>
+        <h3>Lista de Membros</h3>
         <center>
           <Table
             className="table table-striped"

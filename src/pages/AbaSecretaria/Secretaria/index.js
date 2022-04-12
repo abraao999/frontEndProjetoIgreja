@@ -40,6 +40,24 @@ export default function Secretaria() {
             </Link>
           </Col>
           <Col sm={6} md={4} className="my-1">
+            <Link to="/cadMembro">
+              <ContainerBox>
+                <FaUserTie size={50} />
+                <span>Cadastro de Membro</span>
+              </ContainerBox>
+            </Link>
+          </Col>
+          <Col sm={6} md={4} className="my-1">
+            <Link to="/controleCarterinha">
+              <ContainerBox>
+                <FaUserTie size={50} />
+                <span>Controle Carterinha</span>
+              </ContainerBox>
+            </Link>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={6} md={4} className="my-1">
             <Link to="/listAniversario">
               <ContainerBox>
                 <FaUserTie size={50} />
@@ -48,20 +66,18 @@ export default function Secretaria() {
             </Link>
           </Col>
           <Col sm={6} md={4} className="my-1">
-            <Link to="/cadMembro">
-              <ContainerBox>
-                <FaUserTie size={50} />
-                <span>Cadastro de Membro</span>
-              </ContainerBox>
-            </Link>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={6} md={4} className="my-1">
             <Link to="/listMembros">
               <ContainerBox>
                 <FaUserTie size={50} />
                 <span>Lista de Membros</span>
+              </ContainerBox>
+            </Link>
+          </Col>
+          <Col sm={6} md={4} className="my-1">
+            <Link to="/controleAcesso">
+              <ContainerBox>
+                <FaUserTie size={50} />
+                <span>Permissão de Usuário</span>
               </ContainerBox>
             </Link>
           </Col>

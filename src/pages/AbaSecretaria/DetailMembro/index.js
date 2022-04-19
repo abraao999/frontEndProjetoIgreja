@@ -214,7 +214,12 @@ export default function DetailMembro({ match }) {
         <center>
           <Row>
             <Col sm={6} md={6} className="my-1">
-              <button type="submit">Alterar</button>
+              <button
+                type="submit"
+                onClick={(e) => history.push(`/meuCadastro/${id}`)}
+              >
+                Alterar
+              </button>
             </Col>
             <Col sm={6} md={6} className="my-1">
               <button

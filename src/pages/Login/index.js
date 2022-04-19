@@ -16,7 +16,14 @@ export default function Login(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const isLoading = useSelector((state) => state.auth.isLoading);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
+  useEffect(() => {
+    function getData() {
+      if (isLoggedIn) dispath(actions.loginFailure());
+    }
+    getData();
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
 

@@ -26,11 +26,16 @@ export default function ListMembros({ match }) {
   const [idParaDelecao, setIdParaDelecao] = useState('');
   const [indiceDelecao, setIndiceDelecao] = useState('');
   const [filtro, setFiltro] = useState(false);
+  const [filtroCargo, setFiltroCargo] = useState(false);
   const [setores, setSetores] = useState([]);
   const [setorSeletected, setSetorSeletected] = useState(0);
   const [congregacaoId, setCongregacaoId] = useState(
     'Selecione uma congregação'
   );
+
+  const [cargos, setCargos] = useState([]);
+  const [cargoSeletected, setCargoSeletected] = useState(0);
+  const [cargoId, setCargoId] = useState('Selecione uma congregação');
 
   const [membros, setMembros] = useState([]);
   const [descricao, setDescricao] = useState('');
@@ -44,6 +49,8 @@ export default function ListMembros({ match }) {
       setSetores(response.data);
       const response2 = await axios.get('/membro');
       setMembros(response2.data);
+      const response3 = await axios.get('/cargo');
+      setCargos(response3.data);
       setIsLoading(false);
     }
     getData();
@@ -68,8 +75,7 @@ export default function ListMembros({ match }) {
       const response = await axios.get(`/membro/${NCadastro}`);
       novaLista.push(response.data);
       setNCadastro('');
-    } else {
-      console.log();
+    } else if (setorSeletected !== 0 && cargoSeletected === 0) {
       if (!filtro) {
         membros.map((dados) => {
           if (dados.setor_id === setorSeletected) {
@@ -81,6 +87,45 @@ export default function ListMembros({ match }) {
         const response = await axios.get('/membro');
         response.data.map((dados) => {
           if (dados.setor_id === setorSeletected) {
+            novaLista.push(dados);
+          }
+        });
+      }
+    } else if (cargoSeletected !== 0 && setorSeletected === 0) {
+      if (!filtroCargo) {
+        membros.map((dados) => {
+          if (dados.cargo_id === cargoSeletected) {
+            novaLista.push(dados);
+          }
+        });
+        setFiltroCargo(true);
+      } else {
+        const response = await axios.get('/membro');
+        response.data.map((dados) => {
+          if (dados.cargo_id === cargoSeletected) {
+            novaLista.push(dados);
+          }
+        });
+      }
+    } else if (cargoSeletected !== 0 && setorSeletected !== 0) {
+      if (!filtroCargo && !filtro) {
+        membros.map((dados) => {
+          if (
+            dados.cargo_id === cargoSeletected &&
+            dados.setor_id === setorSeletected
+          ) {
+            novaLista.push(dados);
+          }
+        });
+        setFiltroCargo(true);
+        setFiltro(true);
+      } else {
+        const response = await axios.get('/membro');
+        response.data.map((dados) => {
+          if (
+            dados.cargo_id === cargoSeletected &&
+            dados.setor_id === setorSeletected
+          ) {
             novaLista.push(dados);
           }
         });
@@ -126,6 +171,14 @@ export default function ListMembros({ match }) {
       if (nome === dado.descricao) setSetorSeletected(dado.id);
     });
   };
+  const handleGetIdCargo = (e) => {
+    const nome = e.target.value;
+    setCargoId(e.target.value);
+
+    cargos.map((dado) => {
+      if (nome === dado.descricao) setCargoSeletected(dado.id);
+    });
+  };
   const visualizarImpressao = async () => {
     const novaLista = [];
     membros.map((dado) => {
@@ -167,7 +220,7 @@ export default function ListMembros({ match }) {
       <Form onSubmit={handleSubmit}>
         <Row>
           <Col sm={12} md={2} className="my-1">
-            <Form.Label htmlFor="descricao">Nº do cadastro:</Form.Label>
+            <Form.Label htmlFor="descricao">ID Membro:</Form.Label>
             <Form.Control
               id="input"
               type="text"
@@ -191,12 +244,25 @@ export default function ListMembros({ match }) {
               }}
             />
           </Col>
-          <Col sm={12} md={4} className="my-1">
+          <Col sm={12} md={2} className="my-1">
             <Label htmlFor="congregacao">
-              Filtrar por congregação
+              Congregação
               <select onChange={handleGetIdCongregacao} value={congregacaoId}>
                 <option value="nada">Selecione a congregação</option>
                 {setores.map((dado) => (
+                  <option key={dado.id} value={dado.descricao}>
+                    {dado.descricao}
+                  </option>
+                ))}
+              </select>
+            </Label>
+          </Col>
+          <Col sm={12} md={2} className="my-1">
+            <Label htmlFor="congregacao">
+              Cargo
+              <select onChange={handleGetIdCargo} value={cargoId}>
+                <option value="nada">Selecione a cargo</option>
+                {cargos.map((dado) => (
                   <option key={dado.id} value={dado.descricao}>
                     {dado.descricao}
                   </option>

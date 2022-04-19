@@ -1,6 +1,12 @@
 /* eslint-disable import/order */
 import React from 'react';
-import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
+import {
+  FaIcons,
+  FaRegUserCircle,
+  FaSignInAlt,
+  FaSignOutAlt,
+  FaUserCircle,
+} from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../store/modules/auth/actions';
 import history from '../../services/history';
@@ -67,6 +73,13 @@ export default function Header() {
     { desc: 'LIVROS', path: '/teologiaLivro' },
     { desc: 'LISTA DE ALUNOS', path: '/listAlunosTeologia' },
   ];
+  const perfil = [
+    { desc: 'ALTERAR CADASTRO', path: '/meuCadastro' },
+    { desc: 'CADASTRO DE CLASSE', path: '/cadClasseTeologia' },
+    { desc: 'CHAMADA', path: '/teologiaChamada' },
+    { desc: 'LIVROS', path: '/teologiaLivro' },
+    { desc: 'LISTA DE ALUNOS', path: '/listAlunosTeologia' },
+  ];
   const ebd = [
     { desc: 'CADASTRO CLASSE', path: '/classe' },
     { desc: 'CADASTRO DE ALUNO', path: '/cadAluno' },
@@ -127,9 +140,8 @@ export default function Header() {
           </Nav>
           <Nav>
             {isLoggedIn ? (
-              <Nav.Link onClick={handleLogout} href="/login">
-                <FaSignOutAlt size={24} />
-                Sair
+              <Nav.Link href="/perfil">
+                <FaUserCircle size={24} /> Perfil
               </Nav.Link>
             ) : (
               <Nav.Link href="/login">

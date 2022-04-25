@@ -38,18 +38,18 @@ export default function Perfil() {
               </ContainerBox>
             </Link>
           </Col>
-          {/* <Col sm={6} md={4} className="my-1">
-            <Link to="/controleCarterinha">
+          <Col sm={6} md={4} className="my-1">
+            <Link to="/presencaPessoal">
               <ContainerBox>
                 <FaUserTie size={50} />
-                <span>Controle Carterinha</span>
+                <span>Presença EBD</span>
               </ContainerBox>
             </Link>
-          </Col> */}
+          </Col>
         </Row>
         <Row>
           <Col sm={6} md={4} className="my-1">
-            <Link to="/login">
+            <Link to='/login'>
               <ContainerBox>
                 <FaSignOutAlt size={50} />
                 <span>Sair</span>

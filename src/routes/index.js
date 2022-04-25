@@ -60,6 +60,7 @@ import TeologiaChamada from '../pages/AbaEscolaTeologica/TeologiaChamada';
 import TeologiaLivro from '../pages/AbaEscolaTeologica/TeologiaLivro';
 import MeuCadastro from '../pages/AbaPerfil/MeuCadastro';
 import Perfil from '../pages/AbaPerfil/Perfil';
+import PresencaPessoal from '../pages/AbaPerfil/PresencaPessoal';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.function_id);
@@ -551,6 +552,26 @@ export default function Routes() {
       <MyRoute
         path="/perfil/"
         component={Perfil}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[
+          { id: 1 },
+          { id: 2 },
+          { id: 3 },
+          { id: 4 },
+          { id: 5 },
+          { id: 6 },
+          { id: 7 },
+          { id: 8 },
+          { id: 9 },
+          { id: 10 },
+          { id: 11 },
+          { id: 12 },
+        ]}
+      />
+      <MyRoute
+        path="/presencaPessoal"
+        component={PresencaPessoal}
         idFuncao={idFuncao}
         isClosed
         usuarioPermitido={[

@@ -61,6 +61,8 @@ import TeologiaLivro from '../pages/AbaEscolaTeologica/TeologiaLivro';
 import MeuCadastro from '../pages/AbaPerfil/MeuCadastro';
 import Perfil from '../pages/AbaPerfil/Perfil';
 import PresencaPessoal from '../pages/AbaPerfil/PresencaPessoal';
+import GraficoPresenca from '../pages/AbaEdb/GraficoPresenca';
+import CadLivrariaLivros from '../pages/AbaLivraria/CadLivros';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.function_id);
@@ -78,6 +80,7 @@ export default function Routes() {
     10 - secretario ebd
     11 - diretor escola teológica
     12 - secretario escola teológica
+    13 - livraria
   */
   return (
     <Switch>
@@ -447,6 +450,13 @@ export default function Routes() {
         isClosed
       />
       <MyRoute
+        path="/graficoPresenca/"
+        component={GraficoPresenca}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 5 }]}
+        isClosed
+      />
+      <MyRoute
         path="/escolaTeologica/"
         component={EscolaTeologica}
         idFuncao={idFuncao}
@@ -588,6 +598,14 @@ export default function Routes() {
           { id: 11 },
           { id: 12 },
         ]}
+      />
+      //livraria
+      <MyRoute
+        path="/cadLivroLivraria"
+        component={CadLivrariaLivros}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 13 }]}
       />
       <MyRoute path="*" component={Page404} />
     </Switch>

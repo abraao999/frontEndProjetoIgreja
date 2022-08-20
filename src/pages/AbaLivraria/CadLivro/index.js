@@ -1,39 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+/* eslint-disable react/prop-types */
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
-import { toast } from 'react-toastify';
-import { FaEdit, FaSave, FaWindowClose } from 'react-icons/fa';
-import { get } from 'lodash';
-import { Link } from 'react-router-dom';
-import { Button, Col, Form, Row, Table } from 'react-bootstrap';
-import { Container } from '../../../styles/GlobalStyles';
-import Modal from '../../../components/Modal';
+import { toast } from "react-toastify";
+import { FaEdit, FaSave, FaWindowClose } from "react-icons/fa";
+import { get } from "lodash";
+import { Button, Col, Form, Row, Table } from "react-bootstrap";
+import { Container } from "../../../styles/GlobalStyles";
+import Modal from "../../../components/Modal";
 
-import { Listagem } from './styled';
-import axios from '../../../services/axios';
+import { Listagem } from "./styled";
+import axios from "../../../services/axios";
 
-import Loading from '../../../components/Loading';
-import history from '../../../services/history';
+import Loading from "../../../components/Loading";
+import history from "../../../services/history";
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function CadLivro({ match }) {
-  const id = get(match, 'params.id', '');
+  const id = get(match, "params.id", "");
   const [show, setShow] = useState(false);
-  const [idParaDelecao, setIdParaDelecao] = useState('');
-  const [indiceDelecao, setIndiceDelecao] = useState('');
+  const [idParaDelecao, setIdParaDelecao] = useState("");
+  const [indiceDelecao, setIndiceDelecao] = useState("");
 
-  const [descricao, setDescricao] = useState('');
-  const [dataEntrada, setDataEntrada] = useState('');
-  const [valor, setValor] = useState('');
-  const [custo, setCusto] = useState('');
-  const [quantidade, setQuantidade] = useState('');
+  const [descricao, setDescricao] = useState("");
+  const [dataEntrada, setDataEntrada] = useState("");
+  const [valor, setValor] = useState("");
+  const [custo, setCusto] = useState("");
+  const [quantidade, setQuantidade] = useState("");
   const [listLivro, setListLivro] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get('/livrariaLivro');
+      const response = await axios.get("/livrariaLivro");
       if (id) {
         const response2 = await axios.get(`/livrariaLivro/${id}`);
         setDescricao(response2.data.descricao);
@@ -49,11 +49,11 @@ export default function CadLivro({ match }) {
     getData();
   }, [id]);
   const limpaCampos = () => {
-    setDescricao('');
-    setValor('');
-    setCusto('');
-    setQuantidade('');
-    setDataEntrada('');
+    setDescricao("");
+    setValor("");
+    setCusto("");
+    setQuantidade("");
+    setDataEntrada("");
   };
   async function handleSubmit(e) {
     e.preventDefault();
@@ -67,13 +67,13 @@ export default function CadLivro({ match }) {
       parseInt(quantidade) <= 0
     ) {
       formErrors = true;
-      toast.error('Campo descricao deve ter entre 3 e 255 caracteres');
+      toast.error("Campo descricao deve ter entre 3 e 255 caracteres");
     }
     if (formErrors) return;
     setIsLoading(true);
     try {
       if (!id) {
-        const response = await axios.post('/livrariaLivro', {
+        const response = await axios.post("/livrariaLivro", {
           descricao,
           data_entrada: dataEntrada,
           custo,
@@ -81,10 +81,10 @@ export default function CadLivro({ match }) {
           quantidade,
         });
         console.log(response);
-        const novaLista = await axios.get('/livrariaLivro');
+        const novaLista = await axios.get("/livrariaLivro");
         setListLivro(novaLista.data);
         limpaCampos();
-        toast.success('livro criado com sucesso');
+        toast.success("livro criado com sucesso");
 
         setIsLoading(false);
       } else {
@@ -96,19 +96,19 @@ export default function CadLivro({ match }) {
           quantidade,
         });
         console.log(response);
-        const novaLista = await axios.get('/livrariaLivro');
+        const novaLista = await axios.get("/livrariaLivro");
         setListLivro(novaLista.data);
         limpaCampos();
-        toast.success('livro editado com sucesso');
+        toast.success("livro editado com sucesso");
 
         setIsLoading(false);
       }
     } catch (error) {
-      const status = get(error, 'response.data.status', 0);
+      const status = get(error, "response.data.status", 0);
       if (status === 401) {
-        toast.error('Voce precisa fazer login');
+        toast.error("Voce precisa fazer login");
       } else {
-        toast.error('Erro ao alterar o livro');
+        toast.error("Erro ao alterar o livro");
       }
       setIsLoading(false);
     }
@@ -128,16 +128,16 @@ export default function CadLivro({ match }) {
       const novaLista = [...listLivro];
       novaLista.splice(indiceDelecao, 1);
       setListLivro(novaLista);
-      toast.success('Livro excluído com sucesso');
+      toast.success("Livro excluído com sucesso");
       setShow(false);
 
       setIsLoading(false);
     } catch (error) {
-      const status = get(error, 'response.data.status', 0);
+      const status = get(error, "response.data.status", 0);
       if (status === 401) {
-        toast.error('Voce precisa fazer loggin');
+        toast.error("Voce precisa fazer loggin");
       } else {
-        toast.error('Erro ao excluir a o livro');
+        toast.error("Erro ao excluir a o livro");
       }
       setIsLoading(false);
     }
@@ -149,7 +149,7 @@ export default function CadLivro({ match }) {
   };
   return (
     <Container>
-      <h1>{id ? 'Editar Livro' : 'Novo Livro'}</h1>
+      <h1>{id ? "Editar Livro" : "Novo Livro"}</h1>
       <Loading isLoading={isLoading} />
       <Modal
         title="Atenção!!!"
@@ -220,14 +220,14 @@ export default function CadLivro({ match }) {
             md={3}
             className="my-1"
             style={{
-              display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'flex-start',
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "flex-start",
             }}
           >
-            <button type="submit">
+            <Button type="submit" variant="success">
               <FaSave size={24} style={{ marginLeft: 3 }} />
-            </button>
+            </Button>
           </Col>
         </Row>
       </Form>

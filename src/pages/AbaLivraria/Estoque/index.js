@@ -1,56 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import InputMask from 'react-input-mask';
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
-import { toast } from 'react-toastify';
-import {
-  FaEdit,
-  FaFilter,
-  FaHourglassHalf,
-  FaPrint,
-  FaRegEnvelope,
-  FaSave,
-  FaSearch,
-  FaTrash,
-} from 'react-icons/fa';
-import { BsCheck, BsCheckAll } from 'react-icons/bs';
-import { useSelector } from 'react-redux';
-import { get } from 'lodash';
-import { Link } from 'react-router-dom';
-import { Col, Row, Form, Table, Button } from 'react-bootstrap';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { Container } from '../../../styles/GlobalStyles';
-import { Label, LabelSelect, Listagem } from './styled';
-import axios from '../../../services/axios';
-import Modal from '../../../components/Modal';
-import ComboBox from '../../../components/ComboBox';
-import Loading from '../../../components/Loading';
-import history from '../../../services/history';
+import { toast } from "react-toastify";
+import { FaEdit, FaPrint, FaSearch, FaTrash } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { get } from "lodash";
+import { Link } from "react-router-dom";
+import { Col, Row, Form, Table, Button } from "react-bootstrap";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import { Container } from "../../../styles/GlobalStyles";
+import { Label, LabelSelect, Listagem } from "./styled";
+import axios from "../../../services/axios";
+import Modal from "../../../components/Modal";
+import ComboBox from "../../../components/ComboBox";
+import Loading from "../../../components/Loading";
+import history from "../../../services/history";
 // import * as actions from '../../store/modules/auth/actions';
 
-import { Impressao } from '../../../printers/impLivrariaPedido';
-import ModalMembro from '../../../components/ModalMembro';
-import { meioPagamento } from '../../../util';
+import { Impressao } from "../../../printers/impLivrariaLivro";
+import ModalMembro from "../../../components/ModalMembro";
+import { getDataDB } from "../../../util";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export default function Estoque({ match }) {
-  const id = get(match, 'params.id', '');
+  const id = get(match, "params.id", "");
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const [idParaDelecao, setIdParaDelecao] = useState('');
-  const [indiceDelecao, setIndiceDelecao] = useState('');
+  const [idParaDelecao, setIdParaDelecao] = useState("");
+  const [indiceDelecao, setIndiceDelecao] = useState("");
 
-  const [nomeMembro, setNomeMembro] = useState('');
-  const [idMembro, setIdMembro] = useState('');
-  const [contato, setContato] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [quantidade, setQuantidade] = useState('');
-  const [status, setStatus] = useState('');
-  const [tipoPagamento, setTipoPagamento] = useState('');
-  const [descricaoList, setDescricaoList] = useState([]);
+  const [nomeMembro, setNomeMembro] = useState("");
+  const [idMembro, setIdMembro] = useState("");
+  const [contato, setContato] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [quantidade, setQuantidade] = useState("");
+  const [status, setStatus] = useState("");
+  const [tipoPagamento, setTipoPagamento] = useState("");
   const [listPedidos, setListPedidos] = useState([]);
-  const [membros, setMembros] = useState([]);
   const [livrosBusca, setLivrosBusca] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -60,18 +49,20 @@ export default function Estoque({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get('/livrariaLivro');
-      setListPedidos(response.data);
+      const response = await axios.get("/livrariaLivro");
+      renderizaLista(response.data);
+
       setIsLoading(false);
     }
     getData();
   }, [id]);
-  const limpaCampos = () => {
-    setNomeMembro('');
-    setIdMembro('');
-    setContato('');
-    setDescricao('');
-    setQuantidade('');
+  const renderizaLista = (list) => {
+    let aux = [];
+    list.map((dado) => {
+      const dataFormatada = getDataDB(new Date(dado.data_entrada));
+      aux.push({ ...dado, dataFormatada });
+    });
+    setListPedidos(aux);
   };
   const handleClose = () => {
     setShow(false);
@@ -88,15 +79,15 @@ export default function Estoque({ match }) {
       const novaLista = [...listPedidos];
       novaLista.splice(indiceDelecao, 1);
       setListPedidos(novaLista);
-      toast.success('Pedido excluído com sucesso');
+      toast.success("Pedido excluído com sucesso");
       setShowDelete(false);
 
       setIsLoading(false);
     } catch (error) {
-      const status = get(error, 'response.data.status', 0);
-      const msg = get(error, 'response.data.erros', 0);
+      const status = get(error, "response.data.status", 0);
+      const msg = get(error, "response.data.erros", 0);
       if (status === 401) {
-        toast.error('Voce precisa fazer login');
+        toast.error("Voce precisa fazer login");
       } else {
         msg.map((dado) => toast.error(dado));
       }
@@ -106,13 +97,13 @@ export default function Estoque({ match }) {
   const visualizarImpressao = async () => {
     const classeImpressao = new Impressao(listPedidos);
     const documento = await classeImpressao.PreparaDocumento();
-    pdfMake.createPdf(documento).open({}, window.open('', '_blank'));
+    pdfMake.createPdf(documento).open({}, window.open("", "_blank"));
   };
   const handlePesquisaNome = async () => {
     if (nomeMembro.length > 0) {
       try {
         const novaLista = [];
-        const response = await axios.get('/livrariaLivro');
+        const response = await axios.get("/livrariaLivro");
         response.data.map((dados) => {
           if (
             String(dados.descricao)
@@ -125,11 +116,11 @@ export default function Estoque({ match }) {
         setLivrosBusca(novaLista);
         setShow(true);
       } catch (e) {
-        toast.error('Condigo não existe');
+        toast.error("Condigo não existe");
         console.log(e);
       }
     } else {
-      axios.get('/livrariaLivro').then((response) => {
+      axios.get("/livrariaLivro").then((response) => {
         setLivrosBusca(response.data);
         setShow(true);
       });
@@ -145,24 +136,24 @@ export default function Estoque({ match }) {
         handleClose();
       });
     } catch (e) {
-      toast.error('Condigo não existe');
+      toast.error("Condigo não existe");
       console.log(e);
     }
   };
   const handleFiltro = () => {
     let novaLista = [];
     console.log(status, nomeMembro, tipoPagamento);
-    if (status !== '') {
+    if (status !== "") {
       novaLista = listPedidos.filter((dado) => {
         if (dado.status === status) return dado;
       });
     }
-    if (tipoPagamento !== '') {
+    if (tipoPagamento !== "") {
       novaLista = listPedidos.filter((dado) => {
         if (dado.tipo_pagamento === tipoPagamento) return dado;
       });
     }
-    if (nomeMembro !== '') {
+    if (nomeMembro !== "") {
       novaLista = listPedidos.filter((dado) => {
         if (dado.nome === nomeMembro) return dado;
       });
@@ -216,7 +207,7 @@ export default function Estoque({ match }) {
             sm={12}
             md={1}
             className="my-1"
-            style={{ display: 'flex', alignItems: 'flex-end' }}
+            style={{ display: "flex", alignItems: "flex-end" }}
           >
             <Button size="lg" onClick={handlePesquisaNome} variant="success">
               <FaSearch size={16} />
@@ -227,13 +218,14 @@ export default function Estoque({ match }) {
 
       <h3>Livros em Estoque</h3>
 
-      <Table responsive striped bordered hover style={{ textAlign: 'center' }}>
+      <Table responsive striped bordered hover style={{ textAlign: "center" }}>
         <thead>
           <tr>
             <th scope="col">Descrição</th>
             <th scope="col">Quantidade</th>
             <th scope="col">Custo</th>
             <th scope="col">Valor</th>
+            <th scope="col">Data Aquisição</th>
             <th scope="col">Alterar</th>
             <th scope="col">Excluir</th>
           </tr>
@@ -245,6 +237,7 @@ export default function Estoque({ match }) {
               <td>{dado.quantidade}</td>
               <td>{dado.custo}</td>
               <td>{dado.valor}</td>
+              <td>{dado.dataFormatada}</td>
 
               <td>
                 <Button

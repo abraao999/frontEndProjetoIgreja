@@ -6,24 +6,11 @@ export const Form = styled.form`
   flex-direction: column;
   margin-top: 20px;
 
-  small {
-    color: red;
-  }
   label {
-    flex: 1;
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
   }
-  label + label {
-    margin-left: 3px;
-  }
-  div {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
   input {
     height: 40px;
     font-size: 18px;
@@ -35,35 +22,39 @@ export const Form = styled.form`
       border: 1px solid ${colors.primaryColor};
     }
   }
-  select {
+`;
+export const Table = styled.table`
+  margin-top: 20px;
+  max-width: 80%;
+`;
+export const Listagem = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
+export const Label = styled.label`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* margin-bottom: 20px; */
+  small {
+    color: red;
+    display: block;
+  }
+  input {
     height: 40px;
     font-size: 18px;
     border: 1px solid #ddd;
     padding: 0 10px;
     border-radius: 4px;
-    margin: 5px 0;
+    margin-top: 10px;
     &:focus {
-      border: 1px solid ${colors.primaryColor};
+      border: 4px solid ${colors.inputBorder};
     }
   }
 `;
-export const Table = styled.table`
-  margin-top: 20px;
-  th {
-    text-align: center;
-  }
-  td {
-    text-align: center;
-  }
-`;
-export const Listagem = styled.div`
-  h3 {
-    margin: 30px;
-    display: flex;
-    justify-content: center;
-  }
-`;
-export const Label = styled.label`
+export const LabelSelect = styled.label`
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -82,5 +73,17 @@ export const Label = styled.label`
     &:focus {
       border: 4px solid ${colors.inputBorder};
     }
+  }
+`;
+export const ContainerBox = styled.section`
+  display: flex;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  justify-content: start;
+  align-items: center;
+  span {
+    margin: 10px;
+    color:#198754
   }
 `;

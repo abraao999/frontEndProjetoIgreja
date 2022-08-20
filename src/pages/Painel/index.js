@@ -5,6 +5,7 @@ import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { AiOutlineSetting } from 'react-icons/ai';
 import {
+  FaBook,
   FaCalculator,
   FaChalkboardTeacher,
   FaPrayingHands,
@@ -45,18 +46,18 @@ export default function Painel() {
             </Link>
           </Col>
           <Col sm={6} md={4} className="my-1">
-            <Link to="/escolaTeologica">
-              <ContainerBox>
-                <FaChalkboardTeacher size={50} />
-                <span>Escola Teológica</span>
-              </ContainerBox>
-            </Link>
-          </Col>
-          <Col sm={6} md={4} className="my-1">
             <Link to="/configuracoes">
               <ContainerBox>
                 <AiOutlineSetting size={50} />
                 <span>Configuracao</span>
+              </ContainerBox>
+            </Link>
+          </Col>
+          <Col sm={6} md={4} className="my-1">
+            <Link to="/livraria">
+              <ContainerBox>
+                <FaBook size={50} />
+                <span>Livraria</span>
               </ContainerBox>
             </Link>
           </Col>

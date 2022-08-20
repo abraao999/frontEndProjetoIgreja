@@ -1,4 +1,4 @@
-import axios from "../services/axios";
+import axios from '../services/axios';
 
 /* eslint-disable no-param-reassign */
 export const inicioPrimeiroTrimestre = '2022-01-01';
@@ -70,3 +70,14 @@ export const buscaCep = async (cep) => {
   const response = await axios.post('/correio', { cep });
   return response.data;
 };
+
+export const statusPedido = [
+  { id: 0, descricao: 'Pendente' },
+  { id: 1, descricao: 'Encomendado' },
+  { id: 2, descricao: 'Entregue' },
+];
+export const meioPagamento = [
+  { id: 0, descricao: 'Pix' },
+  { id: 1, descricao: 'Dinheiro' },
+  { id: 2, descricao: 'Pendente' },
+];

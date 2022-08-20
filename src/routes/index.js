@@ -60,9 +60,12 @@ import TeologiaChamada from '../pages/AbaEscolaTeologica/TeologiaChamada';
 import TeologiaLivro from '../pages/AbaEscolaTeologica/TeologiaLivro';
 import MeuCadastro from '../pages/AbaPerfil/MeuCadastro';
 import Perfil from '../pages/AbaPerfil/Perfil';
-import PresencaPessoal from '../pages/AbaPerfil/PresencaPessoal';
-import GraficoPresenca from '../pages/AbaEdb/GraficoPresenca';
-import CadLivrariaLivros from '../pages/AbaLivraria/CadLivros';
+import CadLivro from '../pages/AbaLivraria/CadLivro';
+import Venda from '../pages/AbaLivraria/Venda';
+import Livraria from '../pages/AbaLivraria/Livraria';
+import PedidoLivro from '../pages/AbaLivraria/PedidoLivro';
+import ListaPedidoLivraria from '../pages/AbaLivraria/ListaPedidoLivraria';
+import Estoque from '../pages/AbaLivraria/Estoque';
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.function_id);
@@ -80,7 +83,8 @@ export default function Routes() {
     10 - secretario ebd
     11 - diretor escola teológica
     12 - secretario escola teológica
-    13 - livraria
+    13 - adm livraria
+    14 - user livraria
   */
   return (
     <Switch>
@@ -450,13 +454,6 @@ export default function Routes() {
         isClosed
       />
       <MyRoute
-        path="/graficoPresenca/"
-        component={GraficoPresenca}
-        idFuncao={idFuncao}
-        usuarioPermitido={[{ id: 1 }, { id: 5 }]}
-        isClosed
-      />
-      <MyRoute
         path="/escolaTeologica/"
         component={EscolaTeologica}
         idFuncao={idFuncao}
@@ -520,26 +517,6 @@ export default function Routes() {
         isClosed
       />
       <MyRoute
-        path="/meuCadastro/:id"
-        component={MeuCadastro}
-        idFuncao={idFuncao}
-        isClosed
-        usuarioPermitido={[
-          { id: 1 },
-          { id: 2 },
-          { id: 3 },
-          { id: 4 },
-          { id: 5 },
-          { id: 6 },
-          { id: 7 },
-          { id: 8 },
-          { id: 9 },
-          { id: 10 },
-          { id: 11 },
-          { id: 12 },
-        ]}
-      />
-      <MyRoute
         path="/meuCadastro/"
         component={MeuCadastro}
         idFuncao={idFuncao}
@@ -580,32 +557,60 @@ export default function Routes() {
         ]}
       />
       <MyRoute
-        path="/presencaPessoal"
-        component={PresencaPessoal}
+        path="/livraria"
+        component={Livraria}
         idFuncao={idFuncao}
         isClosed
-        usuarioPermitido={[
-          { id: 1 },
-          { id: 2 },
-          { id: 3 },
-          { id: 4 },
-          { id: 5 },
-          { id: 6 },
-          { id: 7 },
-          { id: 8 },
-          { id: 9 },
-          { id: 10 },
-          { id: 11 },
-          { id: 12 },
-        ]}
+        usuarioPermitido={[{ id: 1, id: 13, id: 14 }]}
       />
-      //livraria
       <MyRoute
-        path="/cadLivroLivraria"
-        component={CadLivrariaLivros}
+        path="/cadLivro/:id/edit"
+        component={CadLivro}
         idFuncao={idFuncao}
         isClosed
-        usuarioPermitido={[{ id: 1 }, { id: 2 }, { id: 13 }]}
+        usuarioPermitido={[{ id: 1, id: 13, id: 14 }]}
+      />
+      <MyRoute
+        path="/cadLivro/"
+        component={CadLivro}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1, id: 13, id: 14 }]}
+      />
+      <MyRoute
+        path="/venda/"
+        component={Venda}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1, id: 13, id: 14 }]}
+      />
+      <MyRoute
+        path="/pedidoLivro/:id/edit"
+        component={PedidoLivro}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1, id: 13, id: 14 }]}
+      />
+      <MyRoute
+        path="/pedidoLivro/"
+        component={PedidoLivro}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1, id: 13, id: 14 }]}
+      />
+      <MyRoute
+        path="/ListaPedidoLivraria/"
+        component={ListaPedidoLivraria}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1, id: 13, id: 14 }]}
+      />
+      <MyRoute
+        path="/estoque/"
+        component={Estoque}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1, id: 13, id: 14 }]}
       />
       <MyRoute path="*" component={Page404} />
     </Switch>

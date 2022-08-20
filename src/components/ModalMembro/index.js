@@ -4,7 +4,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { FaCheck } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import * as colors from '../../config/colors';
@@ -29,7 +29,7 @@ export default function ModalMembro({
             <thead>
               <tr>
                 <th scope="col">Nº Ficha</th>
-                <th scope="col">Nome</th>
+                <th scope="col">Descrição</th>
                 <th scope="col">Selecione</th>
               </tr>
             </thead>
@@ -37,14 +37,17 @@ export default function ModalMembro({
               {list.map((dado) => (
                 <tr key={String(dado.id)}>
                   <td>{dado.id}</td>
-                  <td>{dado.nome}</td>
+                  <td>{dado.nome||dado.descricao}</td>
                   <td>
+                    <Button variant='success'>
                     <FaCheck
                       onClick={() => {
                         handleIdMembro(dado.id);
                       }}
                       size={16}
+                      color='white'
                     />
+                    </Button>
                   </td>
                 </tr>
               ))}

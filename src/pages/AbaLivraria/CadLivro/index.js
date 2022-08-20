@@ -202,7 +202,6 @@ export default function CadLivro({ match }) {
               value={valor}
               onChange={(e) => setValor(e.target.value)}
               placeholder="Valor"
-              disabled
             />
           </Col>
           <Col sm={12} md={3} className="my-1">

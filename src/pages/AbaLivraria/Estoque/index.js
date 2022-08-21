@@ -100,11 +100,12 @@ export default function Estoque({ match }) {
     pdfMake.createPdf(documento).open({}, window.open("", "_blank"));
   };
   const handlePesquisaNome = async () => {
-    if (nomeMembro.length > 0) {
+    if (descricao.length > 0) {
       try {
         const novaLista = [];
         const response = await axios.get("/livrariaLivro");
-        response.data.map((dados) => {
+
+        listPedidos.map((dados) => {
           if (
             String(dados.descricao)
               .toLowerCase()
@@ -132,7 +133,7 @@ export default function Estoque({ match }) {
       await axios.get(`/livrariaLivro/${idm}`).then((response) => {
         setDescricao(response.data.descricao);
         novaLista = [response.data];
-        setListPedidos(novaLista);
+        renderizaLista(novaLista);
         handleClose();
       });
     } catch (e) {
@@ -140,26 +141,7 @@ export default function Estoque({ match }) {
       console.log(e);
     }
   };
-  const handleFiltro = () => {
-    let novaLista = [];
-    console.log(status, nomeMembro, tipoPagamento);
-    if (status !== "") {
-      novaLista = listPedidos.filter((dado) => {
-        if (dado.status === status) return dado;
-      });
-    }
-    if (tipoPagamento !== "") {
-      novaLista = listPedidos.filter((dado) => {
-        if (dado.tipo_pagamento === tipoPagamento) return dado;
-      });
-    }
-    if (nomeMembro !== "") {
-      novaLista = listPedidos.filter((dado) => {
-        if (dado.nome === nomeMembro) return dado;
-      });
-    }
-    setListPedidos(novaLista);
-  };
+
   return (
     <Container>
       <Loading isLoading={isLoading} />
@@ -173,7 +155,7 @@ export default function Estoque({ match }) {
         handleFunctionConfirm={handleFunctionConfirm}
       />
       <ModalMembro
-        title="Selecione o membro"
+        title="Selecione o livro"
         handleClose={handleClose}
         show={show}
         list={livrosBusca}

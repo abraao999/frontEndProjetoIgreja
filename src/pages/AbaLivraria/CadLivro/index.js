@@ -99,6 +99,7 @@ export default function CadLivro({ match }) {
         const novaLista = await axios.get("/livrariaLivro");
         setListLivro(novaLista.data);
         limpaCampos();
+        history.push("/cadLivro");
         toast.success("livro editado com sucesso");
 
         setIsLoading(false);

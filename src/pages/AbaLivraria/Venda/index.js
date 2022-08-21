@@ -1,35 +1,31 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 /* eslint-disable array-callback-return */
-import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-import { Button, Col, Form, Row, Table } from 'react-bootstrap';
-import { get } from 'lodash';
-import { Container } from '../../../styles/GlobalStyles';
-import Loading from '../../../components/Loading';
-import axios from '../../../services/axios';
-import ModalMembro from '../../../components/ModalMembro';
-import history from '../../../services/history';
-import {
-  FaEdit,
-  FaSearch,
-  FaTasks,
-  FaTrash,
-  FaWindowClose,
-} from 'react-icons/fa';
-import { Listagem } from './styled';
-import { Link } from 'react-router-dom';
-import ComboBox from '../../../components/ComboBox';
-import { meioPagamento } from '../../../util';
+import { Button, Col, Form, Row, Table } from "react-bootstrap";
+import { get } from "lodash";
+import { Container } from "../../../styles/GlobalStyles";
+import Loading from "../../../components/Loading";
+import axios from "../../../services/axios";
+import ModalMembro from "../../../components/ModalMembro";
+import history from "../../../services/history";
+import { FaSearch, FaTrash } from "react-icons/fa";
+import { Listagem } from "./styled";
+
+import ComboBox from "../../../components/ComboBox";
+import { meioPagamento } from "../../../util";
 
 export default function Venda({ match }) {
-  const id = get(match, 'params.id', '');
+  const id = get(match, "params.id", "");
 
-  const [nomeMembro, setNomeMembro] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [idLivro, setIdLivro] = useState('');
-  const [idMembro, setIdMembro] = useState('');
-  const [tipoPagamento, setTipoPagamento] = useState('');
+  const [nomeMembro, setNomeMembro] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [idLivro, setIdLivro] = useState("");
+  const [idMembro, setIdMembro] = useState("");
+  const [tipoPagamento, setTipoPagamento] = useState("");
   const [valorCompra, setValorCompra] = useState(0);
   const [show, setShow] = useState(false);
   const [showMembro, setShowMembro] = useState(false);
@@ -41,9 +37,9 @@ export default function Venda({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get('/membro');
+      const response = await axios.get("/membro");
       setMembros(response.data);
-      const response2 = await axios.get('/livrariaLivro');
+      const response2 = await axios.get("/livrariaLivro");
       setListLivro(response2.data);
       setIsLoading(false);
     }
@@ -51,8 +47,8 @@ export default function Venda({ match }) {
   }, [id]);
 
   const limpaCampos = () => {
-    setNomeMembro('');
-    setIdMembro('');
+    setNomeMembro("");
+    setIdMembro("");
     setListaCompra([]);
   };
   const handleSubmit = async (e) => {
@@ -61,7 +57,7 @@ export default function Venda({ match }) {
     if (descricao.length > 0) {
       try {
         const novaLista = [];
-        const response = await axios.get('/livrariaLivro');
+        const response = await axios.get("/livrariaLivro");
         response.data.map((dados) => {
           if (
             String(dados.descricao)
@@ -74,7 +70,7 @@ export default function Venda({ match }) {
         setListLivro(novaLista);
         handleShow();
       } catch (e) {
-        toast.error('Condigo não existe');
+        toast.error("Condigo não existe");
         console.log(e);
       }
     } else {
@@ -114,11 +110,11 @@ export default function Venda({ match }) {
       setListLivro(aux);
       handleClose();
     } catch (e) {
-      toast.error('Condigo não existe');
+      toast.error("Condigo não existe");
       console.log(e);
     }
     setListaCompra(novaLista);
-    setDescricao('');
+    setDescricao("");
     setIsLoading(false);
   };
   const handleIdMembro = async (idm) => {
@@ -130,7 +126,7 @@ export default function Venda({ match }) {
       setIdMembro(response.data.id);
       setShowMembro(false);
     } catch (e) {
-      toast.error('Condigo não existe');
+      toast.error("Condigo não existe");
       console.log(e);
     }
     setIsLoading(false);
@@ -138,7 +134,7 @@ export default function Venda({ match }) {
   const handlePesquisaNome = async () => {
     try {
       const novaLista = [];
-      const response = await axios.get('/livrariaLivro');
+      const response = await axios.get("/livrariaLivro");
       response.data.map((dados) => {
         if (
           String(dados.descricao)
@@ -151,7 +147,7 @@ export default function Venda({ match }) {
       setListLivro(novaLista);
       handleShow();
     } catch (e) {
-      toast.error('Condigo não existe');
+      toast.error("Condigo não existe");
       console.log(e);
     }
   };
@@ -161,9 +157,9 @@ export default function Venda({ match }) {
         const novaLista = [];
         membros.map((dados) => {
           if (
-            String(dados.descricao)
+            String(dados.nome)
               .toLowerCase()
-              .includes(String(descricao.toLowerCase()))
+              .includes(String(nomeMembro.toLowerCase()))
           ) {
             novaLista.push(dados);
           }
@@ -172,7 +168,7 @@ export default function Venda({ match }) {
       }
       setShowMembro(true);
     } catch (e) {
-      toast.error('Condigo não existe');
+      toast.error("Condigo não existe");
       console.log(e);
     }
   };
@@ -180,16 +176,16 @@ export default function Venda({ match }) {
     setIsLoading(true);
     try {
       if (
-        nomeMembro === '' ||
+        nomeMembro === "" ||
         listaCompra.length === 0 ||
-        tipoPagamento === ''
+        tipoPagamento === ""
       ) {
-        toast.error('Complete todos os campos');
+        toast.error("Complete todos os campos");
         setIsLoading(false);
         return;
       }
       axios
-        .post('/livrariaVenda', {
+        .post("/livrariaVenda", {
           data_venda: new Date(),
           membro_id: idMembro,
           valor: valorCompra,
@@ -198,7 +194,7 @@ export default function Venda({ match }) {
         })
         .then((response) => {
           listaCompra.map(async (dado) => {
-            await axios.post('/livrariaVendaIten', {
+            await axios.post("/livrariaVendaIten", {
               venda_id: response.data.id,
               livro_id: dado.id,
             });
@@ -211,13 +207,13 @@ export default function Venda({ match }) {
           });
         });
       limpaCampos();
-      toast.success('Venda realizada com sucesso');
+      toast.success("Venda realizada com sucesso");
       setIsLoading(false);
     } catch (error) {
-      const status = get(error, 'response.data.status', 0);
-      const msg = get(error, 'response.data.erros', 0);
+      const status = get(error, "response.data.status", 0);
+      const msg = get(error, "response.data.erros", 0);
       if (status === 401) {
-        toast.error('Voce precisa fazer login');
+        toast.error("Voce precisa fazer login");
       } else {
         msg.map((dado) => toast.error(dado));
       }
@@ -274,9 +270,9 @@ export default function Venda({ match }) {
             md={2}
             className="my-1"
             style={{
-              display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'flex-start',
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "flex-start",
             }}
           >
             <Button variant="success" onClick={handlePesquisaMembro}>
@@ -306,9 +302,9 @@ export default function Venda({ match }) {
             md={2}
             className="my-1"
             style={{
-              display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'flex-start',
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "flex-start",
             }}
           >
             <Button variant="success" type="submit">
@@ -319,7 +315,7 @@ export default function Venda({ match }) {
         <Row>
           <Col sm={12} md={6}>
             <ComboBox
-              title={'Selecione o meio de pagamento'}
+              title={"Selecione o meio de pagamento"}
               list={meioPagamento}
               onChange={(e) => setTipoPagamento(e.target.value)}
               value={tipoPagamento}
@@ -335,7 +331,7 @@ export default function Venda({ match }) {
             striped
             bordered
             hover
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: "center" }}
           >
             <thead>
               <tr>

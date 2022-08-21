@@ -18,13 +18,14 @@ import ComboBox from "../../../components/ComboBox";
 import { porcetagem } from "../../../util";
 // import * as actions from '../../store/modules/auth/actions';
 
-export default function CadLivro({ match }) {
+export default function CadCamiseta({ match }) {
   const id = get(match, "params.id", "");
   const [show, setShow] = useState(false);
   const [idParaDelecao, setIdParaDelecao] = useState("");
   const [indiceDelecao, setIndiceDelecao] = useState("");
 
   const [descricao, setDescricao] = useState("");
+  const [tamanho, setTamanho] = useState("");
   const [dataEntrada, setDataEntrada] = useState("");
   const [valor, setValor] = useState("");
   const [custo, setCusto] = useState("");
@@ -36,12 +37,13 @@ export default function CadLivro({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get("/livrariaLivro");
+      const response = await axios.get("/livrariaCamiseta");
       if (id) {
-        const response2 = await axios.get(`/livrariaLivro/${id}`);
+        const response2 = await axios.get(`/livrariaCamiseta/${id}`);
         setDescricao(response2.data.descricao);
         setCusto(response2.data.custo);
         setValor(response2.data.valor);
+        setTamanho(response2.data.tamanho);
         setQuantidade(response2.data.quantidade);
         setDataEntrada(response2.data.data_entrada);
       }
@@ -56,6 +58,7 @@ export default function CadLivro({ match }) {
     setValor("");
     setCusto("");
     setQuantidade("");
+    setTamanho("");
     setDataEntrada("");
   };
   async function handleSubmit(e) {
@@ -76,34 +79,36 @@ export default function CadLivro({ match }) {
     setIsLoading(true);
     try {
       if (!id) {
-        const response = await axios.post("/livrariaLivro", {
+        const response = await axios.post("/livrariaCamiseta", {
           descricao,
           data_entrada: dataEntrada,
           custo,
           valor,
+          tamanho,
           quantidade,
         });
         console.log(response);
-        const novaLista = await axios.get("/livrariaLivro");
+        const novaLista = await axios.get("/livrariaCamiseta");
         setListLivro(novaLista.data);
         limpaCampos();
         toast.success("livro criado com sucesso");
 
         setIsLoading(false);
       } else {
-        const response = await axios.put(`/livrariaLivro/${id}`, {
+        const response = await axios.put(`/livrariaCamiseta/${id}`, {
           descricao,
           data_entrada: dataEntrada,
           custo,
           valor,
+          tamanho,
           quantidade,
         });
         console.log(response);
-        const novaLista = await axios.get("/livrariaLivro");
+        const novaLista = await axios.get("/livrariaCamiseta");
         setListLivro(novaLista.data);
         limpaCampos();
-        history.push("/cadLivro");
-        toast.success("livro editado com sucesso");
+        history.push("/cadCamiseta");
+        toast.success("camiseta editado com sucesso");
 
         setIsLoading(false);
       }
@@ -128,11 +133,11 @@ export default function CadLivro({ match }) {
   const handleFunctionConfirm = async () => {
     try {
       setIsLoading(true);
-      await axios.delete(`/livrariaLivro/${idParaDelecao}`);
+      await axios.delete(`/livrariaCamiseta/${idParaDelecao}`);
       const novaLista = [...listLivro];
       novaLista.splice(indiceDelecao, 1);
       setListLivro(novaLista);
-      toast.success("Livro excluído com sucesso");
+      toast.success("Camiseta excluído com sucesso");
       setShow(false);
 
       setIsLoading(false);
@@ -153,7 +158,7 @@ export default function CadLivro({ match }) {
   };
   return (
     <Container>
-      <h1>{id ? "Editar Livro" : "Novo Livro"}</h1>
+      <h1>{id ? "Editar Camiseta" : "Novo Camiseta"}</h1>
       <Loading isLoading={isLoading} />
       <Modal
         title="Atenção!!!"
@@ -174,6 +179,18 @@ export default function CadLivro({ match }) {
               value={descricao}
               onChange={(e) => setDescricao(e.target.value)}
               placeholder="Descrição"
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12} md={9} className="my-1">
+            <Form.Label htmlFor="descricao">Tamanho:</Form.Label>
+
+            <Form.Control
+              type="text"
+              value={tamanho}
+              onChange={(e) => setTamanho(e.target.value)}
+              placeholder="Tamanho"
             />
           </Col>
           <Col sm={12} md={3} className="my-1">
@@ -246,7 +263,7 @@ export default function CadLivro({ match }) {
       </Form>
 
       <Listagem>
-        <h3>Lista de Livros</h3>
+        <h3>Lista de Camiseta</h3>
         <center>
           <Table responsive striped bordered hover>
             <thead>
@@ -295,6 +312,6 @@ export default function CadLivro({ match }) {
     </Container>
   );
 }
-CadLivro.protoTypes = {
+CadCamiseta.protoTypes = {
   match: PropTypes.shape({}).isRequired,
 };

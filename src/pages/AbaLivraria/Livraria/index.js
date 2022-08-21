@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { useSelector } from 'react-redux';
-import { Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { AiOutlineSetting } from 'react-icons/ai';
-import { FaBook, FaCalculator, FaUserTie } from 'react-icons/fa';
-import { MdArrowBack, MdSchool } from 'react-icons/md';
-import { Container } from '../../../styles/GlobalStyles';
+import { useSelector } from "react-redux";
+import { Col, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { FaBook } from "react-icons/fa";
+import { MdArrowBack } from "react-icons/md";
+import { Container } from "../../../styles/GlobalStyles";
 
-import Loading from '../../../components/Loading';
-import Card from '../../../components/Card';
-import history from '../../../services/history';
-import { ContainerBox } from './styled';
+import Loading from "../../../components/Loading";
+
+import { ContainerBox } from "./styled";
 
 export default function Livraria() {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +30,14 @@ export default function Livraria() {
         <h1>Livraria</h1>
         <Row>
           <Col sm={6} md={4} className="my-1">
+            <Link to="/cadCamiseta">
+              <ContainerBox>
+                <FaBook size={50} />
+                <span>Cadastro de Camiseta</span>
+              </ContainerBox>
+            </Link>
+          </Col>
+          <Col sm={6} md={4} className="my-1">
             <Link to="/cadLivro">
               <ContainerBox>
                 <FaBook size={50} />
@@ -47,6 +53,8 @@ export default function Livraria() {
               </ContainerBox>
             </Link>
           </Col>
+        </Row>
+        <Row>
           <Col sm={6} md={4} className="my-1">
             <Link to="/listaPedidoLivraria">
               <ContainerBox>
@@ -55,15 +63,19 @@ export default function Livraria() {
               </ContainerBox>
             </Link>
           </Col>
-
-        </Row>
-        <Row>
-
           <Col sm={6} md={4} className="my-1">
             <Link to="/venda">
               <ContainerBox>
                 <FaBook size={50} />
                 <span>Painel de Vendas</span>
+              </ContainerBox>
+            </Link>
+          </Col>
+          <Col sm={6} md={4} className="my-1">
+            <Link to="/relatorioVendas">
+              <ContainerBox>
+                <FaBook size={50} />
+                <span>Relatório de Vendas</span>
               </ContainerBox>
             </Link>
           </Col>

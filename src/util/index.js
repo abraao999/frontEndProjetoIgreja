@@ -1,35 +1,35 @@
-import axios from '../services/axios';
+import axios from "../services/axios";
 
 /* eslint-disable no-param-reassign */
-export const inicioPrimeiroTrimestre = '2022-01-01';
-export const fimPrimeiroTrimestre = '2022-03-31';
-export const inicioSegundoTrimestre = '2022-04-01';
-export const fimSegundoTrimestre = '2022-06-30';
-export const inicioTerceiroTrimestre = '2022-07-01';
-export const fimTerceiroTrimestre = '2022-09-30';
+export const inicioPrimeiroTrimestre = "2022-01-01";
+export const fimPrimeiroTrimestre = "2022-03-31";
+export const inicioSegundoTrimestre = "2022-04-01";
+export const fimSegundoTrimestre = "2022-06-30";
+export const inicioTerceiroTrimestre = "2022-07-01";
+export const fimTerceiroTrimestre = "2022-09-30";
 
-export const inicioQuartoTrimestre = '2022-10-01';
-export const fimQuartoTrimestre = '2022-12-31';
+export const inicioQuartoTrimestre = "2022-10-01";
+export const fimQuartoTrimestre = "2022-12-31";
 
 export const trimestres = [
-  { id: 0, descricao: 'Primeiro Trimestre' },
-  { id: 1, descricao: 'Segundo Trimestre' },
-  { id: 2, descricao: 'Terceiro Trimestre' },
-  { id: 3, descricao: 'Quarto Trimestre' },
+  { id: 0, descricao: "Primeiro Trimestre" },
+  { id: 1, descricao: "Segundo Trimestre" },
+  { id: 2, descricao: "Terceiro Trimestre" },
+  { id: 3, descricao: "Quarto Trimestre" },
 ];
 export const listMeses = [
-  { id: 0, descricao: 'Janeiro' },
-  { id: 1, descricao: 'Fevereiro' },
-  { id: 2, descricao: 'Março' },
-  { id: 3, descricao: 'Abril' },
-  { id: 4, descricao: 'Maio' },
-  { id: 5, descricao: 'Junho' },
-  { id: 6, descricao: 'Julho' },
-  { id: 7, descricao: 'Agosto' },
-  { id: 8, descricao: 'Setembro' },
-  { id: 9, descricao: 'Outubro' },
-  { id: 10, descricao: 'Novembro' },
-  { id: 11, descricao: 'Dezembro' },
+  { id: 0, descricao: "Janeiro" },
+  { id: 1, descricao: "Fevereiro" },
+  { id: 2, descricao: "Março" },
+  { id: 3, descricao: "Abril" },
+  { id: 4, descricao: "Maio" },
+  { id: 5, descricao: "Junho" },
+  { id: 6, descricao: "Julho" },
+  { id: 7, descricao: "Agosto" },
+  { id: 8, descricao: "Setembro" },
+  { id: 9, descricao: "Outubro" },
+  { id: 10, descricao: "Novembro" },
+  { id: 11, descricao: "Dezembro" },
 ];
 export const getToday = () => {
   let dataAtual = new Date();
@@ -66,18 +66,28 @@ export const getMes = (valor) => {
   return valor;
 };
 export const buscaCep = async (cep) => {
-  cep = cep.replace('-', '');
-  const response = await axios.post('/correio', { cep });
+  cep = cep.replace("-", "");
+  const response = await axios.post("/correio", { cep });
   return response.data;
 };
 
 export const statusPedido = [
-  { id: 0, descricao: 'Pendente' },
-  { id: 1, descricao: 'Encomendado' },
-  { id: 2, descricao: 'Entregue' },
+  { id: 0, descricao: "Pendente" },
+  { id: 1, descricao: "Encomendado" },
+  { id: 2, descricao: "Entregue" },
 ];
 export const meioPagamento = [
-  { id: 0, descricao: 'Pix' },
-  { id: 1, descricao: 'Dinheiro' },
-  { id: 2, descricao: 'Pendente' },
+  { id: 0, descricao: "Pix" },
+  { id: 1, descricao: "Dinheiro" },
+  { id: 2, descricao: "Pendente" },
+];
+export const porcetagem = [
+  { id: 0, descricao: 5 },
+  { id: 1, descricao: 10 },
+  { id: 2, descricao: 15 },
+  { id: 3, descricao: 20 },
+  { id: 4, descricao: 25 },
+  { id: 5, descricao: 30 },
+  { id: 6, descricao: 35 },
+  { id: 7, descricao: 40 },
 ];

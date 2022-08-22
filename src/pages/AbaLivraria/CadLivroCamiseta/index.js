@@ -15,7 +15,7 @@ import axios from "../../../services/axios";
 import Loading from "../../../components/Loading";
 import history from "../../../services/history";
 import ComboBox from "../../../components/ComboBox";
-import { porcetagem } from "../../../util";
+import { porcetagem, tamanhos } from "../../../util";
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function CadCamiseta({ match }) {
@@ -158,7 +158,7 @@ export default function CadCamiseta({ match }) {
   };
   return (
     <Container>
-      <h1>{id ? "Editar Camiseta" : "Novo Camiseta"}</h1>
+      <h1>{id ? "Editar Camiseta" : "Cadastro de Camisetas"}</h1>
       <Loading isLoading={isLoading} />
       <Modal
         title="Atenção!!!"
@@ -171,7 +171,7 @@ export default function CadCamiseta({ match }) {
       />
       <Form onSubmit={handleSubmit}>
         <Row className="align-items-center">
-          <Col sm={12} md={9} className="my-1">
+          <Col sm={12} md={7} className="my-1">
             <Form.Label htmlFor="descricao">Descrição:</Form.Label>
 
             <Form.Control
@@ -181,16 +181,12 @@ export default function CadCamiseta({ match }) {
               placeholder="Descrição"
             />
           </Col>
-        </Row>
-        <Row>
-          <Col sm={12} md={9} className="my-1">
-            <Form.Label htmlFor="descricao">Tamanho:</Form.Label>
-
-            <Form.Control
-              type="text"
+          <Col sm={12} md={2} className="my-1">
+            <ComboBox
+              title={"Tamanho"}
+              list={tamanhos}
               value={tamanho}
               onChange={(e) => setTamanho(e.target.value)}
-              placeholder="Tamanho"
             />
           </Col>
           <Col sm={12} md={3} className="my-1">
@@ -203,6 +199,7 @@ export default function CadCamiseta({ match }) {
             />
           </Col>
         </Row>
+        <Row></Row>
         <Row>
           <Col sm={12} md={3} className="my-1">
             <Form.Label htmlFor="descricao">Custo:</Form.Label>
@@ -269,6 +266,7 @@ export default function CadCamiseta({ match }) {
             <thead>
               <tr>
                 <th scope="col">Descrição</th>
+                <th scope="col">Tamanho</th>
                 <th scope="col">Custo</th>
                 <th scope="col">Valor</th>
                 <th scope="col">Quantidade em Estoque</th>
@@ -280,6 +278,7 @@ export default function CadCamiseta({ match }) {
               {listLivro.map((dado, index) => (
                 <tr key={String(dado.id)}>
                   <td>{dado.descricao}</td>
+                  <td>{dado.tamanho}</td>
                   <td>R${dado.custo}</td>
                   <td>R${dado.valor}</td>
                   <td>{dado.quantidade}</td>

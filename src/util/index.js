@@ -91,3 +91,11 @@ export const porcetagem = [
   { id: 6, descricao: 35 },
   { id: 7, descricao: 40 },
 ];
+export const tamanhos = [
+  { id: 0, descricao: "P" },
+  { id: 1, descricao: "M" },
+  { id: 2, descricao: "G" },
+  { id: 3, descricao: "GG" },
+  { id: 4, descricao: "G1" },
+  { id: 5, descricao: "G2" },
+];

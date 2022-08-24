@@ -54,6 +54,7 @@ export default function CadLivro({ match }) {
         setQuantidade(response2.data.quantidade);
         setDataEntrada(response2.data.data_entrada);
         setFotoId(response2.data.foto_id);
+        setUrlFoto(response2.data.url);
         setAutor(response2.data.autor);
       }
       const response3 = await axios.get("/livrariaFotos");
@@ -219,21 +220,23 @@ export default function CadLivro({ match }) {
   };
   const handleUpload = (files) => {
     // console.log(files);
-    const listaAtual = [...uploadedFiles];
-    const aux = files.map((file) => ({
-      file,
-      id: uniqueId(),
-      name: file.name,
-      readableSize: fileSize(file.size),
-      preview: URL.createObjectURL(file),
-      progress: 0,
-      uploaded: false,
-      error: false,
-      url: null,
-    }));
-    setUploadedFiles(listaAtual.concat(aux));
-    setUrlFoto(aux[0].preview);
-    const aux1 = listaAtual.concat(aux);
+    if (uploadedFiles.length < 1) {
+      const listaAtual = [...uploadedFiles];
+      const aux = files.map((file) => ({
+        file,
+        id: uniqueId(),
+        name: file.name,
+        readableSize: fileSize(file.size),
+        preview: URL.createObjectURL(file),
+        progress: 0,
+        uploaded: false,
+        error: false,
+        url: null,
+      }));
+      setUploadedFiles(listaAtual.concat(aux));
+      setUrlFoto(aux[0].preview);
+      const aux1 = listaAtual.concat(aux);
+    }
     // aux1.map((dado) => processUpload(dado));
   };
   const processUpload = async (dado) => {
@@ -287,7 +290,16 @@ export default function CadLivro({ match }) {
         handleFunctionConfirm={handleFunctionConfirm}
       />
       <Row>
-        <Col sm={12} md={6}>
+        <Col
+          sm={12}
+          md={6}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+          }}
+        >
           <Dropzone accept="image/*" onDropAccepted={handleUpload}>
             {({ getRootProps, getInputProps, isDragActive, isDragReject }) => (
               <DropContainer

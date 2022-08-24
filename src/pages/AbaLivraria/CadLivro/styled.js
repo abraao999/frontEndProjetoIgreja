@@ -30,6 +30,7 @@ export const DropContainer = styled.div.attrs({
 })`
   border: 1px dashed #ddd;
   border-radius: 4px;
+  width: 100%;
   cursor: pointer;
   transition: height 0.2s ease;
   ${(props) => props.isDragReject && dragReject}

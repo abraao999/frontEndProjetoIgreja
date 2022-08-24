@@ -1,21 +1,25 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 import { toast } from "react-toastify";
 import { FaEdit, FaSave, FaWindowClose } from "react-icons/fa";
-import { get } from "lodash";
+import { get, uniqueId } from "lodash";
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
 import { Container } from "../../../styles/GlobalStyles";
 import Modal from "../../../components/Modal";
 
-import { Listagem } from "./styled";
+import { DropContainer, UploadMessage, Listagem } from "./styled";
 import axios from "../../../services/axios";
 
 import Loading from "../../../components/Loading";
 import history from "../../../services/history";
 import ComboBox from "../../../components/ComboBox";
 import { porcetagem } from "../../../util";
+import Dropzone from "react-dropzone";
+import FileList from "../../../components/FileList";
+import fileSize from "filesize";
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function CadLivro({ match }) {
@@ -29,9 +33,12 @@ export default function CadLivro({ match }) {
   const [valor, setValor] = useState("");
   const [custo, setCusto] = useState("");
   const [quantidade, setQuantidade] = useState("");
+  const [urlFoto, setUrlFoto] = useState("");
+  const [fotoId, setFotoId] = useState("");
   const [porcentagem, setPorcentagem] = useState(0);
   const [listLivro, setListLivro] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
 
   useEffect(() => {
     async function getData() {
@@ -44,6 +51,8 @@ export default function CadLivro({ match }) {
         setValor(response2.data.valor);
         setQuantidade(response2.data.quantidade);
         setDataEntrada(response2.data.data_entrada);
+        setUrlFoto(response2.data.url);
+        setFotoId(response2.data.foto_id);
       }
       setListLivro(response.data);
 
@@ -57,11 +66,16 @@ export default function CadLivro({ match }) {
     setCusto("");
     setQuantidade("");
     setDataEntrada("");
+    setUploadedFiles([]);
+    setUrlFoto("");
+    setFotoId("");
   };
-  async function handleSubmit(e) {
-    e.preventDefault();
+  const handleRemoveIten = () => {
+    setUploadedFiles([]);
+  };
+
+  const salvaBanco = async (resposta) => {
     let formErrors = false;
-    console.log(parseInt(quantidade), quantidade);
     if (
       descricao.length < 3 ||
       descricao.length > 255 ||
@@ -81,6 +95,7 @@ export default function CadLivro({ match }) {
           data_entrada: dataEntrada,
           custo,
           valor,
+          foto_id: resposta.id,
           quantidade,
         });
         console.log(response);
@@ -91,11 +106,21 @@ export default function CadLivro({ match }) {
 
         setIsLoading(false);
       } else {
+        console.log("aqui");
+        console.log("teste", {
+          descricao,
+          data_entrada: dataEntrada,
+          custo,
+          valor,
+          foto_id: resposta.id,
+          quantidade,
+        });
         const response = await axios.put(`/livrariaLivro/${id}`, {
           descricao,
           data_entrada: dataEntrada,
           custo,
           valor,
+          foto_id: resposta.id,
           quantidade,
         });
         console.log(response);
@@ -116,6 +141,13 @@ export default function CadLivro({ match }) {
       }
       setIsLoading(false);
     }
+  };
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    console.log(uploadedFiles);
+
+    processUpload(uploadedFiles[0]).then((resposta) => salvaBanco(resposta));
   }
   const handleClose = () => {
     setShow(false);
@@ -151,6 +183,73 @@ export default function CadLivro({ match }) {
     aux = aux + (aux * p) / 100;
     setValor(aux.toFixed(2));
   };
+  const renderDragMessage = (isDragActive, isDragReject) => {
+    if (!isDragActive)
+      return <UploadMessage>Click aqui ou arraste arquivos ...</UploadMessage>;
+    if (isDragReject)
+      return (
+        <UploadMessage type="error">Arquivo não suportado ...</UploadMessage>
+      );
+    return (
+      <UploadMessage type="success">Solte os aquivos aqui ...</UploadMessage>
+    );
+  };
+  const handleUpload = (files) => {
+    // console.log(files);
+    const listaAtual = [...uploadedFiles];
+    const aux = files.map((file) => ({
+      file,
+      id: uniqueId(),
+      name: file.name,
+      readableSize: fileSize(file.size),
+      preview: URL.createObjectURL(file),
+      progress: 0,
+      uploaded: false,
+      error: false,
+      url: null,
+    }));
+    setUploadedFiles(listaAtual.concat(aux));
+    setUrlFoto(aux[0].preview);
+    const aux1 = listaAtual.concat(aux);
+    // aux1.map((dado) => processUpload(dado));
+  };
+  const processUpload = async (dado) => {
+    const data = new FormData();
+    data.append("file", dado.file, dado.name);
+    console.log(dado);
+    const res = await axios.post("/livrariaFotos", data, {
+      onUploadProgress: (e) => {
+        // const progress = parseInt(Math.round((e.loaded * 100) / e.total));
+        // updateFile(dado.id, { ...dado, progress });
+      },
+    });
+    console.log(res.data);
+    setFotoId(res.data.id);
+    setUrlFoto(res.data.url);
+    return res.data;
+  };
+  const updateFile = (id, data) => {
+    console.log(data);
+    const listaAtual = [];
+
+    if (uploadedFiles.length > 0) {
+      console.log(uploadedFiles.length);
+      uploadedFiles.map((dado, index) => {
+        if (id === dado.id) {
+          listaAtual.push({ ...dado, ...data });
+          console.log("if");
+        } else {
+          listaAtual.push(dado);
+          console.log("else");
+        }
+      });
+      console.log(listaAtual);
+    } else {
+      console.log(listaAtual);
+      listaAtual.push(data);
+    }
+    setUploadedFiles(listaAtual);
+  };
   return (
     <Container>
       <h1>{id ? "Editar Livro" : "Novo Livro"}</h1>
@@ -164,6 +263,40 @@ export default function CadLivro({ match }) {
         buttonConfirm="Sim"
         handleFunctionConfirm={handleFunctionConfirm}
       />
+      <Row>
+        <Col sm={12} md={6}>
+          <Dropzone accept="image/*" onDropAccepted={handleUpload}>
+            {({ getRootProps, getInputProps, isDragActive, isDragReject }) => (
+              <DropContainer
+                {...getRootProps()}
+                isDragActive={isDragActive}
+                isDragReject={isDragReject}
+              >
+                <input {...getInputProps()} />
+                {renderDragMessage(isDragActive, isDragReject)}
+              </DropContainer>
+            )}
+          </Dropzone>
+          {!!uploadedFiles.length && (
+            <FileList
+              files={uploadedFiles}
+              handleRemoveIten={handleRemoveIten}
+            />
+          )}
+        </Col>
+        {urlFoto && (
+          <Col
+            sm={12}
+            md={6}
+            style={{
+              backgroundImage: `url(${urlFoto})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              backgroundPosition: "50% 50%",
+            }}
+          ></Col>
+        )}
+      </Row>
       <Form onSubmit={handleSubmit}>
         <Row className="align-items-center">
           <Col sm={12} md={9} className="my-1">

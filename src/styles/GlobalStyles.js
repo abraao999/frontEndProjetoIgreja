@@ -1,6 +1,7 @@
-import styled, { createGlobalStyle } from 'styled-components';
-import * as colors from '../config/colors';
-import 'react-toastify/dist/ReactToastify.css';
+import styled, { createGlobalStyle } from "styled-components";
+import * as colors from "../config/colors";
+import "react-toastify/dist/ReactToastify.css";
+import "react-circular-progressbar/dist/styles.css";
 
 export default createGlobalStyle`
   * {

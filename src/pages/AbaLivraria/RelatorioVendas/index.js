@@ -243,7 +243,7 @@ export default function RelatorioVendas({ match }) {
               <td>
                 <Button
                   variant="warning"
-                  onClick={() => history.push(`/pedidoLivro/${dado.id}/edit`)}
+                  onClick={() => history.push(`/venda/${dado.id}/edit`)}
                 >
                   <FaEdit size={16} />
                 </Button>

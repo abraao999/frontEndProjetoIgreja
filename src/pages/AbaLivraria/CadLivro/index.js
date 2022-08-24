@@ -37,9 +37,11 @@ export default function CadLivro({ match }) {
   const [fotoId, setFotoId] = useState("");
   const [porcentagem, setPorcentagem] = useState(0);
   const [listLivro, setListLivro] = useState([]);
+  const [listFotos, setListFotos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
-
+  const imagenVazia =
+    "https://fotosigreja.s3.us-east-1.amazonaws.com/67b54846353ff2e9438fae91a4a30fec-sem-foto.jpeg";
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
@@ -54,12 +56,29 @@ export default function CadLivro({ match }) {
         setUrlFoto(response2.data.url);
         setFotoId(response2.data.foto_id);
       }
-      setListLivro(response.data);
+      const response3 = await axios.get("/livrariaFotos");
+      setListFotos(response3.data);
+      renderizaLista(response.data, response3.data);
 
       setIsLoading(false);
     }
     getData();
   }, [id]);
+
+  const renderizaLista = (livro, foto) => {
+    const novaLista = [];
+    livro.map((l) => {
+      let achou = false;
+      foto.map((f) => {
+        if (l.foto_id === f.id) {
+          novaLista.push({ ...l, urlPreview: f.url });
+          achou = true;
+        }
+      });
+      if (!achou) novaLista.push({ ...l, urlPreview: imagenVazia });
+    });
+    setListLivro(novaLista);
+  };
   const limpaCampos = () => {
     setDescricao("");
     setValor("");
@@ -144,7 +163,7 @@ export default function CadLivro({ match }) {
   };
   async function handleSubmit(e) {
     e.preventDefault();
-
+    setIsLoading(true);
     console.log(uploadedFiles);
 
     processUpload(uploadedFiles[0]).then((resposta) => salvaBanco(resposta));
@@ -252,7 +271,7 @@ export default function CadLivro({ match }) {
   };
   return (
     <Container>
-      <h1>{id ? "Editar Livro" : "Novo Livro"}</h1>
+      <h1 id="top">{id ? "Editar Livro" : "Novo Livro"}</h1>
       <Loading isLoading={isLoading} />
       <Modal
         title="Atenção!!!"
@@ -384,6 +403,7 @@ export default function CadLivro({ match }) {
           <Table responsive striped bordered hover>
             <thead>
               <tr>
+                <th scope="col">Prévia</th>
                 <th scope="col">Descrição</th>
                 <th scope="col">Custo</th>
                 <th scope="col">Valor</th>
@@ -395,6 +415,12 @@ export default function CadLivro({ match }) {
             <tbody>
               {listLivro.map((dado, index) => (
                 <tr key={String(dado.id)}>
+                  <td>
+                    <img
+                      src={dado.urlPreview}
+                      style={{ height: "30px", width: "30px" }}
+                    />
+                  </td>
                   <td>{dado.descricao}</td>
                   <td>R${dado.custo}</td>
                   <td>R${dado.valor}</td>

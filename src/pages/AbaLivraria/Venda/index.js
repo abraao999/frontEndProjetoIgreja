@@ -14,6 +14,7 @@ import ModalMembro from "../../../components/ModalMembro";
 import history from "../../../services/history";
 import { FaSearch, FaTrash } from "react-icons/fa";
 import { Listagem } from "./styled";
+import Modal from "../../../components/Modal";
 
 import ComboBox from "../../../components/ComboBox";
 import { meioPagamento } from "../../../util";
@@ -26,9 +27,11 @@ export default function Venda({ match }) {
   const [idLivro, setIdLivro] = useState("");
   const [idMembro, setIdMembro] = useState("");
   const [tipoPagamento, setTipoPagamento] = useState("");
+  const [idParaDelecao, setIdParaDelecao] = useState("");
   const [valorCompra, setValorCompra] = useState(0);
   const [show, setShow] = useState(false);
   const [showMembro, setShowMembro] = useState(false);
+  const [showDelecao, setShowDelecao] = useState(false);
   const [listaCompra, setListaCompra] = useState([]);
   const [listLivro, setListLivro] = useState([]);
   const [membros, setMembros] = useState([]);
@@ -41,11 +44,28 @@ export default function Venda({ match }) {
       setMembros(response.data);
       const response2 = await axios.get("/livrariaLivro");
       setListLivro(response2.data);
+      if (id) {
+        axios.get(`/livrariaVenda/${id}`).then((dado) => {
+          setNomeMembro(dado.data.nome);
+          console.log(dado.data);
+          setIdMembro(dado.data.membro_id);
+        });
+        const response = await axios.get(`/livrariaVendaIten/getItens/${id}`);
+        setListaCompra(response.data);
+        calculaValor(response.data);
+      }
       setIsLoading(false);
     }
     getData();
   }, [id]);
-
+  const calculaValor = (list) => {
+    let aux = 0;
+    console.log(list);
+    list.map((dado) => {
+      aux += dado.valor;
+    });
+    setValorCompra(aux);
+  };
   const limpaCampos = () => {
     setNomeMembro("");
     setIdMembro("");
@@ -174,6 +194,7 @@ export default function Venda({ match }) {
   };
   const handleFinalizar = async () => {
     setIsLoading(true);
+    if (id) history("/livraria");
     try {
       if (
         nomeMembro === "" ||
@@ -222,10 +243,29 @@ export default function Venda({ match }) {
   };
   const handleRemoveItem = (dado, index) => {
     const novaLista = [...listaCompra];
-    novaLista.splice(index, 1);
-    setListaCompra(novaLista);
-    const aux = valorCompra - parseFloat(dado.valor);
-    setValorCompra(aux);
+    if (id) {
+      setIdParaDelecao(dado.id);
+      setShowDelecao(true);
+    } else {
+      novaLista.splice(index, 1);
+      setListaCompra(novaLista);
+      const aux = valorCompra - parseFloat(dado.valor);
+      setValorCompra(aux);
+    }
+  };
+  const handleExcluirLivro = async () => {
+    setIsLoading(true);
+
+    try {
+      await axios.delete(`/livrariaVendaIten/${idParaDelecao}`);
+    } catch (error) {
+      console.log(error);
+    }
+    const response = await axios.get(`/livrariaVendaIten/getItens/${id}`);
+    setListaCompra(response.data);
+    calculaValor(response.data);
+    setShowDelecao(false);
+    setIsLoading(false);
   };
   return (
     <Container>
@@ -244,6 +284,15 @@ export default function Venda({ match }) {
         list={membros}
         buttonCancel="Fechar"
         handleIdMembro={handleIdMembro}
+      />
+      <Modal
+        show={showDelecao}
+        title="Atenção !!!"
+        text="Deseja excluir esse livro"
+        handleClose={() => setShowDelecao(false)}
+        buttonCancel="Não"
+        buttonConfirm="Sim"
+        handleFunctionConfirm={handleExcluirLivro}
       />
       <h2>Painel de Venda</h2>
       <Loading isLoading={isLoading} />
@@ -363,7 +412,7 @@ export default function Venda({ match }) {
           <strong> Valor Total: R$ {valorCompra}</strong>
         </p>
         <Button variant="success" onClick={handleFinalizar}>
-          Finalizar compra
+          {id ? "Finalizar alteração" : "Finalizar compra"}
         </Button>
       </Listagem>
     </Container>

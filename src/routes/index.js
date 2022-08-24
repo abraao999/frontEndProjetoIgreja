@@ -580,6 +580,13 @@ export default function Routes() {
         usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
       />
       <MyRoute
+        path="/venda/:id/edit"
+        component={Venda}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
+      />
+      <MyRoute
         path="/venda/"
         component={Venda}
         idFuncao={idFuncao}

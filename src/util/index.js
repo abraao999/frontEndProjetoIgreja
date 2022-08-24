@@ -99,3 +99,6 @@ export const tamanhos = [
   { id: 4, descricao: "G1" },
   { id: 5, descricao: "G2" },
 ];
+
+export const imagenVazia =
+  "https://fotosigreja.s3.us-east-1.amazonaws.com/67b54846353ff2e9438fae91a4a30fec-sem-foto.jpeg";

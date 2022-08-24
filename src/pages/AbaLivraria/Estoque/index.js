@@ -8,7 +8,7 @@ import { FaEdit, FaPrint, FaSearch, FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { get } from "lodash";
 import { Link } from "react-router-dom";
-import { Col, Row, Form, Table, Button } from "react-bootstrap";
+import { Col, Row, Form, Table, Button, Image } from "react-bootstrap";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { Container } from "../../../styles/GlobalStyles";
@@ -22,7 +22,7 @@ import history from "../../../services/history";
 
 import { Impressao } from "../../../printers/impLivrariaLivro";
 import ModalMembro from "../../../components/ModalMembro";
-import { getDataDB } from "../../../util";
+import { getDataDB, imagenVazia } from "../../../util";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export default function Estoque({ match }) {
@@ -50,19 +50,28 @@ export default function Estoque({ match }) {
     async function getData() {
       setIsLoading(true);
       const response = await axios.get("/livrariaLivro");
-      renderizaLista(response.data);
-
+      const response3 = await axios.get("/livrariaFotos");
+      renderizaLista(response.data, response3.data);
       setIsLoading(false);
     }
     getData();
   }, [id]);
-  const renderizaLista = (list) => {
-    let aux = [];
-    list.map((dado) => {
-      const dataFormatada = getDataDB(new Date(dado.data_entrada));
-      aux.push({ ...dado, dataFormatada });
+  const renderizaLista = (livro, foto) => {
+    const novaLista = [];
+    livro.map((l) => {
+      const dataFormatada = getDataDB(new Date(l.data_entrada));
+
+      let achou = false;
+      foto.map((f) => {
+        if (l.foto_id === f.id) {
+          novaLista.push({ ...l, dataFormatada, urlPreview: f.url });
+          achou = true;
+        }
+      });
+      if (!achou)
+        novaLista.push({ ...l, dataFormatada, urlPreview: imagenVazia });
     });
-    setListPedidos(aux);
+    setListPedidos(novaLista);
   };
   const handleClose = () => {
     setShow(false);
@@ -203,6 +212,7 @@ export default function Estoque({ match }) {
       <Table responsive striped bordered hover style={{ textAlign: "center" }}>
         <thead>
           <tr>
+            <th scope="col">Prévia</th>
             <th scope="col">Descrição</th>
             <th scope="col">Quantidade</th>
             <th scope="col">Custo</th>
@@ -215,6 +225,13 @@ export default function Estoque({ match }) {
         <tbody>
           {listPedidos.map((dado, index) => (
             <tr key={String(dado.id)}>
+              <td>
+                <Image
+                  roundedCircle
+                  src={dado.urlPreview}
+                  style={{ height: "30px", width: "30px" }}
+                />
+              </td>
               <td>{dado.descricao}</td>
               <td>{dado.quantidade}</td>
               <td>{dado.custo}</td>

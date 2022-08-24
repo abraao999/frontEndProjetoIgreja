@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { FaEdit, FaSave, FaWindowClose } from "react-icons/fa";
 import { get, uniqueId } from "lodash";
-import { Button, Col, Form, Row, Table } from "react-bootstrap";
+import { Button, Col, Form, Image, Row, Table } from "react-bootstrap";
 import { Container } from "../../../styles/GlobalStyles";
 import Modal from "../../../components/Modal";
 
@@ -16,7 +16,7 @@ import axios from "../../../services/axios";
 import Loading from "../../../components/Loading";
 import history from "../../../services/history";
 import ComboBox from "../../../components/ComboBox";
-import { porcetagem } from "../../../util";
+import { imagenVazia, porcetagem } from "../../../util";
 import Dropzone from "react-dropzone";
 import FileList from "../../../components/FileList";
 import fileSize from "filesize";
@@ -35,13 +35,13 @@ export default function CadLivro({ match }) {
   const [quantidade, setQuantidade] = useState("");
   const [urlFoto, setUrlFoto] = useState("");
   const [fotoId, setFotoId] = useState("");
+  const [autor, setAutor] = useState("");
   const [porcentagem, setPorcentagem] = useState(0);
   const [listLivro, setListLivro] = useState([]);
   const [listFotos, setListFotos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const imagenVazia =
-    "https://fotosigreja.s3.us-east-1.amazonaws.com/67b54846353ff2e9438fae91a4a30fec-sem-foto.jpeg";
+
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
@@ -53,8 +53,8 @@ export default function CadLivro({ match }) {
         setValor(response2.data.valor);
         setQuantidade(response2.data.quantidade);
         setDataEntrada(response2.data.data_entrada);
-        setUrlFoto(response2.data.url);
         setFotoId(response2.data.foto_id);
+        setAutor(response2.data.autor);
       }
       const response3 = await axios.get("/livrariaFotos");
       setListFotos(response3.data);
@@ -88,11 +88,11 @@ export default function CadLivro({ match }) {
     setUploadedFiles([]);
     setUrlFoto("");
     setFotoId("");
+    setAutor("");
   };
   const handleRemoveIten = () => {
     setUploadedFiles([]);
   };
-
   const salvaBanco = async (resposta) => {
     let formErrors = false;
     if (
@@ -114,7 +114,8 @@ export default function CadLivro({ match }) {
           data_entrada: dataEntrada,
           custo,
           valor,
-          foto_id: resposta.id,
+          autor,
+          foto_id: resposta.id || 19,
           quantidade,
         });
         console.log(response);
@@ -125,24 +126,26 @@ export default function CadLivro({ match }) {
 
         setIsLoading(false);
       } else {
-        console.log("aqui");
-        console.log("teste", {
-          descricao,
-          data_entrada: dataEntrada,
-          custo,
-          valor,
-          foto_id: resposta.id,
-          quantidade,
-        });
-        const response = await axios.put(`/livrariaLivro/${id}`, {
-          descricao,
-          data_entrada: dataEntrada,
-          custo,
-          valor,
-          foto_id: resposta.id,
-          quantidade,
-        });
-        console.log(response);
+        if (uploadedFiles.length > 0) {
+          const response = await axios.put(`/livrariaLivro/${id}`, {
+            descricao,
+            data_entrada: dataEntrada,
+            custo,
+            valor,
+            autor,
+            foto_id: resposta.id,
+            quantidade,
+          });
+        } else {
+          const response = await axios.put(`/livrariaLivro/${id}`, {
+            descricao,
+            data_entrada: dataEntrada,
+            custo,
+            valor,
+            autor,
+            quantidade,
+          });
+        }
         const novaLista = await axios.get("/livrariaLivro");
         setListLivro(novaLista.data);
         limpaCampos();
@@ -165,8 +168,9 @@ export default function CadLivro({ match }) {
     e.preventDefault();
     setIsLoading(true);
     console.log(uploadedFiles);
-
-    processUpload(uploadedFiles[0]).then((resposta) => salvaBanco(resposta));
+    if (uploadedFiles.length > 0)
+      processUpload(uploadedFiles[0]).then((resposta) => salvaBanco(resposta));
+    else salvaBanco();
   }
   const handleClose = () => {
     setShow(false);
@@ -304,28 +308,42 @@ export default function CadLivro({ match }) {
           )}
         </Col>
         {urlFoto && (
-          <Col
-            sm={12}
-            md={6}
-            style={{
-              backgroundImage: `url(${urlFoto})`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              backgroundPosition: "50% 50%",
-            }}
-          ></Col>
+          <Col sm={12} md={6}>
+            <div
+              style={{
+                height: "100%",
+                maxHeight: "10rem",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Image src={urlFoto} style={{ maxHeight: "10rem" }} />
+            </div>
+          </Col>
         )}
       </Row>
       <Form onSubmit={handleSubmit}>
-        <Row className="align-items-center">
-          <Col sm={12} md={9} className="my-1">
+        <Row>
+          <Col sm={12} md={12} className="my-1">
             <Form.Label htmlFor="descricao">Descrição:</Form.Label>
 
             <Form.Control
               type="text"
               value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
+              onChange={(e) => setDescricao(e.target.value.toLocaleUpperCase())}
               placeholder="Descrição"
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12} md={9} className="my-1">
+            <Form.Label htmlFor="descricao">Nome Autor:</Form.Label>
+
+            <Form.Control
+              type="text"
+              value={autor}
+              onChange={(e) => setAutor(e.target.value.toLocaleUpperCase())}
+              placeholder="Nome Autor"
             />
           </Col>
           <Col sm={12} md={3} className="my-1">
@@ -416,7 +434,8 @@ export default function CadLivro({ match }) {
               {listLivro.map((dado, index) => (
                 <tr key={String(dado.id)}>
                   <td>
-                    <img
+                    <Image
+                      roundedCircle
                       src={dado.urlPreview}
                       style={{ height: "30px", width: "30px" }}
                     />
@@ -426,15 +445,20 @@ export default function CadLivro({ match }) {
                   <td>R${dado.valor}</td>
                   <td>{dado.quantidade}</td>
                   <td>
-                    <Button
-                      variant="warning"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        history.push(`/cadLivro/${dado.id}/edit`);
-                      }}
-                    >
-                      <FaEdit size={16} />
-                    </Button>
+                    <a href="#top">
+                      <Button
+                        variant="warning"
+                        onClick={() => {
+                          history.push(`/cadLivro/${dado.id}/edit/`);
+                          window.scrollTo({
+                            top: 0,
+                            behavior: "smooth",
+                          });
+                        }}
+                      >
+                        <FaEdit size={16} />
+                      </Button>
+                    </a>
                   </td>
                   <td>
                     <Button

@@ -19,12 +19,12 @@ import Modal from "../../../components/Modal";
 import ComboBox from "../../../components/ComboBox";
 import { meioPagamento } from "../../../util";
 
-export default function Venda({ match }) {
+export default function VendaCamiseta({ match }) {
   const id = get(match, "params.id", "");
 
   const [nomeMembro, setNomeMembro] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [idLivro, setIdLivro] = useState("");
+  const [idCamiseta, setIdCamiseta] = useState("");
   const [idMembro, setIdMembro] = useState("");
   const [tipoPagamento, setTipoPagamento] = useState("");
   const [idParaDelecao, setIdParaDelecao] = useState("");
@@ -33,7 +33,7 @@ export default function Venda({ match }) {
   const [showMembro, setShowMembro] = useState(false);
   const [showDelecao, setShowDelecao] = useState(false);
   const [listaCompra, setListaCompra] = useState([]);
-  const [listLivro, setListLivro] = useState([]);
+  const [listCamiseta, setListCamiseta] = useState([]);
   const [membros, setMembros] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -42,15 +42,18 @@ export default function Venda({ match }) {
       setIsLoading(true);
       const response = await axios.get("/membro");
       setMembros(response.data);
-      const response2 = await axios.get("/livrariaLivro");
-      setListLivro(response2.data);
+      const response2 = await axios.get("/livrariaCamiseta");
+      setListCamiseta(response2.data);
       if (id) {
-        axios.get(`/livrariaVenda/${id}`).then((dado) => {
+        axios.get(`/livrariaVendaCamiseta/${id}`).then((dado) => {
           setNomeMembro(dado.data.nome);
           console.log(dado.data);
           setIdMembro(dado.data.membro_id);
+          setTipoPagamento(dado.data.tipo_pagamento);
         });
-        const response = await axios.get(`/livrariaVendaIten/getItens/${id}`);
+        const response = await axios.get(
+          `/livrariaVendaItenCamiseta/getItens/${id}`
+        );
         setListaCompra(response.data);
         calculaValor(response.data);
       }
@@ -77,7 +80,7 @@ export default function Venda({ match }) {
     if (descricao.length > 0) {
       try {
         const novaLista = [];
-        const response = await axios.get("/livrariaLivro");
+        const response = await axios.get("/livrariaCamiseta");
         response.data.map((dados) => {
           if (
             String(dados.descricao)
@@ -87,19 +90,19 @@ export default function Venda({ match }) {
             novaLista.push(dados);
           }
         });
-        setListLivro(novaLista);
+        setListCamiseta(novaLista);
         handleShow();
       } catch (e) {
         toast.error("Condigo não existe");
         console.log(e);
       }
     } else {
-      novaLista = [...listLivro];
+      novaLista = [...listCamiseta];
       const aux = novaLista.filter((valor) => {
         return valor.quantidade > 0 && valor;
       });
       handleShow();
-      setListLivro(aux);
+      setListCamiseta(aux);
     }
   };
   const handleShow = () => {
@@ -108,18 +111,18 @@ export default function Venda({ match }) {
   const handleClose = () => {
     setShow(false);
   };
-  const handleIdLivro = async (idm) => {
+  const handleIdCamiseta = async (idm) => {
     const novaLista = [...listaCompra];
     setIsLoading(true);
     const aux = [];
     try {
-      const response = await axios.get(`/livrariaLivro/${idm}`);
+      const response = await axios.get(`/livrariaCamiseta/${idm}`);
       setDescricao(response.data.descricao);
-      setIdLivro(response.data.id);
+      setIdCamiseta(response.data.id);
       setValorCompra(valorCompra + parseFloat(response.data.valor));
       novaLista.push(response.data);
 
-      listLivro.map((dado) => {
+      listCamiseta.map((dado) => {
         if (dado.id === idm) {
           aux.push({ ...dado, quantidade: parseInt(dado.quantidade) - 1 });
         } else {
@@ -127,7 +130,7 @@ export default function Venda({ match }) {
         }
       });
       console.log(aux);
-      setListLivro(aux);
+      setListCamiseta(aux);
       handleClose();
     } catch (e) {
       toast.error("Condigo não existe");
@@ -154,7 +157,7 @@ export default function Venda({ match }) {
   const handlePesquisaNome = async () => {
     try {
       const novaLista = [];
-      const response = await axios.get("/livrariaLivro");
+      const response = await axios.get("/livrariaCamiseta");
       response.data.map((dados) => {
         if (
           String(dados.descricao)
@@ -164,7 +167,7 @@ export default function Venda({ match }) {
           novaLista.push(dados);
         }
       });
-      setListLivro(novaLista);
+      setListCamiseta(novaLista);
       handleShow();
     } catch (e) {
       toast.error("Condigo não existe");
@@ -206,7 +209,7 @@ export default function Venda({ match }) {
         return;
       }
       axios
-        .post("/livrariaVenda", {
+        .post("/livrariaVendaCamiseta", {
           data_venda: new Date(),
           membro_id: idMembro,
           valor: valorCompra,
@@ -215,14 +218,14 @@ export default function Venda({ match }) {
         })
         .then((response) => {
           listaCompra.map(async (dado) => {
-            await axios.post("/livrariaVendaIten", {
+            await axios.post("/livrariaVendaItenCamiseta", {
               venda_id: response.data.id,
-              livro_id: dado.id,
+              camiseta_id: dado.id,
             });
-            const aux = await axios.get(`/livrariaLivro/${dado.id}`);
+            const aux = await axios.get(`/livrariaCamiseta/${dado.id}`);
             const qtde = parseInt(aux.data.quantidade) - 1;
             console.log(aux, qtde);
-            await axios.put(`/livrariaLivro/${dado.id}`, {
+            await axios.put(`/livrariaCamiseta/${dado.id}`, {
               quantidade: qtde,
             });
           });
@@ -253,28 +256,32 @@ export default function Venda({ match }) {
       setValorCompra(aux);
     }
   };
-  const handleExcluirLivro = async () => {
+  const handleExcluirCamiseta = async () => {
     setIsLoading(true);
 
     try {
-      //busca o livro e aumenta a quantidade
-      const idLi = await axios.get(`/livrariaVendaIten/${idParaDelecao}`);
-      const aux = await axios.get(`/livrariaLivro/${idLi.data.livro_id}`);
+      //busca o Camiseta e aumenta a quantidade
+      const idLi = await axios.get(
+        `/livrariaVendaItenCamiseta/${idParaDelecao}`
+      );
+      const aux = await axios.get(`/livrariaCamiseta/${idLi.data.camiseta_id}`);
       const qtde = parseInt(aux.data.quantidade) + 1;
       //deleta o item da compra
-      await axios.delete(`/livrariaVendaIten/${idParaDelecao}`);
+      await axios.delete(`/livrariaVendaItenCamiseta/${idParaDelecao}`);
 
       //verifica se ainda existe itens na compra. Se não houver deleta a venda
-      const response = await axios.get(`/livrariaVendaIten/getItens/${id}`);
+      const response = await axios.get(
+        `/livrariaVendaItenCamiseta/getItens/${id}`
+      );
       if (response.data.length === 0) {
         setIsLoading(false);
-        await axios.delete(`/livrariaVenda/${id}`);
+        await axios.delete(`/livrariaVendaCamiseta/${id}`);
         history.push("/relatorioVendaCamiseta");
         setShowDelecao(false);
       } else {
         setListaCompra(response.data);
         const novoValor = calculaValor(response.data);
-        await axios.put(`/livrariaLivro/${idLi.data.livro_id}`, {
+        await axios.put(`/livrariaCamiseta/${idLi.data.camiseta_id}`, {
           quantidade: qtde,
           valor: novoValor,
         });
@@ -288,12 +295,12 @@ export default function Venda({ match }) {
   return (
     <Container>
       <ModalMembro
-        title="Selecione o livro"
+        title="Selecione o Camiseta"
         handleClose={handleClose}
         show={show}
-        list={listLivro}
+        list={listCamiseta}
         buttonCancel="Fechar"
-        handleIdMembro={handleIdLivro}
+        handleIdMembro={handleIdCamiseta}
       />
       <ModalMembro
         title="Selecione o membro"
@@ -306,13 +313,13 @@ export default function Venda({ match }) {
       <Modal
         show={showDelecao}
         title="Atenção !!!"
-        text="Deseja excluir esse livro"
+        text="Deseja excluir esse Camiseta"
         handleClose={() => setShowDelecao(false)}
         buttonCancel="Não"
         buttonConfirm="Sim"
-        handleFunctionConfirm={handleExcluirLivro}
+        handleFunctionConfirm={handleExcluirCamiseta}
       />
-      <h2>Painel de Venda</h2>
+      <h2>Painel de venda de camiseta</h2>
       <Loading isLoading={isLoading} />
       <Form onSubmit={handleSubmit}>
         <Row>
@@ -354,7 +361,7 @@ export default function Venda({ match }) {
         </Row>
         <Row>
           <Col sm={12} md={6} className="my-1">
-            <Form.Label htmlFor="descricao">Nome do Livro</Form.Label>
+            <Form.Label htmlFor="descricao">Camiseta</Form.Label>
 
             <Form.Control
               id="input"
@@ -447,6 +454,6 @@ export default function Venda({ match }) {
     </Container>
   );
 }
-Venda.protoTypes = {
+VendaCamiseta.protoTypes = {
   match: PropTypes.shape({}).isRequired,
 };

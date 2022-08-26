@@ -287,7 +287,7 @@ export default function CadCamiseta({ match }) {
                       variant="warning"
                       onClick={(e) => {
                         e.preventDefault();
-                        history.push(`/cadLivro/${dado.id}/edit`);
+                        history.push(`/cadCamiseta/${dado.id}/edit`);
                       }}
                     >
                       <FaEdit size={16} />
@@ -297,7 +297,6 @@ export default function CadCamiseta({ match }) {
                     <Button
                       variant="danger"
                       onClick={() => handleShow(dado.id, index)}
-                      to={`/cadLivro/${dado.id}/delete`}
                     >
                       <FaWindowClose size={16} />
                     </Button>

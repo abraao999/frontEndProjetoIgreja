@@ -67,7 +67,9 @@ import PedidoLivro from "../pages/AbaLivraria/PedidoLivro";
 import ListaPedidoLivraria from "../pages/AbaLivraria/ListaPedidoLivraria";
 import Estoque from "../pages/AbaLivraria/Estoque";
 import RelatorioVendas from "../pages/AbaLivraria/RelatorioVendas";
-import CadCamiseta from "../pages/AbaLivraria/CadLivroCamiseta";
+import CadCamiseta from "../pages/AbaLivraria/CadCamiseta";
+import VendaCamiseta from "../pages/AbaLivraria/VendaCamiseta";
+import RelatorioVendaCamiseta from "../pages/AbaLivraria/RelatorioVendasCamiseta";
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.function_id);
@@ -594,6 +596,20 @@ export default function Routes() {
         usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
       />
       <MyRoute
+        path="/vendaCamiseta/:id/edit"
+        component={VendaCamiseta}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
+      />
+      <MyRoute
+        path="/vendaCamiseta/"
+        component={VendaCamiseta}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
+      />
+      <MyRoute
         path="/pedidoLivro/:id/edit"
         component={PedidoLivro}
         idFuncao={idFuncao}
@@ -624,6 +640,20 @@ export default function Routes() {
       <MyRoute
         path="/relatorioVendas/"
         component={RelatorioVendas}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
+      />
+      <MyRoute
+        path="/relatorioVendaCamiseta/"
+        component={RelatorioVendaCamiseta}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
+      />
+      <MyRoute
+        path="/cadCamiseta/:id/edit"
+        component={CadCamiseta}
         idFuncao={idFuncao}
         isClosed
         usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}

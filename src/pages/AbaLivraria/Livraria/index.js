@@ -82,10 +82,26 @@ export default function Livraria() {
         </Row>
         <Row>
           <Col sm={6} md={4} className="my-1">
+            <Link to="/vendaCamiseta">
+              <ContainerBox>
+                <FaBook size={50} />
+                <span>Painel de venda de camiseta</span>
+              </ContainerBox>
+            </Link>
+          </Col>
+          <Col sm={6} md={4} className="my-1">
             <Link to="/relatorioVendas">
               <ContainerBox>
                 <FaBook size={50} />
                 <span>Relatório de Vendas</span>
+              </ContainerBox>
+            </Link>
+          </Col>
+          <Col sm={6} md={4} className="my-1">
+            <Link to="/relatorioVendaCamiseta">
+              <ContainerBox>
+                <FaBook size={50} />
+                <span>Relatório de venda de camiseta</span>
               </ContainerBox>
             </Link>
           </Col>

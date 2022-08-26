@@ -4,7 +4,14 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 import { toast } from "react-toastify";
-import { FaEdit, FaInfo, FaPrint, FaSearch, FaTrash } from "react-icons/fa";
+import {
+  FaCheck,
+  FaEdit,
+  FaInfo,
+  FaPrint,
+  FaSearch,
+  FaTrash,
+} from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { get } from "lodash";
 import { Link } from "react-router-dom";
@@ -26,7 +33,7 @@ import { getDataBanco, getDataDB } from "../../../util";
 import ModalDetailVenda from "../../../components/ModalDetailVenda";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-export default function RelatorioVendas({ match }) {
+export default function RelatorioVendaCamiseta({ match }) {
   const id = get(match, "params.id", "");
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -35,9 +42,6 @@ export default function RelatorioVendas({ match }) {
   const [indiceDelecao, setIndiceDelecao] = useState("");
 
   const [descricao, setDescricao] = useState("");
-  const [quantidade, setQuantidade] = useState("");
-  const [status, setStatus] = useState("");
-  const [tipoPagamento, setTipoPagamento] = useState("");
   const [listPedidos, setListPedidos] = useState([]);
   const [livrosBusca, setLivrosBusca] = useState([]);
   const [listaInfo, setListaInfo] = useState([]);
@@ -47,7 +51,7 @@ export default function RelatorioVendas({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get("/livrariaVenda");
+      const response = await axios.get("/livrariaVendaCamiseta");
       renderizaLista(response.data);
 
       setIsLoading(false);
@@ -64,11 +68,6 @@ export default function RelatorioVendas({ match }) {
   };
   const handleClose = () => {
     setShow(false);
-  };
-  const handleShow = (idFuncao, index) => {
-    setIdParaDelecao(idFuncao);
-    setIndiceDelecao(index);
-    setShowDelete(true);
   };
   const handleFunctionConfirm = async () => {
     try {
@@ -101,7 +100,7 @@ export default function RelatorioVendas({ match }) {
     if (descricao.length > 0) {
       try {
         const novaLista = [];
-        const response = await axios.get("/livrariaLivro");
+        const response = await axios.get("/livrariaCamiseta");
 
         listPedidos.map((dados) => {
           if (
@@ -119,7 +118,7 @@ export default function RelatorioVendas({ match }) {
         console.log(e);
       }
     } else {
-      axios.get("/livrariaLivro").then((response) => {
+      axios.get("/livrariaCamiseta").then((response) => {
         setLivrosBusca(response.data);
         setShow(true);
       });
@@ -128,7 +127,7 @@ export default function RelatorioVendas({ match }) {
   const handleIdMembro = async (idm) => {
     let novaLista = [];
     try {
-      await axios.get(`/livrariaLivro/${idm}`).then((response) => {
+      await axios.get(`/livrariaCamiseta/${idm}`).then((response) => {
         setDescricao(response.data.descricao);
         novaLista = [response.data];
         renderizaLista(novaLista);
@@ -140,7 +139,7 @@ export default function RelatorioVendas({ match }) {
     }
   };
   const showDetailVendas = async (idv) => {
-    const response = await axios.get("/livrariaVendaIten");
+    const response = await axios.get("/livrariaVendaItenCamiseta");
     // const aux = response.data.filter((dado) => {
     //   return (dado.venda_id = parseInt(idv) && dado);
     // });
@@ -182,7 +181,7 @@ export default function RelatorioVendas({ match }) {
       />
       <Form>
         <Listagem>
-          <h3>Relatório de Vendas</h3>
+          <h3>Relatório de camisetas vendida</h3>
           <Button variant="success" onClick={visualizarImpressao} size="lg">
             <FaPrint size={30} />
           </Button>
@@ -223,8 +222,9 @@ export default function RelatorioVendas({ match }) {
           <tr>
             <th scope="col">Comprador</th>
             <th scope="col">Valor</th>
-            <th scope="col">Data Aquisição</th>
+            <th scope="col">Data da Venda</th>
             <th scope="col">Tipo Pagamento</th>
+            <th scope="col">Status</th>
             <th scope="col">Alterar</th>
             <th scope="col">Detalhes</th>
           </tr>
@@ -236,11 +236,14 @@ export default function RelatorioVendas({ match }) {
               <td>{dado.valor}</td>
               <td>{dado.dataFormatada}</td>
               <td>{dado.tipo_pagamento}</td>
+              <td>
+                <FaCheck size={16} />
+              </td>
 
               <td>
                 <Button
                   variant="warning"
-                  onClick={() => history.push(`/venda/${dado.id}/edit`)}
+                  onClick={() => history.push(`/vendaCamiseta/${dado.id}/edit`)}
                 >
                   <FaEdit size={16} />
                 </Button>
@@ -260,6 +263,6 @@ export default function RelatorioVendas({ match }) {
     </Container>
   );
 }
-RelatorioVendas.protoTypes = {
+RelatorioVendaCamiseta.protoTypes = {
   match: PropTypes.shape({}).isRequired,
 };

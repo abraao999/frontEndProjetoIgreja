@@ -64,6 +64,14 @@ export default function Livraria() {
             </Link>
           </Col>
           <Col sm={6} md={4} className="my-1">
+            <Link to="/fiado">
+              <ContainerBox>
+                <FaBook size={50} />
+                <span>Fiado</span>
+              </ContainerBox>
+            </Link>
+          </Col>
+          <Col sm={6} md={4} className="my-1">
             <Link to="/listaPedidoLivraria">
               <ContainerBox>
                 <FaBook size={50} />
@@ -71,6 +79,8 @@ export default function Livraria() {
               </ContainerBox>
             </Link>
           </Col>
+        </Row>
+        <Row>
           <Col sm={6} md={4} className="my-1">
             <Link to="/venda">
               <ContainerBox>
@@ -79,8 +89,6 @@ export default function Livraria() {
               </ContainerBox>
             </Link>
           </Col>
-        </Row>
-        <Row>
           <Col sm={6} md={4} className="my-1">
             <Link to="/vendaCamiseta">
               <ContainerBox>
@@ -97,6 +105,8 @@ export default function Livraria() {
               </ContainerBox>
             </Link>
           </Col>
+        </Row>
+        <Row>
           <Col sm={6} md={4} className="my-1">
             <Link to="/relatorioVendaCamiseta">
               <ContainerBox>

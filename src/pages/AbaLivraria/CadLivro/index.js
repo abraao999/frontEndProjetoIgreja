@@ -16,7 +16,11 @@ import axios from "../../../services/axios";
 import Loading from "../../../components/Loading";
 import history from "../../../services/history";
 import ComboBox from "../../../components/ComboBox";
-import { imagenVazia, porcetagem } from "../../../util";
+import {
+  formataDataInputInverso,
+  imagenVazia,
+  porcetagem,
+} from "../../../util";
 import Dropzone from "react-dropzone";
 import FileList from "../../../components/FileList";
 import fileSize from "filesize";
@@ -52,7 +56,7 @@ export default function CadLivro({ match }) {
         setCusto(response2.data.custo);
         setValor(response2.data.valor);
         setQuantidade(response2.data.quantidade);
-        setDataEntrada(response2.data.data_entrada);
+        setDataEntrada(formataDataInputInverso(response2.data.data_entrada));
         setFotoId(response2.data.foto_id);
         setUrlFoto(response2.data.url);
         setAutor(response2.data.autor);
@@ -364,6 +368,7 @@ export default function CadLivro({ match }) {
             <Form.Control
               type="date"
               value={dataEntrada}
+              inputMode="pt-BR"
               onChange={(e) => setDataEntrada(e.target.value)}
             />
           </Col>

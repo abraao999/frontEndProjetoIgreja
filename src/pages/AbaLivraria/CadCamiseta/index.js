@@ -15,7 +15,7 @@ import axios from "../../../services/axios";
 import Loading from "../../../components/Loading";
 import history from "../../../services/history";
 import ComboBox from "../../../components/ComboBox";
-import { porcetagem, tamanhos } from "../../../util";
+import { formataDataInputInverso, porcetagem, tamanhos } from "../../../util";
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function CadCamiseta({ match }) {
@@ -45,7 +45,7 @@ export default function CadCamiseta({ match }) {
         setValor(response2.data.valor);
         setTamanho(response2.data.tamanho);
         setQuantidade(response2.data.quantidade);
-        setDataEntrada(response2.data.data_entrada);
+        setDataEntrada(formataDataInputInverso(response2.data.data_entrada));
       }
       setListLivro(response.data);
 
@@ -195,6 +195,7 @@ export default function CadCamiseta({ match }) {
             <Form.Control
               type="date"
               value={dataEntrada}
+              inputMode="pt-BR"
               onChange={(e) => setDataEntrada(e.target.value)}
             />
           </Col>

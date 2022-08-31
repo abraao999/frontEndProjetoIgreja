@@ -57,7 +57,13 @@ export const formataDataInput = (valor) => {
 };
 export const formataDataInputInverso = (valor) => {
   valor = new Date(valor);
-  valor = `${valor.getFullYear()}-${valor.getMonth() + 1}-${valor.getDate()}`;
+  const aux = valor.getMonth() + 1;
+  if (aux < 10)
+    valor = `${valor.getFullYear()}-0${
+      valor.getMonth() + 1
+    }-${valor.getDate()}`;
+  else
+    valor = `${valor.getFullYear()}-${valor.getMonth() + 1}-${valor.getDate()}`;
   return valor;
 };
 export const getMes = (valor) => {

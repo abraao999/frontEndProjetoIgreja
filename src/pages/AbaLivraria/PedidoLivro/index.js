@@ -1,70 +1,62 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import InputMask from 'react-input-mask';
+/* eslint-disable react/prop-types */
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import InputMask from "react-input-mask";
 
-import { toast } from 'react-toastify';
-import { FaArrowRight, FaSave, FaSearch } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
-import { get } from 'lodash';
-import { Link } from 'react-router-dom';
-import { Col, Row, Form, Button } from 'react-bootstrap';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { Container } from '../../../styles/GlobalStyles';
-import { ContainerBox, Label } from './styled';
-import axios from '../../../services/axios';
-import Modal from '../../../components/Modal';
-import ComboBox from '../../../components/ComboBox';
-import Loading from '../../../components/Loading';
-import history from '../../../services/history';
+import { toast } from "react-toastify";
+import { FaArrowRight, FaSave, FaSearch } from "react-icons/fa";
+import { get } from "lodash";
+import { Link } from "react-router-dom";
+import { Col, Row, Form, Button } from "react-bootstrap";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import { Container } from "../../../styles/GlobalStyles";
+import { ContainerBox, Label } from "./styled";
+import axios from "../../../services/axios";
+import ComboBox from "../../../components/ComboBox";
+import Loading from "../../../components/Loading";
 // import * as actions from '../../store/modules/auth/actions';
 
-import { Impressao } from '../../../printers/impLivrariaPedido';
-import ModalMembro from '../../../components/ModalMembro';
-import { meioPagamento } from '../../../util';
-import { MdSchool } from 'react-icons/md';
+import ModalMembro from "../../../components/ModalMembro";
+import { meioPagamento } from "../../../util";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export default function PedidoLivro({ match }) {
-  const id = get(match, 'params.id', '');
+  const id = get(match, "params.id", "");
+  const nomeLivro = get(match, "params.nomeLivro", "");
   const [show, setShow] = useState(false);
 
-  const [nomeMembro, setNomeMembro] = useState('');
-  const [idMembro, setIdMembro] = useState('');
-  const [contato, setContato] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [quantidade, setQuantidade] = useState('');
-  const [status, setStatus] = useState('');
-  const [tipoPagamento, setTipoPagamento] = useState('');
-  const [dataPedido, setDataPedido] = useState('');
-  const [listPedidos, setListPedidos] = useState([]);
+  const [nomeMembro, setNomeMembro] = useState("");
+  const [idMembro, setIdMembro] = useState("");
+  const [contato, setContato] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [quantidade, setQuantidade] = useState("");
+  const [status, setStatus] = useState("");
+  const [tipoPagamento, setTipoPagamento] = useState("");
+  const [dataPedido, setDataPedido] = useState("");
   const [membros, setMembros] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const dataStorage = useSelector((state) => state.auth);
-
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get('/livrariaPedido');
-      setListPedidos(response.data);
+      setDescricao(nomeLivro);
       if (id) {
         axios.get(`/livrariaPedido/${id}`).then((response2) => {
           handleEdit(response2.data);
         });
       }
-      console.log(response.data);
       setIsLoading(false);
     }
     getData();
   }, [id]);
   const limpaCampos = () => {
-    setNomeMembro('');
-    setIdMembro('');
-    setContato('');
-    setDescricao('');
-    setQuantidade('');
+    setNomeMembro("");
+    setIdMembro("");
+    setContato("");
+    setDescricao("");
+    setQuantidade("");
   };
   async function handleSubmit(e) {
     e.preventDefault();
@@ -78,12 +70,12 @@ export default function PedidoLivro({ match }) {
       parseInt(quantidade) <= 0
     ) {
       formErrors = true;
-      toast.error('Campo complete todos os campos');
+      toast.error("Campo complete todos os campos");
     }
     if (formErrors) return;
     try {
       if (!id) {
-        await axios.post('/livrariaPedido', {
+        await axios.post("/livrariaPedido", {
           descricao,
           membro_id: idMembro || null,
           contato,
@@ -91,11 +83,10 @@ export default function PedidoLivro({ match }) {
           quantidade: parseInt(quantidade),
           data_pedido: new Date(),
           tipo_pagamento: tipoPagamento,
-          status: 'PENDENTE',
+          status: "PENDENTE",
         });
-        const novaLista = await axios.get('/livrariaPedido');
         limpaCampos();
-        toast.success('Pedido criado com sucesso');
+        toast.success("Pedido criado com sucesso");
         setIsLoading(false);
       } else {
         await axios.put(`/livrariaPedido/${id}`, {
@@ -109,14 +100,14 @@ export default function PedidoLivro({ match }) {
           data_pedido: dataPedido,
         });
         limpaCampos();
-        toast.success('Pedido editado com sucesso');
+        toast.success("Pedido editado com sucesso");
         setIsLoading(false);
       }
     } catch (error) {
-      const status = get(error, 'response.data.status', 0);
-      const msg = get(error, 'response.data.erros', 0);
+      const status = get(error, "response.data.status", 0);
+      const msg = get(error, "response.data.erros", 0);
       if (status === 401) {
-        toast.error('Voce precisa fazer login');
+        toast.error("Voce precisa fazer login");
       } else {
         msg.map((dado) => toast.error(dado));
       }
@@ -130,7 +121,7 @@ export default function PedidoLivro({ match }) {
     if (nomeMembro.length > 0) {
       try {
         const novaLista = [];
-        const response = await axios.get('/membro');
+        const response = await axios.get("/membro");
         response.data.map((dados) => {
           if (
             String(dados.nome)
@@ -143,11 +134,11 @@ export default function PedidoLivro({ match }) {
         setMembros(novaLista);
         setShow(true);
       } catch (e) {
-        toast.error('Condigo não existe');
+        toast.error("Condigo não existe");
         console.log(e);
       }
     } else {
-      axios.get('/membro').then((response) => {
+      axios.get("/membro").then((response) => {
         setMembros(response.data);
         setShow(true);
       });
@@ -161,7 +152,7 @@ export default function PedidoLivro({ match }) {
       setContato(response.data.telefone);
       handleClose();
     } catch (e) {
-      toast.error('Condigo não existe');
+      toast.error("Condigo não existe");
       console.log(e);
     }
   };
@@ -211,7 +202,7 @@ export default function PedidoLivro({ match }) {
           </Col>
         </Row>
         <Row>
-          <Col sm={12} md={8} className="my-1">
+          <Col sm={10} xs={10} md={8} className="my-1">
             <Form.Label htmlFor="descricao">Nome do Membro</Form.Label>
             <Form.Control
               id="input"
@@ -220,17 +211,18 @@ export default function PedidoLivro({ match }) {
               onChange={(e) => {
                 setNomeMembro(e.target.value);
               }}
-              onBlur={(e) => {
+              onBlur={() => {
                 handlePesquisaNome();
               }}
               placeholder="Nome"
             />
           </Col>
           <Col
-            sm={12}
+            sm={2}
+            xs={2}
             md={4}
             className="my-1"
-            style={{ display: 'flex', alignItems: 'flex-end' }}
+            style={{ display: "flex", alignItems: "flex-end" }}
           >
             <Button size="lg" onClick={handlePesquisaNome} variant="success">
               <FaSearch size={16} />
@@ -238,7 +230,7 @@ export default function PedidoLivro({ match }) {
           </Col>
         </Row>
         <Row>
-          <Col sm={12} md={4} className="my-1">
+          <Col sm={10} xs={10} md={4} className="my-1">
             <Label htmlFor="telefone">
               Celular:
               <InputMask
@@ -255,38 +247,45 @@ export default function PedidoLivro({ match }) {
               {/* <small>Insira um número válido</small> */}
             </Label>
           </Col>
-          <Col sm={12} md={4} className="my-1">
-            <ComboBox
-              title="Tipo de Pagamento"
-              list={meioPagamento}
-              onChange={(e) => {
-                setTipoPagamento(e.target.value);
-              }}
-              value={tipoPagamento}
-            />
-          </Col>
+          {!nomeLivro && (
+            <>
+              <Col sm={12} md={4} className="my-1">
+                <ComboBox
+                  title="Tipo de Pagamento"
+                  list={meioPagamento}
+                  onChange={(e) => {
+                    setTipoPagamento(e.target.value);
+                  }}
+                  value={tipoPagamento}
+                />
+              </Col>
+            </>
+          )}
           <Col
-            sm={6}
+            xs={2}
+            sm={2}
             md={1}
-            style={{ display: 'flex', alignItems: 'flex-end' }}
+            style={{ display: "flex", alignItems: "flex-end" }}
           >
             <Button variant="success" size="lg" type="submit">
               <FaSave size={16} />
             </Button>
           </Col>
-          <Col
-            sm={6}
-            md={3}
-            className="my-1"
-            style={{ display: 'flex', alignItems: 'flex-end' }}
-          >
-            <Link to="/listaPedidoLivraria">
-              <ContainerBox>
-                <span>Lista de Pedidos</span>
-                <FaArrowRight size={50} color="#198754" />
-              </ContainerBox>
-            </Link>
-          </Col>
+          {!nomeLivro && (
+            <Col
+              sm={2}
+              md={3}
+              className="my-1"
+              style={{ display: "flex", alignItems: "flex-end" }}
+            >
+              <Link to="/listaPedidoLivraria">
+                <ContainerBox>
+                  <span>Lista de Pedidos</span>
+                  <FaArrowRight size={50} color="#198754" />
+                </ContainerBox>
+              </Link>
+            </Col>
+          )}
         </Row>
       </Form>
     </Container>

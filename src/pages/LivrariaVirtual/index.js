@@ -52,11 +52,11 @@ function LivrariaVirtual() {
          <p><strong>E-mail: </strong><span>${email}</span></p>
          </div>`;
     try {
-      const response = await axios.post("/sendEmail", {
+      await axios.post("/sendEmail", {
         bodyHtml,
         email,
       });
-      toast.success("Pedido de orçamento enviado com sucesso");
+      toast.success("Reserva efetuada com sucesso");
     } catch (error) {
       toast.error("Desculpe mas não foi possível enviar sua solicitaçãos");
     }

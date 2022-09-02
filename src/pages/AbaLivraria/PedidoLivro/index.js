@@ -82,7 +82,7 @@ export default function PedidoLivro({ match }) {
           nome: nomeMembro,
           quantidade: parseInt(quantidade),
           data_pedido: new Date(),
-          tipo_pagamento: tipoPagamento,
+          tipo_pagamento: tipoPagamento || "Pendente",
           status: "PENDENTE",
         });
         limpaCampos();
@@ -95,7 +95,7 @@ export default function PedidoLivro({ match }) {
           contato,
           nome: nomeMembro,
           quantidade: parseInt(quantidade),
-          tipo_pagamento: tipoPagamento,
+          tipo_pagamento: tipoPagamento || null,
           status,
           data_pedido: dataPedido,
         });

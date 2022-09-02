@@ -35,6 +35,7 @@ function LivrariaVirtual() {
       nome_cliente: nomeCliente,
       livro_id: livroId,
       celular,
+      status: "PENDENTE",
       data_reserva: new Date(),
     });
 

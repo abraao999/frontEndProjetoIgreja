@@ -72,6 +72,7 @@ import VendaCamiseta from "../pages/AbaLivraria/VendaCamiseta";
 import RelatorioVendaCamiseta from "../pages/AbaLivraria/RelatorioVendasCamiseta";
 import Fiado from "../pages/AbaLivraria/Fiados";
 import LivrariaVirtual from "../pages/LivrariaVirtual";
+import Reserva from "../pages/AbaLivraria/Reserva";
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.function_id);
@@ -584,7 +585,7 @@ export default function Routes() {
         usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
       />
       <MyRoute
-        path="/venda/:id/edit"
+        path="/venda/:id/:acao"
         component={Venda}
         idFuncao={idFuncao}
         isClosed
@@ -675,6 +676,13 @@ export default function Routes() {
         path="/livrariaVirtual/"
         component={LivrariaVirtual}
         isClosed={false}
+      />
+      <MyRoute
+        path="/reservaLivros/"
+        component={Reserva}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
       />
       <MyRoute path="*" component={Page404} />
     </Switch>

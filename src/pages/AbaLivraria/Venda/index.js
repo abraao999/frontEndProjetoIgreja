@@ -21,6 +21,7 @@ import { meioPagamento } from "../../../util";
 
 export default function Venda({ match }) {
   const id = get(match, "params.id", "");
+  const acao = get(match, "params.acao", "");
 
   const [nomeMembro, setNomeMembro] = useState("");
   const [descricao, setDescricao] = useState("");
@@ -40,24 +41,36 @@ export default function Venda({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
+      console.log(acao);
       const response = await axios.get("/membro");
       setMembros(response.data);
       const response2 = await axios.get("/livrariaLivro");
       setListLivro(response2.data);
-      if (id) {
-        axios.get(`/livrariaVenda/${id}`).then((dado) => {
-          setNomeMembro(dado.data.nome);
-          console.log(dado.data);
-          setIdMembro(dado.data.membro_id);
-        });
-        const response = await axios.get(`/livrariaVendaIten/getItens/${id}`);
-        setListaCompra(response.data);
-        calculaValor(response.data);
-      }
+      if (acao) await realizaAcoes();
       setIsLoading(false);
     }
     getData();
   }, [id]);
+  const realizaAcoes = async () => {
+    const aux = [];
+    if (acao === "edit") {
+      axios.get(`/livrariaVenda/${id}`).then((dado) => {
+        setNomeMembro(dado.data.nome);
+        console.log(dado.data);
+        setIdMembro(dado.data.membro_id);
+      });
+      const response = await axios.get(`/livrariaVendaIten/getItens/${id}`);
+      setListaCompra(response.data);
+      calculaValor(response.data);
+    } else if (acao === "efetivaVenda") {
+      axios.get(`/livrariaLivro/${id}`).then((dado) => {
+        aux.push({ ...dado.data });
+        console.log(aux);
+        setListaCompra(aux);
+        calculaValor(aux);
+      });
+    }
+  };
   const calculaValor = (list) => {
     let aux = 0;
     console.log(list);
@@ -194,7 +207,8 @@ export default function Venda({ match }) {
   };
   const handleFinalizar = async () => {
     setIsLoading(true);
-    if (id) history.push("/livraria");
+    if (acao === "edit") history.push("/livraria");
+    if (acao === "efetivaVenda") history.push("/efetivaVenda");
     try {
       if (
         nomeMembro === "" ||
@@ -330,7 +344,7 @@ export default function Venda({ match }) {
                 if (e.target.value.length > 0) handlePesquisaMembro();
               }}
               placeholder="Nome"
-              disabled={id ? true : false}
+              disabled={acao === "edit" ? true : false}
             />
           </Col>
           <Col
@@ -346,7 +360,7 @@ export default function Venda({ match }) {
             <Button
               variant="success"
               onClick={handlePesquisaMembro}
-              disabled={id ? true : false}
+              disabled={acao === "edit" ? true : false}
             >
               <FaSearch size={24} />
             </Button>
@@ -396,7 +410,7 @@ export default function Venda({ match }) {
               list={meioPagamento}
               onChange={(e) => setTipoPagamento(e.target.value)}
               value={tipoPagamento}
-              disabled={id ? true : false}
+              disabled={acao === "edit" ? true : false}
             />
           </Col>
         </Row>

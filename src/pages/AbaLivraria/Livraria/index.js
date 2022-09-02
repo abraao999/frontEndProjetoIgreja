@@ -115,6 +115,14 @@ export default function Livraria() {
               </ContainerBox>
             </Link>
           </Col>
+          <Col sm={6} md={4} className="my-1">
+            <Link to="/reservaLivros">
+              <ContainerBox>
+                <FaBook size={50} />
+                <span>Reservas de livro</span>
+              </ContainerBox>
+            </Link>
+          </Col>
         </Row>
         <Row>
           <Col sm={6} md={4} className="my-1">

@@ -18,6 +18,7 @@ function LivrariaVirtual() {
   const [celular, setCelular] = useState("");
   const [email, setEmail] = useState("");
   const [livroId, setLivroId] = useState("");
+  const [valor, setValor] = useState("");
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
@@ -42,8 +43,11 @@ function LivrariaVirtual() {
     bodyHtml += `
          <div>
          <p><strong>Nº Reserva: </strong><span>${response.data.id}</span></p>
-         <p><strong>Nome Cliente: </strong><span>${nomeCliente}</span></p>
          <p><strong>Nome do Livro: </strong><span>${descricao}</span></p>
+         <p><strong>Valor: </strong><span>R$ ${parseFloat(valor).toFixed(
+           2
+         )}</span></p>
+         <p><strong>Nome Cliente: </strong><span>${nomeCliente}</span></p>
          <p><strong>Telefone: </strong><span>${celular}</span></p>
          <p><strong>E-mail: </strong><span>${email}</span></p>
          </div>`;
@@ -115,6 +119,7 @@ function LivrariaVirtual() {
                         setShow(true);
                         setDescricao(dado.descricao);
                         setLivroId(dado.id);
+                        setValor(dado.valor);
                       }}
                       variant="success"
                     >

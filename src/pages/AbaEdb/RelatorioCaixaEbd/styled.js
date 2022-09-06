@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import * as colors from '../../../config/colors';
+import styled from "styled-components";
+import * as colors from "../../../config/colors";
 
 export const Header = styled.div`
   display: flex;
@@ -102,9 +102,7 @@ export const Label = styled.label`
     height: 40px;
     font-size: 18px;
     border: 1px solid #ddd;
-    padding: 0 10px;
     border-radius: 4px;
-    margin-top: 8px;
     &:focus {
       border: 4px solid ${colors.inputBorder};
     }

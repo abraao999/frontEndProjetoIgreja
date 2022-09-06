@@ -1,23 +1,22 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable array-callback-return */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { toast } from 'react-toastify';
-import { FaEdit, FaWindowClose, FaSearch } from 'react-icons/fa';
-
-import { get } from 'lodash';
-import { Link } from 'react-router-dom';
-import { Col, Form, Row, Table } from 'react-bootstrap';
-import { AiFillPrinter } from 'react-icons/ai';
-import pdfMake from 'pdfmake/build/pdfmake';
-import { Container } from '../../../styles/GlobalStyles';
-import { Header, Label, Listagem } from './styled';
-import axios from '../../../services/axios';
-import Modal from '../../../components/Modal';
-import Loading from '../../../components/Loading';
-import history from '../../../services/history';
+import { toast } from "react-toastify";
+import { FaEdit, FaSearch, FaTrash } from "react-icons/fa";
+import moment from "moment";
+import "moment/locale/pt-br";
+import { get } from "lodash";
+import { Button, Col, Form, Row, Table } from "react-bootstrap";
+import { AiFillPrinter } from "react-icons/ai";
+import pdfMake from "pdfmake/build/pdfmake";
+import { Container } from "../../../styles/GlobalStyles";
+import { Header, Label, Listagem } from "./styled";
+import axios from "../../../services/axios";
+import Modal from "../../../components/Modal";
+import Loading from "../../../components/Loading";
+import history from "../../../services/history";
 import {
-  getDataDB,
   fimPrimeiroTrimestre,
   fimQuartoTrimestre,
   fimSegundoTrimestre,
@@ -27,32 +26,45 @@ import {
   inicioSegundoTrimestre,
   inicioTerceiroTrimestre,
   trimestres,
-} from '../../../util';
+} from "../../../util";
 // import * as actions from '../../store/modules/auth/actions';
 
-import { Impressao } from '../../../printers/impRelatorioDiario';
+import { Impressao } from "../../../printers/impRelatorioCaixaEbd";
+import { useDispatch } from "react-redux";
+import * as actions from "../../../store/modules/auth/actions";
 
 export default function RelatorioEbd() {
   const [show, setShow] = useState(false);
-  const [idParaDelecao, setIdParaDelecao] = useState('');
-  const [indiceDelecao, setIndiceDelecao] = useState('');
-
-  const [filtro, setFiltro] = useState(false);
+  const [idParaDelecao, setIdParaDelecao] = useState("");
+  const [indiceDelecao, setIndiceDelecao] = useState("");
 
   const [valorTotal, setValorTotal] = useState(0);
   const [listMovimentacao, setListMovimentacao] = useState([]);
   const [setors, setSetors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [hidden, setHidden] = useState(true);
+  const [hidden, setHidden] = useState(false);
   const [idTrimestre, setIdTrimestre] = useState(0);
   const [idSetor, setIdSetor] = useState(0);
-
+  const dispath = useDispatch();
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
 
-      const response = await axios.get('/setor');
-      setSetors(response.data);
+      try {
+        const response = await axios.get("/setor");
+        setSetors(response.data);
+        const response2 = await axios.get("/caixaEbd");
+        renderizaLista(response2.data);
+      } catch (error) {
+        const status = get(error, "response.data.status", 0);
+        const msg = get(error, "response.data.erros", 0);
+        if (status === 401 || status === 404) {
+          toast.error("Voce precisa fazer loggin");
+          dispath(actions.loginFailure());
+        } else {
+          msg.map((dado) => toast.error(dado));
+        }
+      }
 
       setIsLoading(false);
     }
@@ -63,7 +75,7 @@ export default function RelatorioEbd() {
     let novoValor = 0;
     const novaLista = [];
     list.map((dado) => {
-      const dataOp = getDataDB(new Date(dado.data_operacao));
+      const dataOp = moment(dado.data_operacao).format("L");
 
       novaLista.push({
         id: dado.id,
@@ -131,7 +143,7 @@ export default function RelatorioEbd() {
       default:
         break;
     }
-    axios.get('/caixaEbd').then((response) => {
+    axios.get("/caixaEbd").then((response) => {
       response.data.map((dado) => {
         console.log(dado.data_operacao, dataInicial);
         if (
@@ -140,7 +152,7 @@ export default function RelatorioEbd() {
           dado.setor_id === idSetor
         ) {
           novaLista.push(dado);
-          console.log('banan');
+          console.log("banan");
         }
       });
       renderizaLista(novaLista);
@@ -156,14 +168,14 @@ export default function RelatorioEbd() {
         descricao: dado.descricao,
         dataOp: dado.dataOp,
         valor: dado.valor,
-        tipo: dado.tipo ? 'Entrada' : 'Saída',
+        tipo: dado.tipo ? "Entrada" : "Saída",
         idSetor: dado.setor_id,
         descSetor: dado.desc_setor,
       });
     });
     const classeImpressao = new Impressao(novaLista, valorTotal);
     const documento = await classeImpressao.PreparaDocumento();
-    pdfMake.createPdf(documento).open({}, window.open('', '_blank'));
+    pdfMake.createPdf(documento).open({}, window.open("", "_blank"));
   };
   const handleClose = () => {
     setShow(false);
@@ -180,17 +192,19 @@ export default function RelatorioEbd() {
       const novaList = [...listMovimentacao];
       novaList.splice(indiceDelecao, 1);
       setListMovimentacao(novaList);
-      toast.success('Movimentação excluido com sucesso');
-      setShow(false);
+      toast.success("Movimentação excluido com sucesso");
 
       setIsLoading(false);
     } catch (error) {
-      const status = get(error, 'response.data.status', 0);
-      if (status === 401) {
-        toast.error('Voce precisa fazer loggin');
+      const status = get(error, "response.data.status", 0);
+      const msg = get(error, "response.data.erros", 0);
+      if (status === 401 || status === 404) {
+        toast.error("Voce precisa fazer loggin");
+        dispath(actions.loginFailure());
       } else {
-        toast.error('Erro ao excluir a membro');
+        msg.map((dado) => toast.error(dado));
       }
+      setShow(false);
       setIsLoading(false);
     }
   };
@@ -208,13 +222,13 @@ export default function RelatorioEbd() {
       />
       <Header>
         <h2>Relatório Caixa EBD</h2>
-        <button type="button" onClick={visualizarImpressao}>
+        <Button variant="success" onClick={visualizarImpressao}>
           <AiFillPrinter size={35} />
-        </button>
+        </Button>
       </Header>
       <Form onSubmit={handleSubmit}>
         <Row>
-          <Col sm={12} md={4} className="my-1">
+          <Col sm={12} md={3}>
             <Label htmlFor="departamento">
               Selecione o trimestre
               <select onChange={handleIdTrimestre}>
@@ -227,7 +241,7 @@ export default function RelatorioEbd() {
               </select>
             </Label>
           </Col>
-          <Col sm={12} md={4} className="my-1">
+          <Col sm={12} md={3}>
             <Label htmlFor="departamento">
               Selecione a congregação
               <select onChange={handleIdSetor}>
@@ -240,27 +254,32 @@ export default function RelatorioEbd() {
               </select>
             </Label>
           </Col>
-          <Col sm={12} md={4} className="my-1" hidden={hidden}>
+          <Col
+            sm={12}
+            md={3}
+            style={{ display: "flex", alignItems: "flex-end" }}
+          >
+            <Button variant="success" type="submit">
+              <FaSearch size={20} />
+            </Button>
+          </Col>
+          <Col sm={12} md={3} hidden={hidden}>
             <Form.Label htmlFor="valor">Valor:</Form.Label>
             <Form.Control id="input" type="text" value={valorTotal} disabled />
           </Col>
         </Row>
-        <Row>
-          {filtro ? (
-            <button type="submit">
-              Limpar Filtro <FaSearch />
-            </button>
-          ) : (
-            <button type="submit">
-              Filtrar <FaSearch />
-            </button>
-          )}
-        </Row>
+        <Row></Row>
       </Form>
       <Listagem hidden={hidden}>
         <h3>Relatório de Movimentação</h3>
         <center>
-          <Table responsive striped bordered hover>
+          <Table
+            responsive
+            striped
+            bordered
+            hover
+            style={{ textAlign: "center" }}
+          >
             <thead>
               <tr>
                 <th scope="col">R.F</th>
@@ -279,28 +298,28 @@ export default function RelatorioEbd() {
                   <td>{dado.id}</td>
                   <td>{dado.dataOp}</td>
                   <td>{dado.descricao}</td>
-                  <td>{dado.valor}</td>
-                  <td>{dado.tipo ? 'Entrada' : 'Saída'}</td>
+                  <td>R$ {parseFloat(dado.valor).toFixed(2)}</td>
+                  <td>{dado.tipo ? "Entrada" : "Saída"}</td>
                   <td>{dado.descSetor}</td>
 
                   <td>
-                    <Link
+                    <Button
+                      variant="warning"
                       onClick={(e) => {
                         e.preventDefault();
                         history.push(`/caixaEbd/${dado.id}/edit`);
                       }}
-                      to={`/caixaEbd/${dado.id}/edit`}
                     >
                       <FaEdit size={16} />
-                    </Link>
+                    </Button>
                   </td>
                   <td>
-                    <Link
+                    <Button
+                      variant="danger"
                       onClick={() => handleShow(dado.id, index)}
-                      to="/relatorioCaixaEbd"
                     >
-                      <FaWindowClose size={16} />
-                    </Link>
+                      <FaTrash size={16} />
+                    </Button>
                   </td>
                 </tr>
               ))}

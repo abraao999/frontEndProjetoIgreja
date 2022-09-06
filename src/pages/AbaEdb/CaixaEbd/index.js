@@ -1,54 +1,70 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 /* eslint-disable array-callback-return */
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
-import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
-import { get } from 'lodash';
-import { Col, Form, Row } from 'react-bootstrap';
-import { Container } from '../../../styles/GlobalStyles';
-import axios from '../../../services/axios';
-import ComboBox from '../../../components/ComboBox';
-import Loading from '../../../components/Loading';
-import history from '../../../services/history';
-import * as actions from '../../../store/modules/auth/actions';
-import { Label } from './styled';
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { get } from "lodash";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import { Container } from "../../../styles/GlobalStyles";
+import axios from "../../../services/axios";
+import ComboBox from "../../../components/ComboBox";
+import Loading from "../../../components/Loading";
+import history from "../../../services/history";
+import * as actions from "../../../store/modules/auth/actions";
+import { Label } from "./styled";
+import { FaSave } from "react-icons/fa";
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function CaixaEbd({ match }) {
   const dispath = useDispatch();
-  const id = get(match, 'params.id', '');
+  const id = get(match, "params.id", "");
 
-  const [maxId, setMaxId] = useState(0);
-
-  const [setorId, setSetorId] = useState('');
-  const [setor, setSetor] = useState('');
+  const [setorId, setSetorId] = useState("");
+  const [setor, setSetor] = useState("");
   const [setores, setSetores] = useState([]);
   const [setorSeletected, setSetorSeletected] = useState(0);
   const [comboBoxCongregacao, setComboBoxCongregacao] = useState(
-    'Selecione uma congregação'
+    "Selecione uma congregação"
   );
 
-  const [tipoMovimentacaoBox, setTipoMovimentacaoBox] = useState('');
+  const [tipoMovimentacaoBox, setTipoMovimentacaoBox] = useState("");
   const [tipoMovimentacao, setTipoMovimentacao] = useState();
-  const [valor, setValor] = useState('');
-  const [dataMovimentacao, setDataMovimentacao] = useState('');
+  const [valor, setValor] = useState("");
+  const [dataMovimentacao, setDataMovimentacao] = useState("");
 
-  const [descricao, setDescricao] = useState('');
+  const [descricao, setDescricao] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      if (id) {
-        const dado = await axios.get(`/caixa/${id}`);
-        setDescricao(dado.data.descricao);
-        setValor(dado.data.valor);
-        setTipoMovimentacao(dado.data.tipo);
-        setDataMovimentacao(dado.data.data_operacao);
-        setSetorId(dado.data.setor_id);
+      try {
+        if (id) {
+          axios.get(`/caixaEbd/${id}`).then((dado) => {
+            console.log(dado);
+            setDescricao(dado.data.descricao);
+            setValor(dado.data.valor);
+            setTipoMovimentacao(dado.data.tipo);
+            setDataMovimentacao(dado.data.data_operacao);
+            setSetorId(dado.data.setor_id);
+            setSetor(dado.data.desc_setor);
+            setTipoMovimentacaoBox(dado.data.tipo ? "Entrada" : "Saída");
+          });
+        }
+      } catch (error) {
+        const status = get(error, "response.data.status", 0);
+        const msg = get(error, "response.data.erros", 0);
+        if (status === 401 || status === 404) {
+          toast.error("Voce precisa fazer loggin");
+          dispath(actions.loginFailure());
+        } else {
+          msg.map((dado) => toast.error(dado));
+        }
       }
-      const response = await axios.get('/setor');
+      const response = await axios.get("/setor");
       setSetores(response.data);
 
       setIsLoading(false);
@@ -63,12 +79,12 @@ export default function CaixaEbd({ match }) {
     if (descricao.length < 3 || descricao.length > 255) {
       formErrors = true;
       setIsLoading(false);
-      toast.error('Preencha todos os campos');
+      toast.error("Preencha todos os campos");
     }
     if (formErrors) return;
     try {
       if (!id) {
-        const response = await axios.post('/caixaEbd', {
+        const response = await axios.post("/caixaEbd", {
           descricao,
           valor,
           tipo: tipoMovimentacao,
@@ -76,10 +92,10 @@ export default function CaixaEbd({ match }) {
           setor_id: setorId,
         });
         console.log(response);
-        setDescricao('');
+        setDescricao("");
         setSetorSeletected(0);
-        setComboBoxCongregacao('');
-        toast.success('Movimentação criada com sucesso');
+        setComboBoxCongregacao("");
+        toast.success("Movimentação criada com sucesso");
         setIsLoading(false);
       } else {
         const response = await axios.put(`/caixaEbd/${id}`, {
@@ -90,33 +106,32 @@ export default function CaixaEbd({ match }) {
           setor_id: setorId,
         });
         console.log(response);
-        setDescricao('');
+        setDescricao("");
         setSetorSeletected(0);
-        setComboBoxCongregacao('Selecione uma congregação');
-        toast.success('Movimentação editada com sucesso');
+        setComboBoxCongregacao("Selecione uma congregação");
+        toast.success("Movimentação editada com sucesso");
 
-        history.push('/relatorioCaixa');
+        history.push("/relatorioCaixaEbd");
         setIsLoading(false);
       }
     } catch (error) {
-      const status = get(error, 'response.data.status', 0);
-      if (status === 401) {
-        toast.error('Voce precisa fazer loggin');
+      const status = get(error, "response.data.status", 0);
+      const msg = get(error, "response.data.erros", 0);
+      if (status === 401 || status === 404) {
+        toast.error("Voce precisa fazer loggin");
         dispath(actions.loginFailure());
       } else {
-        toast.error('Erro ao excluir uma Classe');
+        msg.map((dado) => toast.error(dado));
       }
       setIsLoading(false);
     }
   }
-
   const handleTipoMovimentacao = (e) => {
     const nome = e.target.value;
     setTipoMovimentacaoBox(e.target.value);
-    if (nome === 'entrada') setTipoMovimentacao(true);
+    if (nome === "entrada") setTipoMovimentacao(true);
     else setTipoMovimentacao(false);
   };
-
   const handleGetIdCongregacao = (e) => {
     const nome = e.target.value;
     setSetor(e.target.value);
@@ -177,20 +192,22 @@ export default function CaixaEbd({ match }) {
           </Col>
         </Row>
         <Row>
-          <Col sm={12} md={{ span: 3, offset: 3 }} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <Label htmlFor="congregacao">
               Tipo de movimentação
               <select
                 onChange={handleTipoMovimentacao}
                 value={tipoMovimentacaoBox}
               >
-                <option value="nada">Entrada/Saída</option>
+                <option value="nada">
+                  {tipoMovimentacaoBox || "Entrada/Saída"}
+                </option>
                 <option value="entrada">Entrada</option>
                 <option value="saida">Saída</option>
               </select>
             </Label>
           </Col>
-          <Col sm={12} md={3} className="my-1">
+          <Col sm={12} md={4} className="my-1">
             <ComboBox
               title="Selecione a Congregação"
               list={setores}
@@ -198,9 +215,16 @@ export default function CaixaEbd({ match }) {
               onChange={handleGetIdCongregacao}
             />
           </Col>
-        </Row>
-        <Row>
-          <button type="submit">Salvar</button>
+          <Col
+            sm={12}
+            md={3}
+            className="my-1"
+            style={{ display: "flex", alignItems: "flex-end" }}
+          >
+            <Button variant="success" type="submit">
+              <FaSave size={16} />
+            </Button>
+          </Col>
         </Row>
       </Form>
     </Container>

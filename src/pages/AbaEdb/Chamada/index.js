@@ -1,6 +1,4 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable consistent-return */
-/* eslint-disable array-callback-return */
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
@@ -11,9 +9,7 @@ import { Container } from "../../../styles/GlobalStyles";
 import { Table, Listagem, Label } from "./styled";
 import axios from "../../../services/axios";
 import Loading from "../../../components/Loading";
-import history from "../../../services/history";
 import { Button, Col, Form, Row } from "react-bootstrap";
-// import * as actions from '../../store/modules/auth/actions';
 
 // eslint-disable-next-line no-unused-vars
 export default function Chamada({ match }) {
@@ -132,7 +128,10 @@ export default function Chamada({ match }) {
         });
       });
       toast.success("Chamada feita com sucesso");
-      history.push("/PresencaDetalhada");
+      // history.push("/PresencaDetalhada");
+      setListaChamada([]);
+      setAluno([]);
+      setAparecer(true);
     } catch (error) {
       toast.error("Erro ao atribuir as presenças");
       setIsLoading(false);

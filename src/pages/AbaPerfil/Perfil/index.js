@@ -1,24 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React from "react";
 
-import { useSelector } from 'react-redux';
-import { Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { AiOutlineSetting } from 'react-icons/ai';
-import { FaCalculator, FaUserTie } from 'react-icons/fa';
-import { MdArrowBack, MdSchool } from 'react-icons/md';
-import { Container } from '../../../styles/GlobalStyles';
+import { useDispatch, useSelector } from "react-redux";
+import { Col, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { FaUserTie } from "react-icons/fa";
+import { MdArrowBack } from "react-icons/md";
+import { Container } from "../../../styles/GlobalStyles";
 
-import Loading from '../../../components/Loading';
-import Card from '../../../components/Card';
-import history from '../../../services/history';
-import { ContainerBox } from './styled';
+import { ContainerBox } from "./styled";
+import * as actions from "../../../store/modules/auth/actions";
 
 export default function Perfil() {
+  const dispath = useDispatch();
   const storage = useSelector((state) => state.auth);
-  const [isLoading, setIsLoading] = useState(false);
   return (
     <>
-      <Loading isLoading={isLoading} />
       <Container>
         <h1>Meu Perfil</h1>
         <Row>
@@ -69,6 +65,16 @@ export default function Perfil() {
               <ContainerBox>
                 <FaUserTie size={50} />
                 <span>Permissão de Usuário</span>
+              </ContainerBox>
+            </Link>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={6} md={4} className="my-1">
+            <Link to="/login">
+              <ContainerBox>
+                <MdArrowBack size={50} />
+                <span>Sair</span>
               </ContainerBox>
             </Link>
           </Col>

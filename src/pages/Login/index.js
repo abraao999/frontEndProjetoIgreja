@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { isEmail } from "validator";
 import { get } from "lodash";
@@ -13,11 +13,20 @@ import { Row } from "react-bootstrap";
 
 export default function Login(props) {
   const dispath = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const prevPath = get(props, "location.state.prevPath", "/");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const isLoading = useSelector((state) => state.auth.isLoading);
 
+  useEffect(() => {
+    async function getData() {
+      if (isLoggedIn) {
+        dispath(actions.loginFailure());
+      }
+    }
+    getData();
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
 

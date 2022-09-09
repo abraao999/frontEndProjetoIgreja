@@ -71,7 +71,7 @@ import CadCamiseta from "../pages/AbaLivraria/CadCamiseta";
 import VendaCamiseta from "../pages/AbaLivraria/VendaCamiseta";
 import RelatorioVendaCamiseta from "../pages/AbaLivraria/RelatorioVendasCamiseta";
 import Fiado from "../pages/AbaLivraria/Fiados";
-import LivrariaVirtual from "../pages/LivrariaVirtual";
+import LivrariaVirtual from "../pages/AbaLivrariaVirtual/LivrariaVirtual";
 import Reserva from "../pages/AbaLivraria/Reserva";
 import PainelLivrariaAberta from "../pages/AbaLivrariaVirtual/PainelLivrariaAberta";
 import PedidoLivroAberto from "../pages/AbaLivrariaVirtual/PedidoLivroAberto";

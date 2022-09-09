@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { Container } from "../../styles/GlobalStyles";
-import axios from "../../services/axios";
-import Loading from "../../components/Loading";
+import { Container } from "../../../styles/GlobalStyles";
+import axios from "../../../services/axios";
+import Loading from "../../../components/Loading";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { Preview } from "./styled";
-import history from "../../services/history";
-import ModalReservaLivro from "../../components/ModalReservaLivro";
+import history from "../../../services/history";
+import ModalReservaLivro from "../../../components/ModalReservaLivro";
 import { toast } from "react-toastify";
 // import { Container } from './styles';
 function LivrariaVirtual() {

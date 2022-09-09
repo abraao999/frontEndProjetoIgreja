@@ -680,7 +680,7 @@ export default function Routes() {
         usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
       />
       <MyRoute
-        path="/PainelLivrariaVirtual/"
+        path="/painelLivrariaVirtual/"
         component={PainelLivrariaAberta}
         isClosed={false}
       />

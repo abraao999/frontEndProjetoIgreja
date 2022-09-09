@@ -37,10 +37,10 @@ export default function PainelLivrariaAberta() {
             </Link>
           </Col>
           <Col sm={6} md={4} className="my-1">
-            <Link to="/cadCamiseta">
+            <Link to="/livrariaVirtual">
               <ContainerBox>
                 <FaBook size={50} />
-                <span>Cadastro de Camiseta</span>
+                <span>Catálogo de Livros</span>
               </ContainerBox>
             </Link>
           </Col>

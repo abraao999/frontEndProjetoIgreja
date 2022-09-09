@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import InputMask from 'react-input-mask';
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import InputMask from "react-input-mask";
 
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import {
   FaEdit,
   FaFilter,
@@ -12,42 +12,45 @@ import {
   FaSave,
   FaSearch,
   FaTrash,
-} from 'react-icons/fa';
-import { BsCheck, BsCheckAll } from 'react-icons/bs';
-import { useSelector } from 'react-redux';
-import { get } from 'lodash';
-import { Link } from 'react-router-dom';
-import { Col, Row, Form, Table, Button } from 'react-bootstrap';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { Container } from '../../../styles/GlobalStyles';
-import { Label, LabelSelect, Listagem } from './styled';
-import axios from '../../../services/axios';
-import Modal from '../../../components/Modal';
-import ComboBox from '../../../components/ComboBox';
-import Loading from '../../../components/Loading';
-import history from '../../../services/history';
+} from "react-icons/fa";
+import moment from "moment";
+import "moment/locale/pt-br";
+
+import { BsCheck, BsCheckAll } from "react-icons/bs";
+import { useSelector } from "react-redux";
+import { get } from "lodash";
+import { Link } from "react-router-dom";
+import { Col, Row, Form, Table, Button } from "react-bootstrap";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import { Container } from "../../../styles/GlobalStyles";
+import { Label, LabelSelect, Listagem } from "./styled";
+import axios from "../../../services/axios";
+import Modal from "../../../components/Modal";
+import ComboBox from "../../../components/ComboBox";
+import Loading from "../../../components/Loading";
+import history from "../../../services/history";
 // import * as actions from '../../store/modules/auth/actions';
 
-import { Impressao } from '../../../printers/impLivrariaPedido';
-import ModalMembro from '../../../components/ModalMembro';
-import { meioPagamento } from '../../../util';
+import { Impressao } from "../../../printers/impLivrariaPedido";
+import ModalMembro from "../../../components/ModalMembro";
+import { meioPagamento } from "../../../util";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export default function ListaPedidoLivraria({ match }) {
-  const id = get(match, 'params.id', '');
+  const id = get(match, "params.id", "");
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const [idParaDelecao, setIdParaDelecao] = useState('');
-  const [indiceDelecao, setIndiceDelecao] = useState('');
+  const [idParaDelecao, setIdParaDelecao] = useState("");
+  const [indiceDelecao, setIndiceDelecao] = useState("");
 
-  const [nomeMembro, setNomeMembro] = useState('');
-  const [idMembro, setIdMembro] = useState('');
-  const [contato, setContato] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [quantidade, setQuantidade] = useState('');
-  const [status, setStatus] = useState('');
-  const [tipoPagamento, setTipoPagamento] = useState('');
+  const [nomeMembro, setNomeMembro] = useState("");
+  const [idMembro, setIdMembro] = useState("");
+  const [contato, setContato] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [quantidade, setQuantidade] = useState("");
+  const [status, setStatus] = useState("");
+  const [tipoPagamento, setTipoPagamento] = useState("");
   const [descricaoList, setDescricaoList] = useState([]);
   const [listPedidos, setListPedidos] = useState([]);
   const [membros, setMembros] = useState([]);
@@ -59,18 +62,18 @@ export default function ListaPedidoLivraria({ match }) {
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get('/livrariaPedido');
+      const response = await axios.get("/livrariaPedido");
       setListPedidos(response.data);
       setIsLoading(false);
     }
     getData();
   }, [id]);
   const limpaCampos = () => {
-    setNomeMembro('');
-    setIdMembro('');
-    setContato('');
-    setDescricao('');
-    setQuantidade('');
+    setNomeMembro("");
+    setIdMembro("");
+    setContato("");
+    setDescricao("");
+    setQuantidade("");
   };
   const handleClose = () => {
     setShow(false);
@@ -87,15 +90,15 @@ export default function ListaPedidoLivraria({ match }) {
       const novaLista = [...listPedidos];
       novaLista.splice(indiceDelecao, 1);
       setListPedidos(novaLista);
-      toast.success('Pedido excluído com sucesso');
+      toast.success("Pedido excluído com sucesso");
       setShowDelete(false);
 
       setIsLoading(false);
     } catch (error) {
-      const status = get(error, 'response.data.status', 0);
-      const msg = get(error, 'response.data.erros', 0);
+      const status = get(error, "response.data.status", 0);
+      const msg = get(error, "response.data.erros", 0);
       if (status === 401) {
-        toast.error('Voce precisa fazer login');
+        toast.error("Voce precisa fazer login");
       } else {
         msg.map((dado) => toast.error(dado));
       }
@@ -105,13 +108,13 @@ export default function ListaPedidoLivraria({ match }) {
   const visualizarImpressao = async () => {
     const classeImpressao = new Impressao(listPedidos);
     const documento = await classeImpressao.PreparaDocumento();
-    pdfMake.createPdf(documento).open({}, window.open('', '_blank'));
+    pdfMake.createPdf(documento).open({}, window.open("", "_blank"));
   };
   const handlePesquisaNome = async () => {
     if (nomeMembro.length > 0) {
       try {
         const novaLista = [];
-        const response = await axios.get('/membro');
+        const response = await axios.get("/membro");
         response.data.map((dados) => {
           if (
             String(dados.nome)
@@ -124,11 +127,11 @@ export default function ListaPedidoLivraria({ match }) {
         setMembros(novaLista);
         setShow(true);
       } catch (e) {
-        toast.error('Condigo não existe');
+        toast.error("Condigo não existe");
         console.log(e);
       }
     } else {
-      axios.get('/membro').then((response) => {
+      axios.get("/membro").then((response) => {
         setMembros(response.data);
         setShow(true);
       });
@@ -140,30 +143,30 @@ export default function ListaPedidoLivraria({ match }) {
       setNomeMembro(response.data.nome);
       handleClose();
     } catch (e) {
-      toast.error('Condigo não existe');
+      toast.error("Condigo não existe");
       console.log(e);
     }
   };
   const handleAlteraStatus = async (dado, index) => {
     setIsLoading(true);
     const novaLista = [...listPedidos];
-    if (dado.status === 'PENDENTE') {
+    if (dado.status === "PENDENTE") {
       await axios.put(`/livrariaPedido/${dado.id}`, {
-        status: 'SOLICITADO',
+        status: "SOLICITADO",
       });
-      novaLista[index] = { ...dado, status: 'SOLICITADO' };
+      novaLista[index] = { ...dado, status: "SOLICITADO" };
       setListPedidos(novaLista);
-    } else if (dado.status === 'SOLICITADO') {
+    } else if (dado.status === "SOLICITADO") {
       await axios.put(`/livrariaPedido/${dado.id}`, {
-        status: 'ENTREGUE',
+        status: "ENTREGUE",
       });
-      novaLista[index] = { ...dado, status: 'ENTREGUE' };
+      novaLista[index] = { ...dado, status: "ENTREGUE" };
       setListPedidos(novaLista);
-    } else if (dado.status === 'ENTREGUE') {
+    } else if (dado.status === "ENTREGUE") {
       await axios.put(`/livrariaPedido/${dado.id}`, {
-        status: 'ENTREGUE E PAGO',
+        status: "ENTREGUE E PAGO",
       });
-      novaLista[index] = { ...dado, status: 'ENTREGUE E PAGO' };
+      novaLista[index] = { ...dado, status: "ENTREGUE E PAGO" };
       setListPedidos(novaLista);
     }
 
@@ -172,17 +175,17 @@ export default function ListaPedidoLivraria({ match }) {
   const handleFiltro = () => {
     let novaLista = [];
     console.log(status, nomeMembro, tipoPagamento);
-    if (status !== '') {
+    if (status !== "") {
       novaLista = listPedidos.filter((dado) => {
         if (dado.status === status) return dado;
       });
     }
-    if (tipoPagamento !== '') {
+    if (tipoPagamento !== "") {
       novaLista = listPedidos.filter((dado) => {
         if (dado.tipo_pagamento === tipoPagamento) return dado;
       });
     }
-    if (nomeMembro !== '') {
+    if (nomeMembro !== "") {
       novaLista = listPedidos.filter((dado) => {
         if (dado.nome === nomeMembro) return dado;
       });
@@ -236,7 +239,7 @@ export default function ListaPedidoLivraria({ match }) {
             sm={12}
             md={1}
             className="my-1"
-            style={{ display: 'flex', alignItems: 'flex-end' }}
+            style={{ display: "flex", alignItems: "flex-end" }}
           >
             <Button size="lg" onClick={handlePesquisaNome} variant="success">
               <FaSearch size={16} />
@@ -270,7 +273,7 @@ export default function ListaPedidoLivraria({ match }) {
           <Col
             sm={12}
             md={4}
-            style={{ display: 'flex', alignItems: 'flex-end' }}
+            style={{ display: "flex", alignItems: "flex-end" }}
           >
             <Button variant="success" size="lg" onClick={handleFiltro}>
               <FaFilter size={16} />
@@ -281,7 +284,7 @@ export default function ListaPedidoLivraria({ match }) {
 
       <h3>Lista de Pedidos</h3>
 
-      <Table responsive striped bordered hover style={{ textAlign: 'center' }}>
+      <Table responsive striped bordered hover style={{ textAlign: "center" }}>
         <thead>
           <tr>
             <th scope="col">Descição</th>
@@ -289,6 +292,7 @@ export default function ListaPedidoLivraria({ match }) {
             <th scope="col">Nome</th>
             <th scope="col">Contato</th>
             <th scope="col">Pagamento</th>
+            <th scope="col">Data</th>
             <th scope="col">Status</th>
             <th scope="col">Alterar</th>
             <th scope="col">Excluir</th>
@@ -302,22 +306,23 @@ export default function ListaPedidoLivraria({ match }) {
               <td>{dado.nome}</td>
               <td>{dado.contato}</td>
               <td>{dado.tipo_pagamento}</td>
+              <td>{moment(dado.data_pedido).format("L")}</td>
               <td>
-                {dado.status === 'PENDENTE' ? (
+                {dado.status === "PENDENTE" ? (
                   <Button
                     variant="dark"
                     onClick={() => handleAlteraStatus(dado, index)}
                   >
                     <FaHourglassHalf size={16} color="danger" />
                   </Button>
-                ) : dado.status === 'ENTREGUE' ? (
+                ) : dado.status === "ENTREGUE" ? (
                   <Button
                     variant="success"
                     onClick={() => handleAlteraStatus(dado, index)}
                   >
                     <BsCheck size={16} />
                   </Button>
-                ) : dado.status === 'ENTREGUE E PAGO' ? (
+                ) : dado.status === "ENTREGUE E PAGO" ? (
                   <Button
                     variant="success"
                     onClick={() => handleAlteraStatus(dado, index)}

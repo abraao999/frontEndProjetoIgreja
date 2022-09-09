@@ -73,6 +73,8 @@ import RelatorioVendaCamiseta from "../pages/AbaLivraria/RelatorioVendasCamiseta
 import Fiado from "../pages/AbaLivraria/Fiados";
 import LivrariaVirtual from "../pages/LivrariaVirtual";
 import Reserva from "../pages/AbaLivraria/Reserva";
+import PainelLivrariaAberta from "../pages/AbaLivrariaVirtual/PainelLivrariaAberta";
+import PedidoLivroAberto from "../pages/AbaLivrariaVirtual/PedidoLivroAberto";
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.function_id);
@@ -613,6 +615,11 @@ export default function Routes() {
         usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
       />
       <MyRoute
+        path="/pedidoLivroAberto"
+        component={PedidoLivroAberto}
+        isClosed={false}
+      />
+      <MyRoute
         path="/pedidoLivro/:nomeLivro/nomeLivro"
         component={PedidoLivro}
         isClosed={false}
@@ -671,6 +678,11 @@ export default function Routes() {
         idFuncao={idFuncao}
         isClosed
         usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
+      />
+      <MyRoute
+        path="/PainelLivrariaVirtual/"
+        component={PainelLivrariaAberta}
+        isClosed={false}
       />
       <MyRoute
         path="/livrariaVirtual/"

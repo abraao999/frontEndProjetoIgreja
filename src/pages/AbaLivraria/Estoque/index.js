@@ -241,7 +241,7 @@ export default function Estoque({ match }) {
               <td>
                 <Button
                   variant="warning"
-                  onClick={() => history.push(`/pedidoLivro/${dado.id}/edit`)}
+                  onClick={() => history.push(`/cadLivro/${dado.id}/edit`)}
                 >
                   <FaEdit size={16} />
                 </Button>

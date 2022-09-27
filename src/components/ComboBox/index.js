@@ -1,19 +1,11 @@
 /* eslint-disable react/button-has-type */
 /* eslint-disable react/prop-types */
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Modal } from 'react-bootstrap';
-import * as colors from '../../config/colors';
-import { Label } from './styled';
+import React from "react";
+import PropTypes from "prop-types";
+
+import { Label } from "./styled";
 // eslint-disable-next-line react/prop-types
-export default function ComboBox({
-  title,
-  onChange,
-  value,
-  list,
-  handleFunctionConfirm,
-  disabled,
-}) {
+export default function ComboBox({ title, onChange, value, list, disabled }) {
   return (
     <Label htmlFor="congregacao">
       {title}
@@ -30,9 +22,9 @@ export default function ComboBox({
 }
 
 ComboBox.defaultProps = {
-  title: '',
-  value: '',
-  buttonConfirm: '',
+  title: "",
+  value: "",
+  buttonConfirm: "",
   list: [],
   show: false,
   disable: true,

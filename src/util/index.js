@@ -108,3 +108,8 @@ export const tamanhos = [
 
 export const imagenVazia =
   "https://fotosigreja.s3.us-east-1.amazonaws.com/67b54846353ff2e9438fae91a4a30fec-sem-foto.jpeg";
+
+export const listaTipoRevista = [
+  { id: 0, descricao: "Aluno" },
+  { id: 1, descricao: "Professor" },
+];

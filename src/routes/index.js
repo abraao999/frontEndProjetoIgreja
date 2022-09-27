@@ -75,6 +75,11 @@ import LivrariaVirtual from "../pages/AbaLivrariaVirtual/LivrariaVirtual";
 import Reserva from "../pages/AbaLivraria/Reserva";
 import PainelLivrariaAberta from "../pages/AbaLivrariaVirtual/PainelLivrariaAberta";
 import PedidoLivroAberto from "../pages/AbaLivrariaVirtual/PedidoLivroAberto";
+import PedidoRevista from "../pages/AbaLivraria/PedidoRevista";
+import ListaPedidoRevista from "../pages/AbaLivraria/ListaRevista";
+import LivrariaLivro from "../pages/AbaLivraria/LivrariaLivro";
+import LivrariaCamiseta from "../pages/AbaLivraria/LivrariaCamiseta";
+import LivrariaRevista from "../pages/AbaLivraria/LivrariaRevista";
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.function_id);
@@ -638,6 +643,27 @@ export default function Routes() {
         usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
       />
       <MyRoute
+        path="/ListaPedidoRevista/"
+        component={ListaPedidoRevista}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
+      />
+      <MyRoute
+        path="/pedidoRevista/"
+        component={PedidoRevista}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
+      />
+      <MyRoute
+        path="/pedidoRevista/:id/edit"
+        component={PedidoRevista}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
+      />
+      <MyRoute
         path="/estoque/"
         component={Estoque}
         idFuncao={idFuncao}
@@ -661,6 +687,13 @@ export default function Routes() {
       <MyRoute
         path="/cadCamiseta/:id/edit"
         component={CadCamiseta}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
+      />
+      <MyRoute
+        path="/listaPedidoRevista/"
+        component={ListaPedidoRevista}
         idFuncao={idFuncao}
         isClosed
         usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
@@ -692,6 +725,27 @@ export default function Routes() {
       <MyRoute
         path="/reservaLivros/"
         component={Reserva}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
+      />
+      <MyRoute
+        path="/painelLivrariaLivros/"
+        component={LivrariaLivro}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
+      />
+      <MyRoute
+        path="/painelLivrariaCamisetas/"
+        component={LivrariaCamiseta}
+        idFuncao={idFuncao}
+        isClosed
+        usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
+      />
+      <MyRoute
+        path="/painelLivrariaRevistas/"
+        component={LivrariaRevista}
         idFuncao={idFuncao}
         isClosed
         usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}

@@ -35,7 +35,6 @@ export default function CadAluno({ match }) {
   const [classeId, setClasseId] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [visitante, setVisitante] = useState(false);
-
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
@@ -190,7 +189,6 @@ export default function CadAluno({ match }) {
     <Container>
       <h1> {id ? "Editar Aluno" : "Novo Aluno"}</h1>
       <Loading isLoading={isLoading} />
-
       <Form onSubmit={handleSubmit}>
         <Row className="align-items-center">
           <Col sm={12} md={12} className="my-1">

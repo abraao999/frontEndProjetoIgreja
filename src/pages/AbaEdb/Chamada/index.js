@@ -6,10 +6,11 @@ import { toast } from "react-toastify";
 import { FaSearch, FaSave, FaCheck, FaWindowClose } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Container } from "../../../styles/GlobalStyles";
-import { Table, Listagem, Label } from "./styled";
+import { Listagem, Label } from "./styled";
 import axios from "../../../services/axios";
 import Loading from "../../../components/Loading";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Image, Row, Table } from "react-bootstrap";
+import { imagenVazia } from "../../../util";
 
 // eslint-disable-next-line no-unused-vars
 export default function Chamada({ match }) {
@@ -44,10 +45,20 @@ export default function Chamada({ match }) {
     }
     getData();
   }, []);
-  const renderizaLista = (list) => {
+  const renderizaLista = async (list) => {
     const novaLista = [];
+    const response = await axios.get("/ebdFoto");
+
     list.map((dado) => {
-      novaLista.push({ ...dado, chacado: false });
+      let pula = false;
+
+      response.data.map((foto) => {
+        if (dado.foto_id === foto.id) {
+          novaLista.push({ ...dado, chacado: false, url: foto.url });
+          pula = true;
+        }
+      });
+      if (!pula) novaLista.push({ ...dado, chacado: false, url: imagenVazia });
     });
     setAluno(novaLista);
   };
@@ -172,43 +183,52 @@ export default function Chamada({ match }) {
       </Form>
       <Listagem hidden={aparecer}>
         <h3>Lista de Alunos</h3>
-        <center>
-          <Table className="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">Nome</th>
-                <th scope="col">Presença</th>
+
+        <Table
+          responsive
+          striped
+          bordered
+          hover
+          style={{ textAlign: "center", verticalAlign: "middle" }}
+        >
+          <thead>
+            <tr>
+              <th scope="col">Foto</th>
+              <th scope="col">Nome</th>
+              <th scope="col">Presença</th>
+            </tr>
+          </thead>
+          <tbody>
+            {aluno.map((dado, index) => (
+              <tr key={String(dado.id)}>
+                <td>
+                  <Image src={dado.url} style={{ width: "80px" }} />
+                </td>
+                <td>{dado.nome}</td>
+                <td>
+                  {dado.checado ? (
+                    <Button
+                      variant="success"
+                      onClick={() => handleCheck(dado.id, index)}
+                    >
+                      <FaCheck size={16} />
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="danger"
+                      onClick={() => handleCheck(dado.id, index)}
+                    >
+                      <FaWindowClose size={16} />
+                    </Button>
+                  )}
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {aluno.map((dado, index) => (
-                <tr key={String(dado.id)}>
-                  <td>{dado.nome}</td>
-                  <td>
-                    {dado.checado ? (
-                      <Button
-                        variant="success"
-                        onClick={() => handleCheck(dado.id, index)}
-                      >
-                        <FaCheck size={16} />
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="danger"
-                        onClick={() => handleCheck(dado.id, index)}
-                      >
-                        <FaWindowClose size={16} />
-                      </Button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Button variant="success" onClick={handleSalvar}>
-            Salvar <FaSave />
-          </Button>
-        </center>
+            ))}
+          </tbody>
+        </Table>
+        <Button variant="success" onClick={handleSalvar}>
+          Salvar <FaSave />
+        </Button>
       </Listagem>
     </Container>
   );

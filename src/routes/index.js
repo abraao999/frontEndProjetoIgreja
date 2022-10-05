@@ -80,7 +80,7 @@ import ListaPedidoRevista from "../pages/AbaLivraria/ListaRevista";
 import LivrariaLivro from "../pages/AbaLivraria/LivrariaLivro";
 import LivrariaCamiseta from "../pages/AbaLivraria/LivrariaCamiseta";
 import LivrariaRevista from "../pages/AbaLivraria/LivrariaRevista";
-import ImagemReact from "../pages/ImagemReact";
+import CadFoto from "../pages/CadFoto";
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.function_id);
@@ -752,8 +752,8 @@ export default function Routes() {
         usuarioPermitido={[{ id: 1 }, { id: 13 }, { id: 14 }]}
       />
       <MyRoute
-        path="/cadFoto/"
-        component={ImagemReact}
+        path="/cadFoto/:id/:action"
+        component={CadFoto}
         idFuncao={idFuncao}
         isClosed={false}
       />

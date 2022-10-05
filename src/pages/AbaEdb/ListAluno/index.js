@@ -203,7 +203,7 @@ export default function ListAluno() {
         </Row>
       </Form>
       <Listagem>
-        <h3>Lista de Membros</h3>
+        <h3>Lista de Alunos</h3>
         <center>
           <Table
             responsive

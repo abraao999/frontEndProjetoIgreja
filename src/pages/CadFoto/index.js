@@ -32,6 +32,10 @@ const CadFoto = ({ match }) => {
   }, [webcamRef]);
   const handleSubmit = async () => {
     setIsLoading(true);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
     try {
       const res = await axios.post("/ebdFoto", {
         url: imageSrc,

@@ -1,32 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+/* eslint-disable react/prop-types */
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
-import { toast } from 'react-toastify';
-import { FaEdit, FaWindowClose } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
-import { get } from 'lodash';
-import { Link } from 'react-router-dom';
-import { Col, Row, Form, Table } from 'react-bootstrap';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { Container } from '../../../styles/GlobalStyles';
-import { Listagem } from './styled';
-import axios from '../../../services/axios';
-import Modal from '../../../components/Modal';
-import Loading from '../../../components/Loading';
-import history from '../../../services/history';
-// import * as actions from '../../store/modules/auth/actions';
+import { toast } from "react-toastify";
+import { FaEdit, FaSave, FaTrash } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { get } from "lodash";
+import { Col, Row, Form, Table, Button } from "react-bootstrap";
 
-import { Impressao } from '../../../printers/impressao';
+import { Container } from "../../../styles/GlobalStyles";
+import { Listagem } from "./styled";
+import axios from "../../../services/axios";
+import Modal from "../../../components/Modal";
+import Loading from "../../../components/Loading";
+import history from "../../../services/history";
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export default function Classe({ match }) {
-  const id = get(match, 'params.id', '');
+  const id = get(match, "params.id", "");
   const [show, setShow] = useState(false);
-  const [idParaDelecao, setIdParaDelecao] = useState('');
-  const [indiceDelecao, setIndiceDelecao] = useState('');
+  const [idParaDelecao, setIdParaDelecao] = useState("");
+  const [indiceDelecao, setIndiceDelecao] = useState("");
 
-  const [descricao, setDescricao] = useState('');
+  const [descricao, setDescricao] = useState("");
   const [descricaoList, setDescricaoList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,7 +32,7 @@ export default function Classe({ match }) {
       setIsLoading(true);
       const lista = [];
 
-      axios.get('/classe').then((response) => {
+      axios.get("/classe").then((response) => {
         response.data.map((valor) => {
           if (dataStorage.user.setor_id === valor.setor_id) {
             lista.push(valor);
@@ -57,36 +52,36 @@ export default function Classe({ match }) {
 
     if (descricao.length < 3 || descricao.length > 255) {
       formErrors = true;
-      toast.error('Campo descricao deve ter entre 3 e 255 caracteres');
+      toast.error("Campo descricao deve ter entre 3 e 255 caracteres");
     }
     if (formErrors) return;
     try {
       if (!id) {
-        const response = await axios.post('/classe', {
+        await axios.post("/classe", {
           descricao,
           setor_id: dataStorage.user.setor_id,
         });
-        const novaLista = await axios.get('/classe');
+        const novaLista = await axios.get("/classe");
         setDescricaoList(novaLista.data);
-        setDescricao('');
-        toast.success('Classe criada com sucesso');
+        setDescricao("");
+        toast.success("Classe criada com sucesso");
         setIsLoading(false);
       } else {
-        const response = await axios.put(`/classe/${id}`, { descricao });
-        const novaLista = await axios.get('/classe');
+        await axios.put(`/classe/${id}`, { descricao });
+        const novaLista = await axios.get("/classe");
         setDescricaoList(novaLista.data);
-        setDescricao('');
-        toast.success('Classe editada com sucesso');
+        setDescricao("");
+        toast.success("Classe editada com sucesso");
 
-        history.push('/classe');
+        history.push("/classe");
         setIsLoading(false);
       }
     } catch (error) {
-      const status = get(error, 'response.data.status', 0);
+      const status = get(error, "response.data.status", 0);
       if (status === 401) {
-        toast.error('Voce precisa fazer loggin');
+        toast.error("Voce precisa fazer loggin");
       } else {
-        toast.error('Erro ao excluir uma Classe');
+        toast.error("Erro ao excluir uma Classe");
       }
       setIsLoading(false);
     }
@@ -107,29 +102,24 @@ export default function Classe({ match }) {
       const novosFuncoes = [...descricaoList];
       novosFuncoes.splice(indiceDelecao, 1);
       setDescricaoList(novosFuncoes);
-      toast.success('Classe excluida com sucesso');
+      toast.success("Classe excluida com sucesso");
       setShow(false);
 
       setIsLoading(false);
     } catch (error) {
-      const status = get(error, 'response.data.status', 0);
+      const status = get(error, "response.data.status", 0);
       if (status === 401) {
-        toast.error('Voce precisa fazer loggin');
+        toast.error("Voce precisa fazer loggin");
       } else {
-        toast.error('Erro ao excluir a classe');
+        toast.error("Erro ao excluir a classe");
       }
       setIsLoading(false);
     }
   };
-  const visualizarImpressao = async () => {
-    const classeImpressao = new Impressao(descricaoList);
-    const documento = await classeImpressao.PreparaDocumento();
-    pdfMake.createPdf(documento).open({}, window.open('', '_blank'));
-  };
 
   return (
     <Container>
-      <h1>{id ? 'Editar Classe' : 'Novo Classe'}</h1>
+      <h1>{id ? "Editar Classe" : "Novo Classe"}</h1>
       <Loading isLoading={isLoading} />
       <Modal
         title="Atenção!!!"
@@ -141,8 +131,8 @@ export default function Classe({ match }) {
         handleFunctionConfirm={handleFunctionConfirm}
       />
       <Form onSubmit={handleSubmit}>
-        <Row className="align-items-center">
-          <Col sm={12} md={12} className="my-1">
+        <Row>
+          <Col sm={10}>
             <Form.Label htmlFor="descricao">Nome da Classe:</Form.Label>
 
             <Form.Control
@@ -152,9 +142,11 @@ export default function Classe({ match }) {
               placeholder="Classe"
             />
           </Col>
-        </Row>
-        <Row>
-          <button type="submit">Salvar</button>
+          <Col sm={2} style={{ display: "flex", alignItems: "flex-end" }}>
+            <Button variant="success" type="submit">
+              <FaSave size={16} />
+            </Button>
+          </Col>
         </Row>
       </Form>
       <Listagem>
@@ -173,24 +165,24 @@ export default function Classe({ match }) {
                 <tr key={String(dado.id)}>
                   <td>{dado.descricao}</td>
                   <td>
-                    <Link
+                    <Button
+                      variant="warning"
                       onClick={(e) => {
                         e.preventDefault();
                         setDescricao(dado.descricao);
                         history.push(`/classe/${dado.id}/edit`);
                       }}
-                      to={`/classe/${dado.id}/edit`}
                     >
                       <FaEdit size={16} />
-                    </Link>
+                    </Button>
                   </td>
                   <td>
-                    <Link
+                    <Button
+                      variant="danger"
                       onClick={() => handleShow(dado.id, index)}
-                      to={`/classe/${dado.id}/delete`}
                     >
-                      <FaWindowClose size={16} />
-                    </Link>
+                      <FaTrash size={16} />
+                    </Button>
                   </td>
                 </tr>
               ))}

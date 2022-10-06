@@ -204,13 +204,7 @@ export default function ListAluno() {
       <Listagem>
         <h3>Lista de Alunos</h3>
         <center>
-          <Table
-            responsive
-            striped
-            bordered
-            hover
-            style={{ textAlign: "center" }}
-          >
+          <Table responsive striped bordered hover>
             <thead>
               <tr>
                 <th scope="col">Nº Ficha</th>

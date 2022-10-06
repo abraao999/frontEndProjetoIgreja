@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { useSelector } from 'react-redux';
-import { Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { AiOutlineSetting } from 'react-icons/ai';
-import { FaCalculator, FaUserTie } from 'react-icons/fa';
-import { MdArrowBack, MdSchool } from 'react-icons/md';
-import { Container } from '../../../styles/GlobalStyles';
+import { useSelector } from "react-redux";
+import { Col, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { AiOutlineSetting } from "react-icons/ai";
+import { MdArrowBack } from "react-icons/md";
+import { Container } from "../../../styles/GlobalStyles";
 
-import Loading from '../../../components/Loading';
-import Card from '../../../components/Card';
-import history from '../../../services/history';
-import { ContainerBox } from './styled';
+import Loading from "../../../components/Loading";
+
+import { ContainerBox } from "./styled";
 
 export default function Configuracoes() {
   const [isLoading, setIsLoading] = useState(false);

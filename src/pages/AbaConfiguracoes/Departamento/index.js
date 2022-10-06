@@ -1,43 +1,42 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable array-callback-return */
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
-import { toast } from 'react-toastify';
-import { FaEdit, FaWindowClose } from 'react-icons/fa';
-import { get } from 'lodash';
-import { Link } from 'react-router-dom';
-import { Col, Form, Row, Table } from 'react-bootstrap';
-import { Container } from '../../../styles/GlobalStyles';
-import { Label, Listagem } from './styled';
-import axios from '../../../services/axios';
-import Modal from '../../../components/Modal';
-import Loading from '../../../components/Loading';
-import history from '../../../services/history';
+import { toast } from "react-toastify";
+import { FaEdit, FaSave, FaTrash } from "react-icons/fa";
+import { get } from "lodash";
+import { Button, Col, Form, Row, Table } from "react-bootstrap";
+import { Container } from "../../../styles/GlobalStyles";
+import { Label, Listagem } from "./styled";
+import axios from "../../../services/axios";
+import Modal from "../../../components/Modal";
+import Loading from "../../../components/Loading";
+import history from "../../../services/history";
 // import * as actions from '../../store/modules/auth/actions';
 
 export default function Departamento({ match }) {
-  const id = get(match, 'params.id', '');
+  const id = get(match, "params.id", "");
   const [show, setShow] = useState(false);
-  const [idParaDelecao, setIdParaDelecao] = useState('');
-  const [indiceDelecao, setIndiceDelecao] = useState('');
-  const [msg, setMsg] = useState(true);
+  const [idParaDelecao, setIdParaDelecao] = useState("");
+  const [indiceDelecao, setIndiceDelecao] = useState("");
 
   const [setores, setSetores] = useState([]);
   const [setorSeletected, setSetorSeletected] = useState(0);
   const [comboBoxCongregacao, setComboBoxCongregacao] = useState(
-    'Selecione uma congregação'
+    "Selecione uma congregação"
   );
 
   const [departamento, setDepartamento] = useState([]);
-  const [descricao, setDescricao] = useState('');
+  const [descricao, setDescricao] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
-      const response = await axios.get('/departamento');
+      const response = await axios.get("/departamento");
       setDepartamento(response.data);
-      const response2 = await axios.get('/setor');
+      const response2 = await axios.get("/setor");
       setSetores(response2.data);
       console.log(setorSeletected);
       setIsLoading(false);
@@ -56,22 +55,22 @@ export default function Departamento({ match }) {
     ) {
       formErrors = true;
       setIsLoading(false);
-      toast.error('Preencha todos os campos');
+      toast.error("Preencha todos os campos");
     }
     if (formErrors) return;
     try {
       if (!id) {
-        const response = await axios.post('/departamento', {
+        const response = await axios.post("/departamento", {
           descricao,
           setor_id: setorSeletected,
         });
         console.log(response);
-        const novaLista = await axios.get('/departamento');
+        const novaLista = await axios.get("/departamento");
         setDepartamento(novaLista.data);
-        setDescricao('');
+        setDescricao("");
         setSetorSeletected(0);
-        setComboBoxCongregacao('Selecione uma congregação');
-        toast.success('Departamento criada com sucesso');
+        setComboBoxCongregacao("Selecione uma congregação");
+        toast.success("Departamento criada com sucesso");
         setIsLoading(false);
       } else {
         const response = await axios.put(`/departamento/${id}`, {
@@ -79,22 +78,22 @@ export default function Departamento({ match }) {
           setor_id: setorSeletected,
         });
         console.log(response);
-        const novaLista = await axios.get('/departamento');
+        const novaLista = await axios.get("/departamento");
         setDepartamento(novaLista.data);
-        setDescricao('');
+        setDescricao("");
         setSetorSeletected(0);
-        setComboBoxCongregacao('Selecione uma congregação');
-        toast.success('Departamento editada com sucesso');
+        setComboBoxCongregacao("Selecione uma congregação");
+        toast.success("Departamento editada com sucesso");
 
-        history.push('/departamento');
+        history.push("/departamento");
         setIsLoading(false);
       }
     } catch (error) {
-      const status = get(error, 'response.data.status', 0);
+      const status = get(error, "response.data.status", 0);
       if (status === 401) {
-        toast.error('Voce precisa fazer loggin');
+        toast.error("Voce precisa fazer loggin");
       } else {
-        toast.error('Erro ao excluir uma Classe');
+        toast.error("Erro ao excluir uma Classe");
       }
       setIsLoading(false);
     }
@@ -115,16 +114,16 @@ export default function Departamento({ match }) {
       const novosFuncoes = [...departamento];
       novosFuncoes.splice(indiceDelecao, 1);
       setDepartamento(novosFuncoes);
-      toast.success('Departamento excluida com sucesso');
+      toast.success("Departamento excluida com sucesso");
       setShow(false);
 
       setIsLoading(false);
     } catch (error) {
-      const status = get(error, 'response.data.status', 0);
+      const status = get(error, "response.data.status", 0);
       if (status === 401) {
-        toast.error('Voce precisa fazer loggin');
+        toast.error("Voce precisa fazer loggin");
       } else {
-        toast.error('Erro ao excluir a departamento');
+        toast.error("Erro ao excluir a departamento");
       }
       setIsLoading(false);
     }
@@ -138,7 +137,7 @@ export default function Departamento({ match }) {
   };
   return (
     <Container>
-      <h1>{id ? 'Editar Departamento' : 'Novo Departamento'}</h1>
+      <h1>{id ? "Editar Departamento" : "Novo Departamento"}</h1>
       <Loading isLoading={isLoading} />
       <Modal
         title="Atenção!!!"
@@ -152,7 +151,7 @@ export default function Departamento({ match }) {
 
       <Form onSubmit={handleSubmit}>
         <Row>
-          <Col sm={12} md={6} className="my-1">
+          <Col sm={12} md={5}>
             <Form.Label htmlFor="descricao">Nome do departamento:</Form.Label>
             <Form.Control
               id="input"
@@ -164,7 +163,7 @@ export default function Departamento({ match }) {
               placeholder="Departamento"
             />
           </Col>
-          <Col sm={12} md={6} className="my-1">
+          <Col sm={12} md={5}>
             <Label htmlFor="congregacao">
               Nome da congregação
               <select onChange={handleGetIdClasse} value={comboBoxCongregacao}>
@@ -177,9 +176,15 @@ export default function Departamento({ match }) {
               </select>
             </Label>
           </Col>
-        </Row>
-        <Row>
-          <button type="submit">Salvar</button>
+          <Col
+            sm={12}
+            md={2}
+            style={{ display: "flex", alignItems: "flex-end" }}
+          >
+            <Button variant="success" type="submit">
+              <FaSave size={16} />
+            </Button>
+          </Col>
         </Row>
       </Form>
       <Listagem>
@@ -200,24 +205,24 @@ export default function Departamento({ match }) {
                   <td>{dado.descricao}</td>
                   <td>{dado.setor_descricao}</td>
                   <td>
-                    <Link
+                    <Button
+                      variant="warning"
                       onClick={(e) => {
                         e.preventDefault();
                         setDescricao(dado.descricao);
                         history.push(`/departamento/${dado.id}/edit`);
                       }}
-                      to={`/departamento/${dado.id}/edit`}
                     >
                       <FaEdit size={16} />
-                    </Link>
+                    </Button>
                   </td>
                   <td>
-                    <Link
+                    <Button
+                      variant="danger"
                       onClick={() => handleShow(dado.id, index)}
-                      to={`/departamento/${dado.id}/delete`}
                     >
-                      <FaWindowClose size={16} />
-                    </Link>
+                      <FaTrash size={16} />
+                    </Button>
                   </td>
                 </tr>
               ))}

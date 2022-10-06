@@ -50,6 +50,9 @@ export default createGlobalStyle`
   ul {
     list-style: none;
   }
+  table{
+    text-align:center
+  }
 
   /* body .Toastify .Toastify__toast-container .Toastify__toast--success {
     background: ${colors.successColor}

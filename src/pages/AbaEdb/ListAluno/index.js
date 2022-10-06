@@ -21,7 +21,6 @@ import axios from "../../../services/axios";
 import Modal from "../../../components/Modal";
 import Loading from "../../../components/Loading";
 import history from "../../../services/history";
-import { IonButton } from "@ionic/react";
 
 export default function ListAluno() {
   const [show, setShow] = useState(false);

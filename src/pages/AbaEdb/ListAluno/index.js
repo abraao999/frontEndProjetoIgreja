@@ -217,8 +217,8 @@ export default function ListAluno() {
                 <th scope="col">Nome</th>
                 <th scope="col">Telefone</th>
                 <th scope="col">Classe</th>
-                <th scope="col">Detalhes</th>
                 <th scope="col">Foto</th>
+                <th scope="col">Detalhes</th>
                 <th scope="col">Editar</th>
                 <th scope="col">Excluir</th>
               </tr>

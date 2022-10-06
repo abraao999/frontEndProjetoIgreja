@@ -9,7 +9,7 @@ import history from "./services/history";
 import GlobalStyle from "./styles/GlobalStyles";
 import Header from "./components/Header";
 import Routes from "./routes";
-
+import "@ionic/react/css/core.css";
 function App() {
   return (
     <Provider store={store}>

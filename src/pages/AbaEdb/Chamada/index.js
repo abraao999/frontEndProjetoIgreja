@@ -6,10 +6,10 @@ import { toast } from "react-toastify";
 import { FaSearch, FaSave, FaCheck, FaWindowClose } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Container } from "../../../styles/GlobalStyles";
-import { Listagem, Label } from "./styled";
+import { Listagem, Label, SlideContainer } from "./styled";
 import axios from "../../../services/axios";
 import Loading from "../../../components/Loading";
-import { Button, Col, Form, Image, Row, Table } from "react-bootstrap";
+import { Button, Carousel, Col, Form, Image, Row } from "react-bootstrap";
 import { imagenVazia } from "../../../util";
 
 // eslint-disable-next-line no-unused-vars
@@ -149,6 +149,7 @@ export default function Chamada({ match }) {
     }
     setIsLoading(false);
   };
+
   return (
     <Container>
       <h1>Chamada</h1>
@@ -182,9 +183,7 @@ export default function Chamada({ match }) {
         </Row>
       </Form>
       <Listagem hidden={aparecer}>
-        <h3>Lista de Alunos</h3>
-
-        <Table
+        {/* <Table
           responsive
           striped
           bordered
@@ -225,10 +224,44 @@ export default function Chamada({ match }) {
               </tr>
             ))}
           </tbody>
-        </Table>
-        <Button variant="success" onClick={handleSalvar}>
-          Salvar <FaSave />
-        </Button>
+        </Table> */}
+        <Carousel slide={false} prevLabel="" nextLabel="" interval={null}>
+          {aluno.map((dado, index) => (
+            <Carousel.Item key={dado.id}>
+              <SlideContainer>
+                <Image rounded src={dado.url} style={{ width: "80px" }} />
+                <p> {dado.nome}</p>
+                {dado.checado ? (
+                  <Button
+                    variant="success"
+                    size="lg"
+                    onClick={() => handleCheck(dado.id, index)}
+                  >
+                    <FaCheck size={36} />
+                  </Button>
+                ) : (
+                  <Button
+                    variant="danger"
+                    size="lg"
+                    onClick={() => handleCheck(dado.id, index)}
+                  >
+                    <FaWindowClose size={36} />
+                  </Button>
+                )}
+              </SlideContainer>
+            </Carousel.Item>
+          ))}
+        </Carousel>
+        <center>
+          <Button
+            variant="success"
+            size="lg"
+            style={{ width: "60%" }}
+            onClick={handleSalvar}
+          >
+            <FaSave size={36} />
+          </Button>
+        </center>
       </Listagem>
     </Container>
   );

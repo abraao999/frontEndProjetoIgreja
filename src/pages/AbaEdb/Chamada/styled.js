@@ -113,3 +113,18 @@ export const ProfilePicture = styled.div`
     border-radius: 50%;
   }
 `;
+export const SlideContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around !important;
+  align-items: center;
+  height: 30rem;
+  img {
+    width: auto !important;
+    height: 50% !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important;
+  }
+  button {
+    width: 60%;
+  }
+`;

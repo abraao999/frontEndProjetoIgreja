@@ -21,6 +21,7 @@ import axios from "../../../services/axios";
 import Modal from "../../../components/Modal";
 import Loading from "../../../components/Loading";
 import history from "../../../services/history";
+import { IonButton } from "@ionic/react";
 
 export default function ListAluno() {
   const [show, setShow] = useState(false);
@@ -62,7 +63,6 @@ export default function ListAluno() {
         console.log(listaAluno);
         renderizaLista(listaAluno);
       });
-      setIsLoading(false);
     }
     getData();
   }, []);
@@ -81,7 +81,8 @@ export default function ListAluno() {
       if (!pula) novaLista.push({ ...dado, url: imagenVazia });
     });
     setAluno(novaLista);
-    console.log(novaLista);
+
+    setIsLoading(false);
   };
   async function handleSubmit(e) {
     e.preventDefault();
@@ -165,7 +166,6 @@ export default function ListAluno() {
         buttonConfirm="Sim"
         handleFunctionConfirm={handleFunctionConfirm}
       />
-
       <Form onSubmit={handleSubmit}>
         <Row>
           <Col sm={12} md={5}>

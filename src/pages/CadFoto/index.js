@@ -48,7 +48,7 @@ const CadFoto = ({ match }) => {
     }
 
     setIsLoading(false);
-    toast.success("Foto alterado com sucesso");
+    toast.success("Foto alterada com sucesso");
     history.back();
   };
   return (

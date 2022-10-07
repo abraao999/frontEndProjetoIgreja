@@ -1,19 +1,15 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable no-use-before-define */
-/* eslint-disable array-callback-return */
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from "react";
 
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch } from "react-icons/fa";
 
-import { useSelector } from 'react-redux';
-import { Col, Form, Row, Table } from 'react-bootstrap';
-import { Container } from '../../../styles/GlobalStyles';
-import { Label, Listagem } from './styled';
-import axios from '../../../services/axios';
+import { useSelector } from "react-redux";
+import { Button, Col, Form, Row, Table } from "react-bootstrap";
+import { Container } from "../../../styles/GlobalStyles";
+import { Label, Listagem } from "./styled";
+import axios from "../../../services/axios";
 
-import ComboBox from '../../../components/ComboBox';
-import Loading from '../../../components/Loading';
+import ComboBox from "../../../components/ComboBox";
+import Loading from "../../../components/Loading";
 import {
   fimPrimeiroTrimestre,
   fimQuartoTrimestre,
@@ -24,11 +20,11 @@ import {
   inicioSegundoTrimestre,
   inicioTerceiroTrimestre,
   trimestres,
-} from '../../../util';
+} from "../../../util";
+import Chart from "react-google-charts";
 
-export default function RelatorioPresencaGeral({ match }) {
+export default function RelatorioPresencaGeral() {
   const [classes, setClasses] = useState([]);
-  const [listAlunos, setListAlunos] = useState([]);
   const [listSetores, setListSetores] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,14 +33,17 @@ export default function RelatorioPresencaGeral({ match }) {
   const [disebledClasse, setDisebledClasse] = useState(false);
 
   const [classeSeletected, setClasseSeletected] = useState(0);
-  const [congregacaoSeletected, setCongregacaoSeletected] = useState(0);
-  const [classeNome, setClasseNome] = useState('');
-  const [congregacaoNome, setCongregacaoNome] = useState('');
+  const [classeNome, setClasseNome] = useState("");
+  const [congregacaoNome, setCongregacaoNome] = useState("");
   const [presenca, setPresenca] = useState([]);
 
   const dataStorage = useSelector((state) => state.auth);
-
-  const [idTrimestre, setIdTrimestre] = useState('');
+  const options = {
+    title: "Presença",
+    is3D: true,
+  };
+  const [dadosGrafico, setDadosGrafico] = useState([]);
+  const [idTrimestre, setIdTrimestre] = useState("");
   useEffect(() => {
     async function getData() {
       if (
@@ -56,10 +55,10 @@ export default function RelatorioPresencaGeral({ match }) {
       }
 
       console.log(dataStorage.user);
-      const response1 = await axios.get('/setor');
+      const response1 = await axios.get("/setor");
       setListSetores(response1.data);
 
-      const response = await axios.get('/classe');
+      const response = await axios.get("/classe");
       const listaClasse = [];
       response.data.map((dado) => {
         if (dado.setor_id === dataStorage.user.setor_id) {
@@ -74,7 +73,8 @@ export default function RelatorioPresencaGeral({ match }) {
   const contadorPresenca = async (listPresenca, alunos) => {
     // contador de presenca
     const novaLista = [];
-    const qtdeAlunos = 0;
+
+    let totalPresenca = 0;
 
     console.log(listPresenca);
     alunos.map((aluno) => {
@@ -90,6 +90,7 @@ export default function RelatorioPresencaGeral({ match }) {
       // x --- presenca
       // x = (presenca*100)/13
       // renderiza a lista com os dados
+      totalPresenca += parseFloat(((contador * 100) / 13).toFixed(2));
       novaLista.push({
         id: aluno.id,
         nomeAluno: aluno.nome,
@@ -102,16 +103,29 @@ export default function RelatorioPresencaGeral({ match }) {
     setPresenca(novaLista);
     console.log(novaLista);
     setIsLoading(false);
+
+    const porcentagemPresenca = totalPresenca / alunos.length;
+    const porcentagemFalta = 100 - porcentagemPresenca;
+    handleGeraGraficoIndividual(porcentagemPresenca, porcentagemFalta);
+  };
+  const handleGeraGraficoIndividual = (
+    porcentagemPresenca,
+    porcentagemFalta
+  ) => {
+    setDadosGrafico([
+      ["cabeçário", "nada"],
+      ["Presença", porcentagemPresenca],
+      ["Falta", porcentagemFalta],
+    ]);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const alunos = [];
 
-    axios.get('/aluno').then((response) => {
+    axios.get("/aluno").then((response) => {
       response.data.map((aluno) => {
         if (aluno.classe_id === classeSeletected) alunos.push(aluno);
       });
-      setListAlunos(alunos);
     });
 
     let dataInicial;
@@ -179,7 +193,7 @@ export default function RelatorioPresencaGeral({ match }) {
     setCongregacaoNome(e.target.value);
     setDisebledClasse(false);
     let idSetor = 0;
-    const response = await axios.get('/classe');
+    const response = await axios.get("/classe");
 
     listSetores.map((dado) => {
       if (nome === dado.descricao) {
@@ -203,7 +217,7 @@ export default function RelatorioPresencaGeral({ match }) {
 
       <Form onSubmit={handleSubmit}>
         <Row>
-          <Col sm={12} md={4} className="my-1">
+          <Col sm={12} md={3}>
             <ComboBox
               title="Selecione a congregação"
               onChange={handleGetIdCongregacao}
@@ -212,7 +226,7 @@ export default function RelatorioPresencaGeral({ match }) {
               hidden={autorizado}
             />
           </Col>
-          <Col sm={12} md={4} className="my-1">
+          <Col sm={12} md={3}>
             <Label htmlFor="congregacao">
               Selecione a classe
               <select
@@ -229,7 +243,7 @@ export default function RelatorioPresencaGeral({ match }) {
               </select>
             </Label>
           </Col>
-          <Col sm={12} md={4} className="my-1">
+          <Col sm={12} md={3}>
             <Label htmlFor="trimestre">
               Filtrar por trimestre
               <select onChange={handleIdTrimestre}>
@@ -242,34 +256,39 @@ export default function RelatorioPresencaGeral({ match }) {
               </select>
             </Label>
           </Col>
+          <Col
+            sm={12}
+            md={2}
+            style={{ display: "flex", alignItems: "flex-end" }}
+          >
+            <Button variant="success" type="submit">
+              <FaSearch />
+            </Button>
+          </Col>
         </Row>
-
-        <button type="submit">
-          Filtrar <FaSearch />
-        </button>
       </Form>
       <Listagem hidden={hidden}>
         <h3>Relatório de Presença</h3>
-        <center>
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th scope="col">Nome da Classe</th>
-                <th scope="col">Total de presença</th>
-                <th scope="col">Total de faltas</th>
-                <th scope="col">Percentual de presença</th>
-                {/* <th scope="col">Excluir</th> */}
-              </tr>
-            </thead>
-            <tbody>
-              {presenca.map((dado, index) => (
-                <tr key={String(dado.id)}>
-                  <td>{dado.nomeAluno}</td>
-                  <td>{dado.frequencia}</td>
-                  <td>{dado.faltas}</td>
-                  <td>{dado.porcentagem}</td>
 
-                  {/* <td>
+        <Table responsive striped bordered hover>
+          <thead>
+            <tr>
+              <th scope="col">Nome da Classe</th>
+              <th scope="col">Total de presença</th>
+              <th scope="col">Total de faltas</th>
+              <th scope="col">Percentual de presença</th>
+              {/* <th scope="col">Excluir</th> */}
+            </tr>
+          </thead>
+          <tbody>
+            {presenca.map((dado) => (
+              <tr key={String(dado.id)}>
+                <td>{dado.nomeAluno}</td>
+                <td>{dado.frequencia}</td>
+                <td>{dado.faltas}</td>
+                <td>{dado.porcentagem}</td>
+
+                {/* <td>
                     <Link
                       onClick={() => handleShow(dado.id, index)}
                       to="/relatorioPresencaEbd"
@@ -277,15 +296,19 @@ export default function RelatorioPresencaGeral({ match }) {
                       <FaWindowClose size={16} />
                     </Link>
                   </td> */}
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </center>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+
+        <Chart
+          chartType="PieChart"
+          data={dadosGrafico}
+          options={options}
+          width={"100%"}
+          height={"400px"}
+        />
       </Listagem>
     </Container>
   );
 }
-RelatorioPresencaGeral.protoTypes = {
-  match: PropTypes.shape({}).isRequired,
-};

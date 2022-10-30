@@ -142,6 +142,7 @@ export default function Chamada({ match }) {
       // history.push("/PresencaDetalhada");
       setListaChamada([]);
       setAluno([]);
+      history.push('/')
       setAparecer(true);
     } catch (error) {
       toast.error("Erro ao atribuir as presenças");

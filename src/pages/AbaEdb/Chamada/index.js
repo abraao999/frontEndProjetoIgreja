@@ -11,6 +11,7 @@ import axios from "../../../services/axios";
 import Loading from "../../../components/Loading";
 import { Button, Carousel, Col, Form, Image, Row } from "react-bootstrap";
 import { imagenVazia } from "../../../util";
+import history from "../../../services/history";
 
 // eslint-disable-next-line no-unused-vars
 export default function Chamada({ match }) {
@@ -140,13 +141,13 @@ export default function Chamada({ match }) {
       });
       toast.success("Chamada feita com sucesso");
       // history.push("/PresencaDetalhada");
-      setListaChamada([]);
-      setAluno([]);
-      history.push('/')
+
       setAparecer(true);
+      history.push("/ebd");
     } catch (error) {
       toast.error("Erro ao atribuir as presenças");
       setIsLoading(false);
+      console.log(error);
     }
     setIsLoading(false);
   };

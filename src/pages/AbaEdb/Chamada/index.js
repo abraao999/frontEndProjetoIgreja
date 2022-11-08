@@ -15,7 +15,6 @@ import history from "../../../services/history";
 
 // eslint-disable-next-line no-unused-vars
 export default function Chamada({ match }) {
-  const [filtro, setFiltro] = useState(false);
   const [classes, setClasses] = useState([]);
   const [setorSeletected, setSetorSeletected] = useState(0);
   const [congregacaoId, setCongregacaoId] = useState(
@@ -40,8 +39,7 @@ export default function Chamada({ match }) {
         });
         setClasses(lista);
       });
-      const response2 = await axios.get("/aluno");
-      renderizaLista(response2.data);
+
       setIsLoading(false);
     }
     getData();
@@ -61,31 +59,33 @@ export default function Chamada({ match }) {
       });
       if (!pula) novaLista.push({ ...dado, chacado: false, url: imagenVazia });
     });
-    setAluno(novaLista);
+    return novaLista;
   };
   async function handleSubmit(e) {
     e.preventDefault();
+    setAluno([]);
     setIsLoading(true);
     const novaLista = [];
-
-    if (!filtro) {
-      aluno.map((dados) => {
+    const response2 = await axios.get("/aluno");
+    renderizaLista(response2.data).then((dados) => {
+      dados.map((dados) => {
         if (dados.classe_id === setorSeletected) {
           novaLista.push(dados);
         }
       });
-      setFiltro(true);
-    } else {
-      const response = await axios.get("/aluno");
-      response.data.map((dados) => {
-        if (dados.classe_id === setorSeletected) {
-          novaLista.push(dados);
-        }
-      });
-    }
-    setAparecer(false);
-    setAluno(novaLista);
-    setIsLoading(false);
+      setAparecer(false);
+      setAluno(novaLista);
+      setIsLoading(false);
+    });
+    // if (!filtro) {
+    // } else {
+    //   const response = await axios.get("/aluno");
+    //   response.data.map((dados) => {
+    //     if (dados.classe_id === setorSeletected) {
+    //       novaLista.push(dados);
+    //     }
+    //   });
+    // }
   }
   const handleGetIdCongregacao = (e) => {
     const nome = e.target.value;

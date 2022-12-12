@@ -12,7 +12,8 @@ import Loading from "../../../components/Loading";
 import { Button, Carousel, Col, Form, Image, Row } from "react-bootstrap";
 import { imagenVazia } from "../../../util";
 import history from "../../../services/history";
-
+import moment from "moment";
+import "moment/locale/pt-br";
 // eslint-disable-next-line no-unused-vars
 export default function Chamada({ match }) {
   const [classes, setClasses] = useState([]);
@@ -26,7 +27,7 @@ export default function Chamada({ match }) {
   const [isLoading, setIsLoading] = useState(false);
   const [aparecer, setAparecer] = useState(true);
   const [listaChamada, setListaChamada] = useState([]);
-
+  const [dataAula, setDataAula] = useState("");
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
@@ -135,7 +136,7 @@ export default function Chamada({ match }) {
     try {
       listaChamada.map(async (item) => {
         await axios.post("/chamada", {
-          data_aula: new Date(),
+          data_aula: moment(dataAula).format() || new Date(),
           aluno_id: item,
         });
       });
@@ -158,6 +159,18 @@ export default function Chamada({ match }) {
       <Loading isLoading={isLoading} />
 
       <Form onSubmit={handleSubmit}>
+        <Row>
+          <Col sm={12} md={6} className="my-1">
+            <Form.Label htmlFor="dataAula">Data da aula</Form.Label>
+            <Form.Control
+              type="date"
+              value={dataAula}
+              onChange={(e) => {
+                setDataAula(e.target.value);
+              }}
+            />
+          </Col>
+        </Row>
         <Row>
           <Col xs={10} sm={10} md={10}>
             <Label htmlFor="congregacao">

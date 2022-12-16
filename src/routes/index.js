@@ -74,6 +74,7 @@ import LivrariaLivro from "../pages/AbaLivraria/LivrariaLivro";
 import LivrariaCamiseta from "../pages/AbaLivraria/LivrariaCamiseta";
 import LivrariaRevista from "../pages/AbaLivraria/LivrariaRevista";
 import CadFoto from "../pages/CadFoto";
+import Sorteio from "../pages/AbaEdb/RelatorioPresencaGeral";
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.function_id);
@@ -429,6 +430,13 @@ export default function Routes() {
       <MyRoute
         path="/chamada/"
         component={Chamada}
+        idFuncao={idFuncao}
+        usuarioPermitido={[{ id: 1 }, { id: 5 }, { id: 7 }]}
+        isClosed
+      />
+      <MyRoute
+        path="/sorteio/"
+        component={Sorteio}
         idFuncao={idFuncao}
         usuarioPermitido={[{ id: 1 }, { id: 5 }, { id: 7 }]}
         isClosed

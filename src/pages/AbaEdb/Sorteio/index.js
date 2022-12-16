@@ -7,23 +7,12 @@ import { Button, Col, Form, Row, Table } from "react-bootstrap";
 import { Container } from "../../../styles/GlobalStyles";
 import { Label, Listagem } from "./styled";
 import axios from "../../../services/axios";
-
+import moment from "moment";
+import "moment/locale/pt-br";
 import ComboBox from "../../../components/ComboBox";
 import Loading from "../../../components/Loading";
-import {
-  fimPrimeiroTrimestre,
-  fimQuartoTrimestre,
-  fimSegundoTrimestre,
-  fimTerceiroTrimestre,
-  inicioPrimeiroTrimestre,
-  inicioQuartoTrimestre,
-  inicioSegundoTrimestre,
-  inicioTerceiroTrimestre,
-  trimestres,
-} from "../../../util";
-import Chart from "react-google-charts";
 
-export default function RelatorioPresencaGeral() {
+export default function Sorteio() {
   const [classes, setClasses] = useState([]);
   const [listSetores, setListSetores] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,16 +23,12 @@ export default function RelatorioPresencaGeral() {
 
   const [classeSeletected, setClasseSeletected] = useState(0);
   const [classeNome, setClasseNome] = useState("");
+  const [ganhador, setGanhador] = useState("");
   const [congregacaoNome, setCongregacaoNome] = useState("");
   const [presenca, setPresenca] = useState([]);
-
+  const [ano, setAno] = useState(0);
   const dataStorage = useSelector((state) => state.auth);
-  const options = {
-    title: "Presença",
-    is3D: true,
-  };
-  const [dadosGrafico, setDadosGrafico] = useState([]);
-  const [idTrimestre, setIdTrimestre] = useState("");
+
   useEffect(() => {
     async function getData() {
       if (
@@ -73,9 +58,6 @@ export default function RelatorioPresencaGeral() {
   const contadorPresenca = async (listPresenca, alunos) => {
     // contador de presenca
     const novaLista = [];
-
-    let totalPresenca = 0;
-
     console.log(listPresenca);
     alunos.map((aluno) => {
       let contador = 0;
@@ -90,34 +72,24 @@ export default function RelatorioPresencaGeral() {
       // x --- presenca
       // x = (presenca*100)/13
       // renderiza a lista com os dados
-      totalPresenca += parseFloat(((contador * 100) / 13).toFixed(2));
-      novaLista.push({
-        id: aluno.id,
-        nomeAluno: aluno.nome,
-        frequencia: contador,
-        faltas: 13 - contador,
-        porcentagem: ((contador * 100) / 13).toFixed(2),
-      });
+      const porcentagem = ((contador * 100) / 44).toFixed(2);
+
+      if (porcentagem >= 70)
+        novaLista.push({
+          id: aluno.id,
+          nomeAluno: aluno.nome,
+          frequencia: contador,
+          faltas: 0,
+          porcentagem,
+        });
     });
     setHidden(false);
+    handleSorteio(novaLista);
     setPresenca(novaLista);
     console.log(novaLista);
     setIsLoading(false);
+  };
 
-    const porcentagemPresenca = totalPresenca / alunos.length;
-    const porcentagemFalta = 100 - porcentagemPresenca;
-    handleGeraGraficoIndividual(porcentagemPresenca, porcentagemFalta);
-  };
-  const handleGeraGraficoIndividual = (
-    porcentagemPresenca,
-    porcentagemFalta
-  ) => {
-    setDadosGrafico([
-      ["cabeçário", "nada"],
-      ["Presença", porcentagemPresenca],
-      ["Falta", porcentagemFalta],
-    ]);
-  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const alunos = [];
@@ -128,45 +100,13 @@ export default function RelatorioPresencaGeral() {
       });
     });
 
-    let dataInicial;
-    let dataFinal;
     setIsLoading(true);
     const novaList = [];
 
-    switch (idTrimestre) {
-      case 0: {
-        dataInicial = inicioPrimeiroTrimestre;
-        dataFinal = fimPrimeiroTrimestre;
-
-        break;
-      }
-      case 1: {
-        dataInicial = inicioSegundoTrimestre;
-        dataFinal = fimSegundoTrimestre;
-
-        break;
-      }
-      case 2: {
-        dataInicial = inicioTerceiroTrimestre;
-        dataFinal = fimTerceiroTrimestre;
-
-        break;
-      }
-      case 3: {
-        dataInicial = inicioQuartoTrimestre;
-        dataFinal = fimQuartoTrimestre;
-
-        break;
-      }
-
-      default:
-        break;
-    }
     axios.get(`/chamada`).then((dados) => {
       dados.data.map((dado) => {
         if (
-          dado.data_aula >= dataInicial &&
-          dado.data_aula <= dataFinal &&
+          moment(dado.data_aula).year() === ano &&
           dado.id_classe === classeSeletected
         ) {
           novaList.push(dado);
@@ -175,10 +115,10 @@ export default function RelatorioPresencaGeral() {
       contadorPresenca(novaList, alunos);
     });
   };
-  const handleIdTrimestre = async (e) => {
+  const handleAno = async (e) => {
     const valor = Number(e.target.value);
 
-    setIdTrimestre(valor);
+    setAno(valor);
   };
   const handleGetIdClasse = (e) => {
     const nome = e.target.value;
@@ -210,11 +150,15 @@ export default function RelatorioPresencaGeral() {
     });
     setClasses(listaClasse);
   };
+  const handleSorteio = (lista) => {
+    const valor = Math.floor(Math.random() * lista.length);
+
+    setGanhador(lista[valor].nomeAluno);
+  };
   return (
     <Container>
-      <h1>Relatório de presença geral </h1>
+      <h1>Sorteio</h1>
       <Loading isLoading={isLoading} />
-
       <Form onSubmit={handleSubmit}>
         <Row>
           <Col sm={12} md={3}>
@@ -246,13 +190,11 @@ export default function RelatorioPresencaGeral() {
           <Col sm={12} md={3}>
             <Label htmlFor="trimestre">
               Filtrar por trimestre
-              <select onChange={handleIdTrimestre}>
-                <option value="nada">Selecione a trimestre</option>
-                {trimestres.map((dado) => (
-                  <option key={dado.id} value={dado.id}>
-                    {dado.descricao}
-                  </option>
-                ))}
+              <select onChange={handleAno}>
+                <option value="nada">Selecione o ano</option>
+
+                <option value={2022}>2022</option>
+                <option value={2023}>2023</option>
               </select>
             </Label>
           </Col>
@@ -268,14 +210,12 @@ export default function RelatorioPresencaGeral() {
         </Row>
       </Form>
       <Listagem hidden={hidden}>
-        <h3>Relatório de Presença</h3>
+        <h3>Alunos com mais 70% de presença</h3>
 
         <Table responsive striped bordered hover>
           <thead>
             <tr>
-              <th scope="col">Nome da Classe</th>
-              <th scope="col">Total de presença</th>
-              <th scope="col">Total de faltas</th>
+              <th scope="col">Nome</th>
               <th scope="col">Percentual de presença</th>
               {/* <th scope="col">Excluir</th> */}
             </tr>
@@ -284,8 +224,6 @@ export default function RelatorioPresencaGeral() {
             {presenca.map((dado) => (
               <tr key={String(dado.id)}>
                 <td>{dado.nomeAluno}</td>
-                <td>{dado.frequencia}</td>
-                <td>{dado.faltas}</td>
                 <td>{dado.porcentagem}</td>
 
                 {/* <td>
@@ -301,13 +239,8 @@ export default function RelatorioPresencaGeral() {
           </tbody>
         </Table>
 
-        <Chart
-          chartType="PieChart"
-          data={dadosGrafico}
-          options={options}
-          width={"100%"}
-          height={"400px"}
-        />
+        <h3>Ganhador:</h3>
+        <h3>{ganhador}</h3>
       </Listagem>
     </Container>
   );

@@ -30,7 +30,6 @@ import ListAluno from "../pages/AbaEdb/ListAluno";
 import DetailAluno from "../pages/AbaEdb/DetailAluno";
 import Chamada from "../pages/AbaEdb/Chamada";
 import RelatorioPresencaDiaria from "../pages/AbaEdb/RelatorioPresencaDiaria";
-import RelatorioPresencaGeral from "../pages/AbaEdb/RelatorioPresencaGeral";
 import PresencaDetalhada from "../pages/AbaEdb/PresencaDetalhada";
 import ListaAniversario from "../pages/AbaSecretaria/ListaAniversario";
 import EditPass from "../pages/AbaSecretaria/EditPass";
@@ -74,7 +73,8 @@ import LivrariaLivro from "../pages/AbaLivraria/LivrariaLivro";
 import LivrariaCamiseta from "../pages/AbaLivraria/LivrariaCamiseta";
 import LivrariaRevista from "../pages/AbaLivraria/LivrariaRevista";
 import CadFoto from "../pages/CadFoto";
-import Sorteio from "../pages/AbaEdb/RelatorioPresencaGeral";
+import Sorteio from "../pages/AbaEdb/Sorteio";
+import RelatorioPresencaGeral from "../pages/AbaEdb/RelatorioPresencaGeral";
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.function_id);

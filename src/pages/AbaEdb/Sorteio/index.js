@@ -75,7 +75,7 @@ export default function Sorteio() {
       // renderiza a lista com os dados
       const porcentagem = ((contador * 100) / 44).toFixed(2);
 
-      if (porcentagem >= 50)
+      //if (porcentagem >= 50)
         novaLista.push({
           id: aluno.id,
           nomeAluno: aluno.nome,

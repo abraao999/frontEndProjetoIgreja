@@ -241,7 +241,7 @@ export default function Sorteio() {
         </Table>
 
         <h3>Ganhador:</h3>
-        <center><Button variant="success"onClick={()=>setHiddenGanhador(false)}>Mostrar</Button>
+        <center><Button variant="success"onClick={()=>setHiddenGanhador(false)}>Mostrar</Button></center>
         <h3 hidden={hiddenGanhador}>{ganhador}</h3>
       </Listagem>
     </Container>

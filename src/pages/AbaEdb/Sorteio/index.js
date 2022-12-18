@@ -74,7 +74,7 @@ export default function Sorteio() {
       // renderiza a lista com os dados
       const porcentagem = ((contador * 100) / 44).toFixed(2);
 
-      if (porcentagem >= 70)
+      if (porcentagem >= 50)
         novaLista.push({
           id: aluno.id,
           nomeAluno: aluno.nome,
@@ -210,7 +210,7 @@ export default function Sorteio() {
         </Row>
       </Form>
       <Listagem hidden={hidden}>
-        <h3>Alunos com mais 70% de presença</h3>
+        <h3>Alunos com mais 50% de presença</h3>
 
         <Table responsive striped bordered hover>
           <thead>

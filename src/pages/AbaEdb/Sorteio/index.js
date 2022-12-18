@@ -18,6 +18,7 @@ export default function Sorteio() {
   const [isLoading, setIsLoading] = useState(false);
 
   const [hidden, setHidden] = useState(true);
+  const [hiddenGanhador, setHiddenGanhador] = useState(true);
   const [autorizado, setAutorizado] = useState(true);
   const [disebledClasse, setDisebledClasse] = useState(false);
 
@@ -240,7 +241,8 @@ export default function Sorteio() {
         </Table>
 
         <h3>Ganhador:</h3>
-        <h3>{ganhador}</h3>
+        <center><Button variant="success"onClick={()=>setHiddenGanhador(false)}>Mostrar</Button>
+        <h3 hidden={hiddenGanhador}>{ganhador}</h3>
       </Listagem>
     </Container>
   );

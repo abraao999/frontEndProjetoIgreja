@@ -18,6 +18,7 @@ export default function Sorteio() {
   const [isLoading, setIsLoading] = useState(false);
 
   const [hidden, setHidden] = useState(true);
+  const [hiddenGanhador, setHiddenGanhador] = useState(true);
   const [autorizado, setAutorizado] = useState(true);
   const [disebledClasse, setDisebledClasse] = useState(false);
 
@@ -74,7 +75,7 @@ export default function Sorteio() {
       // renderiza a lista com os dados
       const porcentagem = ((contador * 100) / 44).toFixed(2);
 
-      if (porcentagem >= 70)
+      //if (porcentagem >= 50)
         novaLista.push({
           id: aluno.id,
           nomeAluno: aluno.nome,
@@ -210,7 +211,7 @@ export default function Sorteio() {
         </Row>
       </Form>
       <Listagem hidden={hidden}>
-        <h3>Alunos com mais 70% de presença</h3>
+        <h3>Alunos com mais 50% de presença</h3>
 
         <Table responsive striped bordered hover>
           <thead>
@@ -240,7 +241,8 @@ export default function Sorteio() {
         </Table>
 
         <h3>Ganhador:</h3>
-        <h3>{ganhador}</h3>
+        <center><Button variant="success"onClick={()=>setHiddenGanhador(false)}>Mostrar</Button></center>
+        <h3 hidden={hiddenGanhador}>{ganhador}</h3>
       </Listagem>
     </Container>
   );

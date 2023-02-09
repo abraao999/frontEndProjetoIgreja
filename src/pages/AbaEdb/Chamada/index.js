@@ -12,6 +12,7 @@ import Loading from "../../../components/Loading";
 import { Button, Carousel, Col, Form, Image, Row } from "react-bootstrap";
 import { imagenVazia } from "../../../util";
 import history from "../../../services/history";
+// eslint-disable-next-line no-unused-vars
 import moment from "moment";
 import "moment/locale/pt-br";
 // eslint-disable-next-line no-unused-vars
@@ -27,7 +28,7 @@ export default function Chamada({ match }) {
   const [isLoading, setIsLoading] = useState(false);
   const [aparecer, setAparecer] = useState(true);
   const [listaChamada, setListaChamada] = useState([]);
-  const [dataAula, setDataAula] = useState("");
+  const [dataAula, setDataAula] = useState(new Date());
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
@@ -136,10 +137,10 @@ export default function Chamada({ match }) {
     try {
       listaChamada.map(async (item) => {
         await axios.post("/chamada", {
-          data_aula: moment(dataAula).format() || new Date(),
+          data_aula: new Date(dataAula),
           aluno_id: item,
         });
-      });
+      }); //
       toast.success("Chamada feita com sucesso");
       // history.push("/PresencaDetalhada");
 

@@ -1,29 +1,28 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable array-callback-return */
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from "react";
 
-import { toast } from 'react-toastify';
-import { FaWindowClose, FaSearch } from 'react-icons/fa';
+import { toast } from "react-toastify";
+import { FaWindowClose, FaSearch } from "react-icons/fa";
 
-import { get } from 'lodash';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Col, Form, Row, Table } from 'react-bootstrap';
-import { Container } from '../../../styles/GlobalStyles';
-import { Label, Listagem } from './styled';
-import axios from '../../../services/axios';
-import Modal from '../../../components/Modal';
-import Loading from '../../../components/Loading';
-
-export default function PresencaDetalhada({ match }) {
+import { get } from "lodash";
+import { useSelector } from "react-redux";
+import { Button, Col, Form, Row, Table } from "react-bootstrap";
+import { Container } from "../../../styles/GlobalStyles";
+import { Label, Listagem } from "./styled";
+import axios from "../../../services/axios";
+import Modal from "../../../components/Modal";
+import Loading from "../../../components/Loading";
+import moment from "moment";
+import "moment/locale/pt-br";
+export default function PresencaDetalhada() {
   const [show, setShow] = useState(false);
 
-  const [congregacaoId, setCongregacaoId] = useState('Selecione uma classe');
-  const [idParaDelecao, setIdParaDelecao] = useState('');
-  const [indiceDelecao, setIndiceDelecao] = useState('');
+  const [congregacaoId, setCongregacaoId] = useState("Selecione uma classe");
+  const [idParaDelecao, setIdParaDelecao] = useState("");
+  const [indiceDelecao, setIndiceDelecao] = useState("");
 
-  const [dataAula, setDataAula] = useState('');
+  const [dataAula, setDataAula] = useState("");
 
   const [classes, setClasses] = useState([]);
   const [listAlunos, setListAlunos] = useState([]);
@@ -35,7 +34,7 @@ export default function PresencaDetalhada({ match }) {
   useEffect(() => {
     async function getData() {
       const lista = [];
-      axios.get('/classe').then((response) => {
+      axios.get("/classe").then((response) => {
         response.data.map((valor) => {
           if (dataStorage.user.setor_id === valor.setor_id) {
             lista.push(valor);
@@ -52,18 +51,17 @@ export default function PresencaDetalhada({ match }) {
     getData();
   }, []);
 
-  const renderizaLista = (list, mes) => {
+  const renderizaLista = (list) => {
     const novaLista = [];
     list.map((dado) => {
-      const data = new Date(dado.data_aula);
-      const dataFormatada = `${data.getDate()}/
-      ${data.getMonth() + 1}/${data.getFullYear()}`;
+      // const data = new Date(dado.data_aula);
+      // const dataFormatada = moment(dado.data_aula).format("l");
       novaLista.push({
         id: dado.id,
         nomeAluno: dado.desc_aluno,
         classeId: dado.setorId,
         classeDesc: dado.desc_classes,
-        dataAula: dataFormatada,
+        dataAula: dado.data_aula,
       });
     });
     setIsLoading(false);
@@ -78,19 +76,22 @@ export default function PresencaDetalhada({ match }) {
     if (dataAula) {
       axios.get(`/chamada`).then((dados) => {
         dados.data.map((dado) => {
-          console.log(dado.data_aula);
-          console.log('data', dataAula);
+          let d = dado.data_aula;
+          if (moment(d).format("h") == 9)
+            d = moment(dado.data_aula).add(1, "d").format("l");
+          else d = moment(dado.data_aula).format("l");
+
           if (
-            dado.data_aula >= dataAula &&
+            moment(d).isSame(moment(dataAula).format("l")) &&
             dado.id_classe === setorSeletected
           ) {
-            novaList.push(dado);
+            novaList.push({ ...dado, data_aula: d });
           }
         });
         renderizaLista(novaList);
       });
     } else {
-      toast.error('Selecione todos os campos para filtrar');
+      toast.error("Selecione todos os campos para filtrar");
       setIsLoading(false);
     }
   };
@@ -112,16 +113,16 @@ export default function PresencaDetalhada({ match }) {
       const novaList = [...listAlunos];
       novaList.splice(indiceDelecao, 1);
       setListAlunos(novaList);
-      toast.success('Presença excluida com sucesso');
+      toast.success("Presença excluida com sucesso");
       setShow(false);
 
       setIsLoading(false);
     } catch (error) {
-      const status = get(error, 'response.data.status', 0);
+      const status = get(error, "response.data.status", 0);
       if (status === 401) {
-        toast.error('Voce precisa fazer loggin');
+        toast.error("Voce precisa fazer loggin");
       } else {
-        toast.error('Erro ao excluir a membro');
+        toast.error("Erro ao excluir a membro");
       }
       setIsLoading(false);
     }
@@ -151,7 +152,7 @@ export default function PresencaDetalhada({ match }) {
 
       <Form onSubmit={handleSubmit}>
         <Row>
-          <Col sm={12} md={6} className="my-1">
+          <Col sm={12} md={5}>
             <Label htmlFor="congregacao">
               Filtrar por classe
               <select onChange={handleGetClasseId} value={congregacaoId}>
@@ -164,7 +165,7 @@ export default function PresencaDetalhada({ match }) {
               </select>
             </Label>
           </Col>
-          <Col sm={12} md={6} className="my-1">
+          <Col xs={10} sm={10} md={5}>
             <Form.Label htmlFor="dataAula">Data aula</Form.Label>
             <Form.Control
               type="date"
@@ -174,14 +175,17 @@ export default function PresencaDetalhada({ match }) {
               }}
             />
           </Col>
+          <Col
+            xs={2}
+            sm={2}
+            md={2}
+            style={{ display: "flex", alignItems: "flex-end", marginTop: 4 }}
+          >
+            <Button variant="success" type="submit">
+              <FaSearch size={16} />
+            </Button>
+          </Col>
         </Row>
-        <Col
-          style={{ display: 'flex', justifyContent: 'center', marginTop: 4 }}
-        >
-          <button type="submit">
-            Filtrar <FaSearch />
-          </button>
-        </Col>
       </Form>
       <Listagem hidden={hidden}>
         <h3>Relatório de Presença</h3>
@@ -203,12 +207,12 @@ export default function PresencaDetalhada({ match }) {
                   <td>{dado.classeDesc}</td>
 
                   <td>
-                    <Link
+                    <Button
+                      variant="danger"
                       onClick={() => handleShow(dado.id, index)}
-                      to="/PresencaDetalhada"
                     >
                       <FaWindowClose size={16} />
-                    </Link>
+                    </Button>
                   </td>
                 </tr>
               ))}
@@ -219,6 +223,3 @@ export default function PresencaDetalhada({ match }) {
     </Container>
   );
 }
-PresencaDetalhada.protoTypes = {
-  match: PropTypes.shape({}).isRequired,
-};

@@ -75,6 +75,9 @@ import LivrariaRevista from "../pages/AbaLivraria/LivrariaRevista";
 import CadFoto from "../pages/CadFoto";
 import Sorteio from "../pages/AbaEdb/Sorteio";
 import RelatorioPresencaGeral from "../pages/AbaEdb/RelatorioPresencaGeral";
+import PainelPrincipal from "../pages/AbaGincana/PainelPrincipal";
+import PainelPergunta from "../pages/AbaGincana/PainelPergunta";
+import CadPerguntas from "../pages/AbaGincana/CadPergunta";
 
 export default function Routes() {
   const idFuncao = useSelector((state) => state.auth.function_id);
@@ -694,6 +697,28 @@ export default function Routes() {
         path="/cadFoto/:id/:action"
         component={CadFoto}
         idFuncao={idFuncao}
+        isClosed={false}
+      />
+      <MyRoute
+        path="/painelPrincipal"
+        component={PainelPrincipal}
+        isClosed={false}
+      />
+
+      <MyRoute
+        path="/painelPergunta/:id/:titulo"
+        component={PainelPergunta}
+        isClosed={false}
+      />
+      <MyRoute
+        path="/painelPergunta"
+        component={PainelPergunta}
+        isClosed={false}
+      />
+
+      <MyRoute
+        path="/cadPerguntas/"
+        component={CadPerguntas}
         isClosed={false}
       />
       <MyRoute path="*" component={Page404} />

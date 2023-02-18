@@ -108,6 +108,7 @@ export default function Header() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/">HOME</Nav.Link>
+            <Nav.Link href="/painelPrincipal">GINCANA</Nav.Link>
             <Dropdown nome="CULTO" opcoes={culto} />
             <Nav.Link href="/painelLivrariaVirtual">LIVRARIA VIRTUAL</Nav.Link>
             {!isLoggedIn && (

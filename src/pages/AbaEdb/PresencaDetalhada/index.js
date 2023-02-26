@@ -80,11 +80,12 @@ export default function PresencaDetalhada() {
           if (moment(d).format("h") == 9)
             d = moment(dado.data_aula).add(1, "d").format("l");
           else d = moment(dado.data_aula).format("l");
-
+          console.log(d, moment(dataAula).format("l"));
           if (
-            moment(d).isSame(moment(dataAula).format("l")) &&
+            d == moment(dataAula).format("l") &&
             dado.id_classe === setorSeletected
           ) {
+            console.log("aqui");
             novaList.push({ ...dado, data_aula: d });
           }
         });

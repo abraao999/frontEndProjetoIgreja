@@ -28,7 +28,7 @@ export default function Chamada({ match }) {
   const [isLoading, setIsLoading] = useState(false);
   const [aparecer, setAparecer] = useState(true);
   const [listaChamada, setListaChamada] = useState([]);
-  const [dataAula, setDataAula] = useState(new Date());
+  const [dataAula, setDataAula] = useState("");
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
@@ -137,7 +137,10 @@ export default function Chamada({ match }) {
     try {
       listaChamada.map(async (item) => {
         await axios.post("/chamada", {
-          data_aula: new Date(dataAula),
+          data_aula:
+            Date(dataAula).toLocaleString("en-US", {
+              timeZone: "America/Sao_Paulo",
+            }) || new Date(),
           aluno_id: item,
         });
       }); //
@@ -168,6 +171,7 @@ export default function Chamada({ match }) {
               value={dataAula}
               onChange={(e) => {
                 setDataAula(e.target.value);
+                console.log(Date(e.target.value));
               }}
             />
           </Col>

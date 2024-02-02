@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 import { toast } from "react-toastify";
-import { FaSave, FaCheck, FaWindowClose, FaTrash } from "react-icons/fa";
+import { FaSave, FaCheck, FaWindowClose, FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Container } from "../../../styles/GlobalStyles";
 import { Listagem, Label, SlideContainer } from "./styled";
@@ -197,7 +197,7 @@ export default function Chamada({ match }) {
             style={{ display: "flex", alignItems: "flex-end" }}
           >
             <Button size="lg" variant="success" type="submit">
-              <FaTrash size={16} />
+              <FaSearch size={16} />
             </Button>
           </Col>
         </Row>

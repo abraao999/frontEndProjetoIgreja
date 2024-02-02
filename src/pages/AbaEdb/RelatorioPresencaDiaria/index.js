@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-use-before-define */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
@@ -13,8 +12,9 @@ import { Container } from '../../../styles/GlobalStyles';
 import { Listagem } from './styled';
 import axios from '../../../services/axios';
 import Loading from '../../../components/Loading';
+import moment from "moment";
 
-export default function RelatorioPresencaDiaria({ match }) {
+export default function RelatorioPresencaDiaria() {
   const [dataAula, setDataAula] = useState('');
 
   const [presencaTotal, setPresencaTotal] = useState([]);
@@ -42,7 +42,7 @@ export default function RelatorioPresencaDiaria({ match }) {
     getData();
   }, []);
 
-  const renderizaLista = (list, mes) => {
+  const renderizaLista = (list) => {
     const novaLista = [];
     list.map((dado) => {
       const data = new Date(dado.data_aula);
@@ -111,17 +111,16 @@ export default function RelatorioPresencaDiaria({ match }) {
     if (dataAula) {
       axios.get(`/chamada`).then((dados) => {
         dados.data.map((dado) => {
-          let dataSelect = new Date(dataAula);
-          let dataBD = new Date(dado.data_aula);
-
-          dataSelect = `${dataSelect.getDate() + 1}-${dataSelect.getMonth() + 1
-            }-${dataSelect.getFullYear()}`;
-
-          dataBD = `${dataBD.getDate()}-${dataBD.getMonth() + 1
-            }-${dataBD.getFullYear()}`;
-
-          if (dataSelect === dataBD) {
-            novaList.push(dado);
+          let d = dado.data_aula;
+          if (moment(d).format("h") == 9)
+            d = moment(dado.data_aula).add(1, "d").format("l");
+          else d = moment(dado.data_aula).format("l");
+          console.log(d, moment(dataAula).format("l"));
+          if (
+            d == moment(dataAula).format("l") 
+          ) {
+            console.log("aqui");
+            novaList.push({ ...dado, data_aula: d });
           }
         });
         renderizaLista(novaList);
